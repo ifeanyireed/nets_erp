@@ -2212,15 +2212,6 @@ export function useERPStore() {
   const [objectives, setObjectives] = useState<Objective[]>([]);
 
   useEffect(() => {
-    // Clean up local storage completely to ensure only database fetches are used
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("erp_reviews");
-      localStorage.removeItem("erp_objectives");
-      localStorage.removeItem("erp_users");
-      localStorage.removeItem("erp_cycles");
-      localStorage.removeItem("erp_departments");
-    }
-
     const loadData = async () => {
       const usersData = await fetchFromApi("/users", INITIAL_USERS);
       setUsers(usersData);
