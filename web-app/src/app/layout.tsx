@@ -10,12 +10,12 @@ const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: "Virginia Outdoors Foundation - Protecting Virginia's Open Spaces",
-  description: "The Virginia Outdoors Foundation is Virginia's leader in land conservation, protecting more than 800,000 acres of open space in 107 counties and cities.",
+  title: "NETS ERP - Performance Review & Objective Management",
+  description: "Performance review, employee evaluation, and objective management platform for New Era Transport Services (NETS).",
   icons: {
-    icon: "/logo-white.png",
-    shortcut: "/logo-white.png",
-    apple: "/logo-white.png",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
