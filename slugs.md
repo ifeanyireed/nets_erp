@@ -21,9 +21,9 @@ This file maps the frontend page routes (slugs), their respective file paths in 
 | `/md` | `src/app/md/page.tsx` | Executive MD home dashboard (company KPIs and department comparison stats) | MD |
 | `/md/department/[deptId]` | `src/app/md/department/[deptId]/page.tsx` | Executive breakdown of department performance details | MD |
 
-## Backend API Endpoints (PHP REST API)
+## Backend API Endpoints (Go REST API)
 
-* API Location: `backend/api.php`
+* API Location: `backend/main.go`
 
 | Endpoint | Method | Parameters | Description |
 | :--- | :--- | :--- | :--- |

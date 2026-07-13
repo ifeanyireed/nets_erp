@@ -28,7 +28,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 | Service / Module | Component Details | Status | Notes |
 | :--- | :--- | :---: | :--- |
 | **Prisma Schema** | `User`, `ReviewCycle`, `Objective`, `PerformanceReview` models | **[100% COMPLETED]** | Saved in [schema.prisma](file:///Users/user/Downloads/nets_erp/backend/prisma/schema.prisma) and pushed to Hostinger DB. |
-| **API Router** | `backend/api.php` simple router switch-case routing | **[100% COMPLETED]** | Routes request URI paths to corresponding CRUD handler functions. |
+| **API Router** | `backend/main.go` and `backend/handlers.go` REST routing | **[100% COMPLETED]** | Routes request URI paths to corresponding CRUD handler functions. |
 | **MySQL Seeder** | `/seed` API route for truncating and inserting mock ERP data | **[100% COMPLETED]** | Seeds users, cycles, classified objectives, and evaluations in Hostinger MySQL. |
 
 ---
@@ -42,7 +42,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 * **Status:** **[100% COMPLETED]**
 * **Backend Services Needed:**
   * Endpoint: `/users` (`GET` with ID / email verification)
-  * Handler: `handleUsers` in [api.php](file:///Users/user/Downloads/nets_erp/backend/api.php#L69-L118)
+  * Handler: `handleUsers` in [handlers.go](file:///Users/user/Downloads/nets_erp/backend/handlers.go)
   * Database: `User` model table query
 
 #### Employee Dashboard (`/employee`)
@@ -50,7 +50,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 * **Status:** **[100% COMPLETED]**
 * **Backend Services Needed:**
   * Endpoint: `/reviews?employeeId=<id>` (fetch active evaluations)
-  * Handler: `handleReviews` in [api.php](file:///Users/user/Downloads/nets_erp/backend/api.php#L189-L253)
+  * Handler: `handleReviews` in [handlers.go](file:///Users/user/Downloads/nets_erp/backend/handlers.go)
   * Database: `PerformanceReview` model table query
 
 #### My Performance Reviews Timelines (`/employee/reviews`)
@@ -58,7 +58,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 * **Status:** **[100% COMPLETED]**
 * **Backend Services Needed:**
   * Endpoint: `/cycles` (fetch available performance evaluation windows)
-  * Handler: `handleCycles` in [api.php](file:///Users/user/Downloads/nets_erp/backend/api.php#L154-L187)
+  * Handler: `handleCycles` in [handlers.go](file:///Users/user/Downloads/nets_erp/backend/handlers.go)
   * Database: `ReviewCycle` model table query
 
 #### Performance Self-Assessment Form (`/employee/reviews/[id]`)
@@ -128,7 +128,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 * **Status:** **[100% COMPLETED]**
 * **Backend Services Needed:**
   * Endpoint: `/objectives` (`GET` to fetch, `POST` to upsert, `DELETE` to delete)
-  * Handler: `handleObjectives` in [api.php](file:///Users/user/Downloads/nets_erp/backend/api.php#L120-L153)
+  * Handler: `handleObjectives` in [handlers.go](file:///Users/user/Downloads/nets_erp/backend/handlers.go)
   * Database: `Objective` table mutations
 * **UI Features Added:** Swapped layout (Objective Type is now above Weight), integrated Competency Category select picker, added target department checkbox selectors for work objectives, bulk split-by-comma multi-objective insertion, filter list dropdown by department, and an inline `+ Add Dept` dynamic creator.
 

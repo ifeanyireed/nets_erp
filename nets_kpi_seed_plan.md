@@ -52,6 +52,6 @@ Below is the structured plan to seed the database with real Key Performance Indi
 
 ## 2. Database Action Plan
 If you approve this plan, I will:
-1. Update `backend/api.php` inside the `handleSeed` function to insert these exact objectives into the Hostinger MySQL database.
+1. Update `backend/handlers.go` inside the `handleSeed` function to insert these exact objectives into the Hostinger MySQL database.
 2. Re-trigger the seed process to apply them.
 3. Update the frontend's default store seeding values in `erp-store.ts` to match.

@@ -28,7 +28,7 @@ func main() {
 		log.Printf("Warning: Database ping failed: %v", err)
 	}
 
-	// Register routes with and without /api.php prefix to ensure backward compatibility
+	// Register routes
 	registerRoute("/users", handleUsers)
 	registerRoute("/objectives", handleObjectives)
 	registerRoute("/cycles", handleCycles)
@@ -48,7 +48,6 @@ func main() {
 
 func registerRoute(path string, handler http.HandlerFunc) {
 	http.HandleFunc(path, enableCORS(handler))
-	http.HandleFunc("/api.php"+path, enableCORS(handler))
 }
 
 func getDSN() string {

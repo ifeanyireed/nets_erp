@@ -2129,7 +2129,7 @@ export function setStoredData<T>(key: string, data: T): void {
   // Disabled: all fetches must load directly from database
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api.php";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 async function fetchFromApi<T>(endpoint: string, fallbackData: T): Promise<T> {
   try {
