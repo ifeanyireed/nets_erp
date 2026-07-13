@@ -21,8 +21,6 @@ export default function HRDashboard() {
     }
   }, []);
 
-  if (!currentUser) return null;
-
   // Filter reviews awaiting HR action (status = "Manager Reviewed")
   const pendingReviews = reviews.filter(r => r.status === "Manager Reviewed");
   const completedReviews = reviews.filter(r => r.status === "HR Approved");
@@ -74,6 +72,8 @@ export default function HRDashboard() {
         return <span className="bg-gray-100 text-gray-700 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase">{status}</span>;
     }
   };
+
+  if (!currentUser) return null;
 
   return (
     <ERPLayout>
