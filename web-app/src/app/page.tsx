@@ -132,23 +132,30 @@ export default function LandingLoginPage() {
 
         {/* Quick Logins */}
         <div className="grid grid-cols-2 gap-2">
-          {users.slice(0, 4).map((user) => (
-            <button
-              key={user.id}
-              onClick={() => handleQuickLogin(user)}
-              className="flex items-center gap-2 p-1.5 bg-slate-950/50 md:bg-white hover:bg-slate-900/50 md:hover:bg-slate-50 border border-white/10 md:border-gray-200 rounded-xl shadow-sm hover:scale-[1.02] active:scale-98 transition-all text-left"
-            >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-7 h-7 rounded-full object-cover border border-white/15 md:border-gray-100 flex-shrink-0"
-              />
-              <div className="overflow-hidden">
-                <p className="text-[11px] font-bold text-white md:text-slate-800 truncate">{user.name.split(" ")[0]}</p>
-                <p className="text-[8px] text-slate-550 md:text-slate-450 font-bold uppercase tracking-wide truncate">{user.role}</p>
-              </div>
-            </button>
-          ))}
+          {[
+            users.find(u => u.role === "employee"),
+            users.find(u => u.role === "manager"),
+            users.find(u => u.role === "hr"),
+            users.find(u => u.role === "md"),
+          ]
+            .filter((u): u is User => !!u)
+            .map((user) => (
+              <button
+                key={user.id}
+                onClick={() => handleQuickLogin(user)}
+                className="flex items-center gap-2 p-1.5 bg-slate-950/50 md:bg-white hover:bg-slate-900/50 md:hover:bg-slate-50 border border-white/10 md:border-gray-200 rounded-xl shadow-sm hover:scale-[1.02] active:scale-98 transition-all text-left"
+              >
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-7 h-7 rounded-full object-cover border border-white/15 md:border-gray-100 flex-shrink-0"
+                />
+                <div className="overflow-hidden">
+                  <p className="text-[11px] font-bold text-white md:text-slate-800 truncate">{user.name.split(" ")[0]}</p>
+                  <p className="text-[8px] text-slate-550 md:text-slate-450 font-bold uppercase tracking-wide truncate">{user.role}</p>
+                </div>
+              </button>
+            ))}
         </div>
       </div>
     </div>

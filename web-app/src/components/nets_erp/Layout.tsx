@@ -100,7 +100,6 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
   const { users } = useERPStore();
   
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [roleSwitcherOpen, setRoleSwitcherOpen] = useState(false);
 
   // Sync current user from local storage or set default employee
   useEffect(() => {
@@ -123,18 +122,19 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     }
   }, [users]);
 
-  // Set the current user and redirect to their home dashboard
-  const handleSwitchUser = (user: User) => {
-    setCurrentUser(user);
-    localStorage.setItem("erp_current_user", JSON.stringify(user));
-    setRoleSwitcherOpen(false);
-    
-    // Redirect to matching role folder home page
-    if (user.role === "employee") router.push("/employee");
-    else if (user.role === "manager") router.push("/manager");
-    else if (user.role === "hr") router.push("/hr");
-    else if (user.role === "md") router.push("/md");
-  };
+  // Enforce Role-Based Access Control (RBAC) client-side
+  useEffect(() => {
+    if (currentUser) {
+      const role = currentUser.role;
+      if (pathname.startsWith("/hr") && role !== "hr") {
+        router.push(`/${role}`);
+      } else if (pathname.startsWith("/manager") && role !== "manager") {
+        router.push(`/${role}`);
+      } else if (pathname.startsWith("/md") && role !== "md") {
+        router.push(`/${role}`);
+      }
+    }
+  }, [currentUser, pathname, router]);
 
   // Determine sidebar menu items based on role
   const getSidebarItems = (): SidebarItem[] => {
@@ -248,18 +248,14 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
               <h1 className="text-xl font-extrabold text-slate-850 capitalize">{currentUser.role} Dashboard</h1>
             </div>
 
-            {/* Quick Role switcher dropdown for Demo purposes */}
-            <div className="flex items-center gap-3 self-end sm:self-auto relative">
+            {/* User Profile Info (Static Display) */}
+            <div className="flex items-center gap-3 self-end sm:self-auto">
               <div className="text-right hidden sm:block">
                 <p className="text-xs text-slate-400 font-semibold">Logged in as</p>
                 <p className="text-sm font-bold text-slate-800">{currentUser.name}</p>
               </div>
 
-              {/* Selector Trigger */}
-              <button
-                onClick={() => setRoleSwitcherOpen(!roleSwitcherOpen)}
-                className="flex items-center gap-2.5 px-3.5 py-2 bg-white border border-[#E2E5E9] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)] hover:bg-gray-50 active:scale-98 transition-all"
-              >
+              <div className="flex items-center gap-2.5 px-3.5 py-2 bg-white border border-[#E2E5E9] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                 <img
                   src={currentUser.avatar}
                   alt={currentUser.name}
@@ -268,33 +264,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 <span className="text-[12px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">
                   {currentUser.role}
                 </span>
-                <svg className="w-3.5 h-3.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <polyline points="6 9 12 15 18 9" />
-                </svg>
-              </button>
-
-              {/* Role switcher dropdown box */}
-              {roleSwitcherOpen && (
-                <div className="absolute right-0 top-12 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 p-2.5 space-y-1">
-                  <p className="text-[11px] font-bold text-slate-400 px-2 py-1.5 uppercase tracking-wider">Switch Demo User Role</p>
-                  
-                  {users.map((user) => (
-                    <button
-                      key={user.id}
-                      onClick={() => handleSwitchUser(user)}
-                      className={`w-full flex items-center gap-3 px-2 py-2 rounded-xl text-left text-xs font-semibold hover:bg-slate-50 transition-all ${
-                        currentUser.id === user.id ? "bg-blue-50/50 text-blue-600" : "text-slate-700"
-                      }`}
-                    >
-                      <img src={user.avatar} alt={user.name} className="w-6 h-6 rounded-full object-cover border" />
-                      <div className="flex-1">
-                        <p className="font-bold">{user.name}</p>
-                        <p className="text-[10px] text-slate-400 uppercase font-medium">{user.role} • {user.department}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
+              </div>
             </div>
           </header>
 
