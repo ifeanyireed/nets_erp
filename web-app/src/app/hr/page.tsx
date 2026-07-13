@@ -12,6 +12,8 @@ export default function HRDashboard() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [queuePage, setQueuePage] = useState(1);
+  const [submissionsStatusFilter, setSubmissionsStatusFilter] = useState("");
+  const [submissionsDeptFilter, setSubmissionsDeptFilter] = useState("");
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -20,6 +22,8 @@ export default function HRDashboard() {
       setCurrentUser(JSON.parse(stored));
     }
   }, []);
+
+  const departmentsList = Array.from(new Set(reviews.map(r => r.department))).filter(Boolean).sort();
 
   // Filter reviews awaiting HR action (status = "Manager Reviewed")
   const pendingReviews = reviews.filter(r => r.status === "Manager Reviewed");
@@ -34,7 +38,14 @@ export default function HRDashboard() {
     ? (finalScoreAverages.reduce((a, b) => a + b, 0) / finalScoreAverages.length).toFixed(1)
     : "N/A";
 
-  const submissionsTotalPages = Math.ceil(reviews.length / itemsPerPage);
+  // Filter all submissions
+  const filteredReviews = reviews.filter(r => {
+    const matchesStatus = submissionsStatusFilter === "" || r.status === submissionsStatusFilter;
+    const matchesDept = submissionsDeptFilter === "" || r.department === submissionsDeptFilter;
+    return matchesStatus && matchesDept;
+  });
+
+  const submissionsTotalPages = Math.ceil(filteredReviews.length / itemsPerPage);
   
   useEffect(() => {
     if (submissionsPage > submissionsTotalPages && submissionsTotalPages > 0) {
@@ -43,7 +54,7 @@ export default function HRDashboard() {
   }, [submissionsTotalPages, submissionsPage]);
 
   const submissionsStartIndex = (submissionsPage - 1) * itemsPerPage;
-  const paginatedReviews = reviews.slice(submissionsStartIndex, submissionsStartIndex + itemsPerPage);
+  const paginatedReviews = filteredReviews.slice(submissionsStartIndex, submissionsStartIndex + itemsPerPage);
 
   const queueTotalPages = Math.ceil(pendingReviews.length / itemsPerPage);
   
@@ -219,8 +230,43 @@ export default function HRDashboard() {
           )}
         </div>        {/* All Reviews Progress Standings */}
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/40 flex flex-col gap-4">
-          <div className="flex justify-between items-center pb-3 border-b border-gray-150">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 pb-3 border-b border-gray-150">
             <h3 className="font-bold text-slate-800 text-sm">All Company Review Submissions</h3>
+            
+            {/* Filters */}
+            <div className="flex items-center gap-2 flex-wrap">
+              {/* Department Filter */}
+              <select
+                value={submissionsDeptFilter}
+                onChange={(e) => {
+                  setSubmissionsDeptFilter(e.target.value);
+                  setSubmissionsPage(1);
+                }}
+                className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+              >
+                <option value="">All Departments</option>
+                {departmentsList.map(dept => (
+                  <option key={dept} value={dept}>{dept}</option>
+                ))}
+              </select>
+
+              {/* Status Filter */}
+              <select
+                value={submissionsStatusFilter}
+                onChange={(e) => {
+                  setSubmissionsStatusFilter(e.target.value);
+                  setSubmissionsPage(1);
+                }}
+                className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+              >
+                <option value="">All Statuses</option>
+                <option value="Draft">Draft</option>
+                <option value="Submitted">Awaiting Mgr Evaluation</option>
+                <option value="Manager Reviewed">Awaiting HR Audit</option>
+                <option value="HR Approved">HR Approved</option>
+                <option value="Returned">Returned</option>
+              </select>
+            </div>
           </div>
 
           <div className="overflow-x-auto">
@@ -279,52 +325,54 @@ export default function HRDashboard() {
           </div>
 
           {/* Pagination controls */}
-          {submissionsTotalPages > 1 && (
+          {filteredReviews.length > 0 && (
             <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-gray-100 mt-2">
               <p className="text-[11px] text-slate-455 font-bold">
-                Showing {submissionsStartIndex + 1} to {Math.min(submissionsStartIndex + itemsPerPage, reviews.length)} of {reviews.length} reviews
+                Showing {filteredReviews.length === 0 ? 0 : submissionsStartIndex + 1} to {Math.min(submissionsStartIndex + itemsPerPage, filteredReviews.length)} of {filteredReviews.length} reviews
               </p>
-              <div className="flex items-center gap-1 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => setSubmissionsPage(prev => Math.max(prev - 1, 1))}
-                  disabled={submissionsPage === 1}
-                  className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 disabled:opacity-40 disabled:hover:bg-gray-50 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer disabled:cursor-not-allowed"
-                >
-                  Prev
-                </button>
-                {Array.from({ length: submissionsTotalPages }, (_, i) => i + 1).map(page => {
-                  const shouldShow = page === 1 || page === submissionsTotalPages || Math.abs(page - submissionsPage) <= 1;
-                  if (!shouldShow) {
-                    if (page === 2 || page === submissionsTotalPages - 1) {
-                      return <span key={`dots-${page}`} className="text-[10px] text-slate-400 font-bold px-1">...</span>;
+              {submissionsTotalPages > 1 && (
+                <div className="flex items-center gap-1 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => setSubmissionsPage(prev => Math.max(prev - 1, 1))}
+                    disabled={submissionsPage === 1}
+                    className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 disabled:opacity-40 disabled:hover:bg-gray-50 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Prev
+                  </button>
+                  {Array.from({ length: submissionsTotalPages }, (_, i) => i + 1).map(page => {
+                    const shouldShow = page === 1 || page === submissionsTotalPages || Math.abs(page - submissionsPage) <= 1;
+                    if (!shouldShow) {
+                      if (page === 2 || page === submissionsTotalPages - 1) {
+                        return <span key={`dots-${page}`} className="text-[10px] text-slate-400 font-bold px-1">...</span>;
+                      }
+                      return null;
                     }
-                    return null;
-                  }
-                  return (
-                    <button
-                      key={page}
-                      type="button"
-                      onClick={() => setSubmissionsPage(page)}
-                      className={`w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
-                        submissionsPage === page
-                          ? "bg-blue-600 text-white shadow-sm"
-                          : "bg-white border border-gray-200 text-slate-600 hover:bg-gray-50"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  onClick={() => setSubmissionsPage(prev => Math.min(prev + 1, submissionsTotalPages))}
-                  disabled={submissionsPage === submissionsTotalPages}
-                  className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 disabled:opacity-40 disabled:hover:bg-gray-50 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer disabled:cursor-not-allowed"
-                >
-                  Next
-                </button>
-              </div>
+                    return (
+                      <button
+                        key={page}
+                        type="button"
+                        onClick={() => setSubmissionsPage(page)}
+                        className={`w-6 h-6 flex items-center justify-center rounded-lg text-[10px] font-extrabold transition-all cursor-pointer ${
+                          submissionsPage === page
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "bg-white border border-gray-200 text-slate-600 hover:bg-gray-50"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    onClick={() => setSubmissionsPage(prev => Math.min(prev + 1, submissionsTotalPages))}
+                    disabled={submissionsPage === submissionsTotalPages}
+                    className="px-2.5 py-1.5 bg-gray-50 border border-gray-200 hover:bg-gray-100 text-slate-700 disabled:opacity-40 disabled:hover:bg-gray-50 rounded-xl text-[10px] font-extrabold transition-all cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
