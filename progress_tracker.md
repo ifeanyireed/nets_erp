@@ -18,6 +18,7 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 - [x] **Review Cycle Management (`/hr/cycle`)** - Creates, updates status, and publishes active cycle timelines to `/cycles`.
 - [x] **Objective Management (`/hr/objectives`)** - Performs dynamic CRUD actions on performance items (added/updated items synced to `/objectives` via `POST`, and deleted items synced via `DELETE`).
 - [x] **User & Role Management (`/hr/users`)** - Fetches and manages global user list directory dynamically from `/users`.
+- [x] **Admin Dashboard (`/admin`)** - Manages bulk email campaigns and password reset token dispatches dynamically.
 - [x] **MD Dashboard (`/md`)** - Fetches overall stats and computes company-wide department comparison charts dynamically using live `/reviews` and `/users` data.
 - [x] **Department Performance (`/md/department/[deptId]`)** - Dynamically queries department-specific performance scores from `/reviews`.
 
@@ -138,6 +139,13 @@ All pages utilizing the ERP Store are now fully integrated with dynamic backend 
 * **Backend Services Needed:**
   * Endpoint: `/users` (`GET` to list directory, `POST` to edit/assign roles)
   * Handler: `handleUsers`
+
+#### Admin Dashboard (`/admin`)
+* **Frontend File:** `src/app/admin/page.tsx`
+* **Status:** **[100% COMPLETED]**
+* **Backend Services Needed:**
+  * Endpoints: `/send-reset-email` (`POST`), `/send-bulk-notification` (`POST`)
+  * Handler: `handleSendResetEmail`, `handleSendBulkNotification` in [email_handlers.go](file:///Users/user/Downloads/nets_erp/backend/email_handlers.go)
 
 ---
 
