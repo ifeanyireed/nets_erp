@@ -37,9 +37,7 @@ func sendEmail(to, subject, htmlBody string) error {
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpHost)
 
 	// Compose headers and body
-	// To prevent SMTP "Sender address rejected: not owned by auth user" errors on Hostinger,
-	// the email address in the From header must match the authenticated SMTP user.
-	headerFrom := fmt.Sprintf("From: New Era HR <%s>\r\n", smtpUser)
+	headerFrom := fmt.Sprintf("From: New Era HR <%s>\r\n", fromEmail)
 	headerTo := fmt.Sprintf("To: %s\r\n", to)
 	headerSubject := fmt.Sprintf("Subject: %s\r\n", subject)
 	headerMime := "MIME-Version: 1.0\r\n"
