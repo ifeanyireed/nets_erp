@@ -37,7 +37,9 @@ func sendEmail(to, subject, htmlBody string) error {
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpHost)
 
 	// Compose headers and body
-	headerFrom := fmt.Sprintf("From: New Era HR <%s>\r\n", fromEmail)
+	// To prevent SMTP "Sender address rejected: not owned by auth user" errors on Hostinger,
+	// the email address in the From header must match the authenticated SMTP user.
+	headerFrom := fmt.Sprintf("From: New Era HR <%s>\r\n", smtpUser)
 	headerTo := fmt.Sprintf("To: %s\r\n", to)
 	headerSubject := fmt.Sprintf("Subject: %s\r\n", subject)
 	headerMime := "MIME-Version: 1.0\r\n"
@@ -83,16 +85,10 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch users from database
-	tx, err := db.Begin()
+	rows, err := db.Query("SELECT id, name, email, password FROM User")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	defer tx.Rollback()
-
-	rows, err := tx.Query("SELECT id, name, email, password FROM User")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Database error: " + err.Error()})
 		return
 	}
 	defer rows.Close()
@@ -184,16 +180,10 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Fetch users from database
-	tx, err := db.Begin()
+	rows, err := db.Query("SELECT id, name, email FROM User")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	defer tx.Rollback()
-
-	rows, err := tx.Query("SELECT id, name, email FROM User")
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Database error: " + err.Error()})
 		return
 	}
 	defer rows.Close()

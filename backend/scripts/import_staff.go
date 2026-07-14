@@ -137,11 +137,14 @@ func main() {
 			log.Fatalf("Error reading CSV row: %v", err)
 		}
 
-		name := strings.TrimSpace(record[1])
+		name := toTitleCase(strings.TrimSpace(record[1]))
 		designation := strings.TrimSpace(record[2])
 		dept := strings.TrimSpace(record[3])
 		perfRole := strings.TrimSpace(record[4])
 		lineManager := strings.TrimSpace(record[5])
+		if lineManager != "" {
+			lineManager = toTitleCase(lineManager)
+		}
 		email := strings.TrimSpace(record[6])
 
 		if name == "" {
@@ -323,6 +326,16 @@ func normalizeName(name string) string {
 	name = strings.ToLower(name)
 	name = regexp.MustCompile(`[^a-z]`).ReplaceAllString(name, "")
 	return name
+}
+
+func toTitleCase(s string) string {
+	words := strings.Fields(strings.ToLower(s))
+	for i, w := range words {
+		if len(w) > 0 {
+			words[i] = strings.ToUpper(w[:1]) + w[1:]
+		}
+	}
+	return strings.Join(words, " ")
 }
 
 func updateSeedData(users []User) {
