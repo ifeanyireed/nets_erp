@@ -124,36 +124,26 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 <html>
 <head>
     <meta charset="utf-8">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .header { background-color: #1e3a8a; padding: 30px 20px; text-align: center; color: #ffffff; }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
-        .content { padding: 40px 30px; color: #334155; line-height: 1.6; }
-        .content h2 { color: #1e3a8a; font-size: 18px; font-weight: 700; margin-top: 0; }
-        .content p { font-size: 14px; margin-bottom: 24px; }
-        .btn-wrapper { text-align: center; margin: 30px 0; }
-        .btn { display: inline-block; padding: 12px 30px; background-color: #2563eb; color: #ffffff !important; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center; }
-        .footer { background-color: #f8fafc; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>New Era Transport Services</h1>
-        </div>
-        <div class="content">
-            <h2>Reset Your Password</h2>
-            <p>Hello %s,</p>
-            <p>A request has been made to reset the password for your account on the New Era Performance Portal. Click the button below to choose a new password:</p>
-            <div class="btn-wrapper">
-                <a href="%s" class="btn">Reset Password</a>
+<body style="margin: 0; padding: 0; background-color: #f3f4f6;">
+    <div style="background-color: #f3f4f6; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+            <div style="background-color: #1e3a8a; padding: 30px 20px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: -0.02em;">New Era Transport Services</h1>
             </div>
-            <p>If you did not request this password reset, please ignore this email or contact HR.</p>
-            <p>Best regards,<br>New Era HR Team</p>
-        </div>
-        <div class="footer">
-            &copy; 2026 New Era Transport Services. All rights reserved.
+            <div style="padding: 40px 30px; color: #334155; line-height: 1.6; font-size: 14px;">
+                <h2 style="color: #1e3a8a; font-size: 18px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">Reset Your Password</h2>
+                <p style="margin: 0 0 16px 0;">Hello %s,</p>
+                <p style="margin: 0 0 24px 0;">A request has been made to reset the password for your account on the New Era Performance Portal. Click the button below to choose a new password:</p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="%s" style="display: inline-block; padding: 12px 30px; background-color: #2563eb; color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 14px; text-align: center;">Reset Password</a>
+                </div>
+                <p style="margin: 0 0 16px 0;">If you did not request this password reset, please ignore this email or contact HR.</p>
+                <p style="margin: 0;">Best regards,<br><strong style="color: #1e3a8a;">New Era HR Team</strong></p>
+            </div>
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
+                &copy; 2026 New Era Transport Services. All rights reserved.
+            </div>
         </div>
     </div>
 </body>
@@ -231,30 +221,22 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 <html>
 <head>
     <meta charset="utf-8">
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; }
-        .container { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .header { background-color: #1e3a8a; padding: 30px 20px; text-align: center; color: #ffffff; }
-        .header h1 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
-        .content { padding: 40px 30px; color: #334155; line-height: 1.6; }
-        .content h2 { color: #1e3a8a; font-size: 18px; font-weight: 700; margin-top: 0; }
-        .content p { font-size: 14px; margin-bottom: 24px; }
-        .footer { background-color: #f8fafc; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0; }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>New Era Transport Services</h1>
-        </div>
-        <div class="content">
-            <h2>Notification Alert</h2>
-            <p>Hello %s,</p>
-            <p>%s</p>
-            <p>Best regards,<br>New Era Performance Portal Team</p>
-        </div>
-        <div class="footer">
-            &copy; 2026 New Era Transport Services. All rights reserved.
+<body style="margin: 0; padding: 0; background-color: #f3f4f6;">
+    <div style="background-color: #f3f4f6; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+            <div style="background-color: #1e3a8a; padding: 30px 20px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 22px; font-weight: 800; letter-spacing: -0.02em;">New Era Transport Services</h1>
+            </div>
+            <div style="padding: 40px 30px; color: #334155; line-height: 1.6; font-size: 14px;">
+                <h2 style="color: #1e3a8a; font-size: 18px; font-weight: 700; margin-top: 0; margin-bottom: 16px;">Notification Alert</h2>
+                <p style="margin: 0 0 16px 0;">Hello %s,</p>
+                <p style="margin: 0 0 24px 0;">%s</p>
+                <p style="margin: 0;">Best regards,<br><strong style="color: #1e3a8a;">New Era Performance Portal Team</strong></p>
+            </div>
+            <div style="background-color: #f8fafc; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
+                &copy; 2026 New Era Transport Services. All rights reserved.
+            </div>
         </div>
     </div>
 </body>
