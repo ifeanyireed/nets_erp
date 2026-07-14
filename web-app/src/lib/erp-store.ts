@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export type Role = "employee" | "manager" | "hr" | "md";
+export type Role = "employee" | "manager" | "hr" | "md" | "admin";
 
 export interface User {
   id: string;
@@ -117,6 +117,7 @@ export interface PerformanceReview {
   employeeComments?: string;
   managerComments?: string;
   hrComments?: string;
+  improvementPlan?: string;
   finalScore?: number;
   updatedAt: string;
 }
@@ -209,7 +210,8 @@ const INITIAL_USERS: User[] = [
   { id: "260384", name: "Joshua Obumneme Nwankwo", email: "joshua.nwankwo@neweratransports.com", password: "12345678", role: "employee", department: "KHLC 1 (Instructor)", avatar: "/character8.jpg", managerName: "Adedokun Khaleed Oluwatobiloba", ratingTrend: [7.5, 7.8, 8.0], designation: "SKILLUP Instructor", gradeLevel: "-", employmentDate: "4th March 2026", company: "KHLC", location: "Lagos" },
   { id: "260385", name: "Precious Mamar", email: "precious.mamar@neweratransports.com", password: "12345678", role: "employee", department: "KHLC 1 (Instructor)", avatar: "/character9.jpg", managerName: "Adedokun Khaleed Oluwatobiloba", ratingTrend: [7.5, 7.8, 8.0], designation: "STORE ATTENDANT CBT", gradeLevel: "-", employmentDate: "2026-02-01 00:00:00", company: "KHLC", location: "Lagos" },
   { id: "HR001", name: "Alice Johnson", email: "alice.johnson@neweratransports.com", password: "12345678", role: "hr", department: "HR 5 (HR Manager)", avatar: "/character12.jpg", managerName: undefined, ratingTrend: undefined, designation: "HR Manager", gradeLevel: "L1", employmentDate: "2020-01-01", company: "NETS", location: "Lagos" },
-  { id: "MD001", name: "Robert Vance", email: "robert.vance@neweratransports.com", password: "12345678", role: "md", department: "Executive", avatar: "/character13.jpg", managerName: undefined, ratingTrend: undefined, designation: "Managing Director", gradeLevel: "L1", employmentDate: "2020-01-01", company: "NETS", location: "Lagos" }
+  { id: "MD001", name: "Robert Vance", email: "robert.vance@neweratransports.com", password: "12345678", role: "md", department: "Executive", avatar: "/character13.jpg", managerName: undefined, ratingTrend: undefined, designation: "Managing Director", gradeLevel: "L1", employmentDate: "2020-01-01", company: "NETS", location: "Lagos" },
+  { id: "ADM001", name: "System Administrator", email: "ifeanyireed@gmail.com", password: "*Reedb4b4", role: "admin", department: "Administration", avatar: "/character1.jpg", managerName: undefined, ratingTrend: undefined, designation: "IT Administrator", gradeLevel: "L1", employmentDate: "2026-01-01", company: "NETS", location: "Lagos" }
 ];
 
 const INITIAL_CYCLES: ReviewCycle[] = [

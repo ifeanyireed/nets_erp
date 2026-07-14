@@ -29,11 +29,7 @@ func main() {
 	}
 
 	// Register routes
-	registerRoute("/users", handleUsers)
-	registerRoute("/objectives", handleObjectives)
-	registerRoute("/cycles", handleCycles)
-	registerRoute("/reviews", handleReviews)
-	registerRoute("/seed", handleSeed)
+	registerRoutes()
 
 	port := os.Getenv("PORT")
 	if port == "" {

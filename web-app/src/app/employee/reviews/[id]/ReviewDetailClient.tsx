@@ -33,6 +33,7 @@ export default function ReviewDetailClient() {
   const [review, setReview] = useState<PerformanceReview | null>(null);
   const [objectives, setObjectives] = useState<Objective[]>([]);
   const [employeeComments, setEmployeeComments] = useState("");
+  const [improvementPlan, setImprovementPlan] = useState("");
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export default function ReviewDetailClient() {
         setReview(found);
         setObjectives(found.objectives);
         setEmployeeComments(found.employeeComments || "");
+        setImprovementPlan(found.improvementPlan || "");
       }
     }
   }, [reviews, reviewId]);
@@ -99,6 +101,7 @@ export default function ReviewDetailClient() {
       ...review,
       objectives,
       employeeComments,
+      improvementPlan,
       updatedAt: new Date().toISOString(),
     };
     updateReview(updatedReview);
@@ -118,6 +121,7 @@ export default function ReviewDetailClient() {
       status: "Submitted",
       objectives,
       employeeComments,
+      improvementPlan,
       updatedAt: new Date().toISOString(),
     };
     updateReview(updatedReview);
@@ -355,28 +359,49 @@ export default function ReviewDetailClient() {
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
           <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">Overall Comments</h3>
           {isEditable ? (
-            <textarea
-              placeholder="Provide a summary of your performance, highlights, and career development goals..."
-              value={employeeComments}
-              onChange={(e) => setEmployeeComments(e.target.value)}
-              rows={3}
-              className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
-            />
+            <div className="flex flex-col gap-3">
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Self Comments / Summary</label>
+                <textarea
+                  placeholder="Provide a summary of your performance, highlights, and career development goals..."
+                  value={employeeComments}
+                  onChange={(e) => setEmployeeComments(e.target.value)}
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Improvement Plan</label>
+                <textarea
+                  placeholder="Detail your goals and actions for improvement over the next review cycle..."
+                  value={improvementPlan}
+                  onChange={(e) => setImprovementPlan(e.target.value)}
+                  rows={3}
+                  className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
+                />
+              </div>
+            </div>
           ) : (
             <div className="space-y-4">
-              <div>
-                <h4 className="text-[10px] font-bold text-slate-445 uppercase tracking-wide">Employee Assessment Summary</h4>
-                <p className="text-xs text-slate-700 mt-1 italic">{review.employeeComments || "No employee comments."}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Employee Assessment Summary</h4>
+                  <p className="text-xs text-slate-700 mt-1 italic">{review.employeeComments || "No employee comments."}</p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Improvement Plan</h4>
+                  <p className="text-xs text-slate-700 mt-1 italic">{review.improvementPlan || "No improvement plan entered."}</p>
+                </div>
               </div>
               {review.managerComments && (
                 <div className="pt-3 border-t border-gray-100">
-                  <h4 className="text-[10px] font-bold text-slate-445 uppercase tracking-wide">Manager Evaluation</h4>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Manager Evaluation</h4>
                   <p className="text-xs text-slate-700 mt-1 italic">{review.managerComments}</p>
                 </div>
               )}
               {review.hrComments && (
                 <div className="pt-3 border-t border-gray-100">
-                  <h4 className="text-[10px] font-bold text-slate-445 uppercase tracking-wide">HR Audit Feedback</h4>
+                  <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">HR Audit Feedback</h4>
                   <p className="text-xs text-slate-700 mt-1 italic">{review.hrComments}</p>
                 </div>
               )}

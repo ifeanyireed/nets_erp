@@ -34,6 +34,7 @@ export default function ManagerReviewClient() {
   const [employee, setEmployee] = useState<User | null>(null);
   const [objectives, setObjectives] = useState<Objective[]>([]);
   const [managerComments, setManagerComments] = useState("");
+  const [improvementPlan, setImprovementPlan] = useState("");
 
   useEffect(() => {
     if (reviews.length > 0) {
@@ -43,6 +44,7 @@ export default function ManagerReviewClient() {
         setReview(foundReview);
         setObjectives(foundReview.objectives);
         setManagerComments(foundReview.managerComments || "");
+        setImprovementPlan(foundReview.improvementPlan || "");
       }
     }
     if (users.length > 0) {
@@ -117,6 +119,7 @@ export default function ManagerReviewClient() {
       status: "Manager Reviewed",
       objectives,
       managerComments,
+      improvementPlan,
       finalScore,
       updatedAt: new Date().toISOString(),
     };
@@ -135,6 +138,7 @@ export default function ManagerReviewClient() {
       ...review,
       status: "Returned",
       managerComments,
+      improvementPlan,
       updatedAt: new Date().toISOString(),
     };
     updateReview(updatedReview);
@@ -305,16 +309,39 @@ export default function ManagerReviewClient() {
           </div>
         </div>
 
-        {/* Manager feedback evaluation */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
-          <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">Manager Evaluation Summary & Comments</h3>
-          <textarea
-            placeholder="Provide a comprehensive evaluation of employee achievements, strengths, and areas requiring development. This comment will be visible to HR/MD audits and employee."
-            value={managerComments}
-            onChange={(e) => setManagerComments(e.target.value)}
-            rows={3}
-            className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
-          />
+        {/* Manager feedback evaluation & Overall comments */}
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-4">
+          <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider border-b border-gray-100 pb-2">Overall Comments</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Employee Assessment Summary</span>
+              <p className="text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-gray-200 italic min-h-[80px]">
+                {review.employeeComments || "No employee comments entered."}
+              </p>
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Improvement Plan</span>
+              <textarea
+                placeholder="Detail the goals and actions for improvement over the next review cycle..."
+                value={improvementPlan}
+                onChange={(e) => setImprovementPlan(e.target.value)}
+                rows={3}
+                className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
+              />
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Manager Evaluation Summary & Comments</span>
+            <textarea
+              placeholder="Provide a comprehensive evaluation of employee achievements, strengths, and areas requiring development. This comment will be visible to HR/MD audits and employee."
+              value={managerComments}
+              onChange={(e) => setManagerComments(e.target.value)}
+              rows={3}
+              className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
+            />
+          </div>
         </div>
 
         {/* Action buttons */}

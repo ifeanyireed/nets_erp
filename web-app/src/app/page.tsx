@@ -101,7 +101,7 @@ export default function LandingLoginPage() {
               <label className="block text-[9px] font-extrabold text-slate-300 md:text-slate-550 uppercase tracking-wider">Password</label>
               <button
                 type="button"
-                onClick={() => alert("Password recovery: please use one of the quick login accounts below.")}
+                onClick={() => router.push("/reset-password")}
                 className="text-[10px] font-bold text-blue-400 md:text-blue-600 hover:underline"
               >
                 Forgot Password?
@@ -137,6 +137,7 @@ export default function LandingLoginPage() {
             users.find(u => u.role === "manager"),
             users.find(u => u.role === "hr"),
             users.find(u => u.role === "md"),
+            users.find(u => u.role === "admin"),
           ]
             .filter((u): u is User => !!u)
             .map((user) => (

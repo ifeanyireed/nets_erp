@@ -33,6 +33,7 @@ export default function HRReviewClient() {
   const [review, setReview] = useState<PerformanceReview | null>(null);
   const [employee, setEmployee] = useState<User | null>(null);
   const [hrComments, setHrComments] = useState("");
+  const [improvementPlan, setImprovementPlan] = useState("");
 
   useEffect(() => {
     if (reviews.length > 0) {
@@ -41,6 +42,7 @@ export default function HRReviewClient() {
       if (foundReview) {
         setReview(foundReview);
         setHrComments(foundReview.hrComments || "");
+        setImprovementPlan(foundReview.improvementPlan || "");
       }
     }
     if (users.length > 0) {
@@ -64,6 +66,7 @@ export default function HRReviewClient() {
       ...review,
       status: "HR Approved",
       hrComments,
+      improvementPlan,
       updatedAt: new Date().toISOString(),
     };
     updateReview(updatedReview);
@@ -81,6 +84,7 @@ export default function HRReviewClient() {
       ...review,
       status: "Returned",
       hrComments,
+      improvementPlan,
       updatedAt: new Date().toISOString(),
     };
     updateReview(updatedReview);
@@ -210,19 +214,36 @@ export default function HRReviewClient() {
           </div>
         </div>
 
-        {/* Comments Audit */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1.5">Employee assessment summary</span>
-            <p className="text-xs text-slate-600 bg-slate-50 p-4 rounded-2xl border border-gray-100 italic">
-              "{review.employeeComments || "No employee comments entered."}"
-            </p>
-          </div>
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1.5">Manager evaluation summary</span>
-            <p className="text-xs text-slate-600 bg-slate-50 p-4 rounded-2xl border border-gray-100 italic">
-              "{review.managerComments || "No manager comments entered."}"
-            </p>
+        {/* Comments & Improvement Plan Audit */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4">
+          <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider border-b border-gray-100 pb-2">Overall Comments Audit</h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-4">
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1.5">Employee assessment summary</span>
+                <p className="text-xs text-slate-650 bg-slate-50 p-4 rounded-2xl border border-gray-100 italic min-h-[80px]">
+                  "{review.employeeComments || "No employee comments entered."}"
+                </p>
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1.5">Manager evaluation summary</span>
+                <p className="text-xs text-slate-650 bg-slate-50 p-4 rounded-2xl border border-gray-100 italic min-h-[80px]">
+                  "{review.managerComments || "No manager comments entered."}"
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1.5">Improvement Plan</span>
+              <textarea
+                placeholder="Detail the goals and actions for improvement over the next review cycle..."
+                value={improvementPlan}
+                onChange={(e) => setImprovementPlan(e.target.value)}
+                rows={7}
+                className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
+              />
+            </div>
           </div>
         </div>
 

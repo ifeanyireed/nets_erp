@@ -145,6 +145,8 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
         router.push(`/${role}`);
       } else if (pathname.startsWith("/md") && role !== "md") {
         router.push(`/${role}`);
+      } else if (pathname.startsWith("/admin") && role !== "admin") {
+        router.push(`/${role}`);
       }
     }
   }, [currentUser, pathname, router]);
@@ -176,6 +178,10 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
         return [
           { name: "MD Dashboard", route: "/md", icon: <BarChartIcon /> },
           { name: "Department Details", route: "/md/department/Fleet", icon: <BuildingIcon /> },
+        ];
+      case "admin":
+        return [
+          { name: "Admin Dashboard", route: "/admin", icon: <DashboardIcon /> },
         ];
       default:
         return [];

@@ -55,6 +55,7 @@ model PerformanceReview {
   employeeComments String?  @db.Text
   managerComments  String?  @db.Text
   hrComments       String?  @db.Text
+  improvementPlan  String?  @db.Text
   finalScore       Float?
   objectivesJson   String   @db.Text // JSON stringified array of Objective evaluations
   updatedAt        DateTime @default(now()) @updatedAt
