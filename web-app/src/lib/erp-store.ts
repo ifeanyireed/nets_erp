@@ -37,6 +37,47 @@ export function getParentDept(deptName: string): string {
   return "Other";
 }
 
+export const DEPARTMENTS = [
+  "Admin/HR 1 (Front Desk & Account Support)",
+  "Admin/HR 2 (Front Desk)",
+  "Admin/HR 3 (Office Assistant)",
+  "ERP/IT 1 (ERP/IT Officer)",
+  "Finance 1 (Acc Payable)",
+  "Finance 2 (Acc Receivable)",
+  "Finance 3 (Accountant)",
+  "Finance 4 (Finance Analyst)",
+  "Finance 5 (Head of Finance)",
+  "Fleet 1 (Bus Assistant)",
+  "Fleet 2 (Fleet Officer)",
+  "Fleet 3 (Fleet Support Officer)",
+  "Fleet 4 (Facility Manager)",
+  "Fleet 5 (Fleet Maintenance North)",
+  "Fleet 6 (Fleet Operations Manager)",
+  "Fleet 7 (HSE Executive)",
+  "Fleet 8 (Fleet Supervisor)",
+  "HR 1 (HR Executive 1)",
+  "HR 2 (HR Executive 2)",
+  "HR 3 (Head of HR)",
+  "Head of Operations",
+  "Internal Control 1 (Internal Control)",
+  "Legal 1 (Legal Counsel & EA)",
+  "Legal 2 (Legal Counsel)",
+  "Marketing 1 (Head of Marketing)",
+  "Marketing 2 (Marketing Executive & CSR)",
+  "Marketing 3 (Marketing Executive)",
+  "Marketing 4 (Marketing Manager)",
+  "Marketing 5 (Social Media Executive)",
+  "Marketing 6 (Sales Closer)",
+  "NOC 1 (Fleet Monitoring & NOC Supervisor)",
+  "NOC 2 (Fleet Monitoring Officer)",
+  "Workshop 1 (Mechanic)",
+  "Workshop 2 (Workshop Assistant)",
+  "Workshop 3 (Workshop Manager)",
+  "KHLC 1 (Instructor)",
+  "KHLC 2 (Supervisor)",
+  "KHLC 3 (Program Coordinator)"
+] as const;
+
 export interface ReviewCycle {
   id: string;
   name: string;
@@ -105,7 +146,7 @@ const INITIAL_USERS: User[] = [
   { id: "260323", name: "Divine Favour Chi Egbomuche", email: "divine.egbomuche@neweratransports.com", password: "12345678", role: "manager", department: "Marketing 1 (Head of Marketing)", avatar: "/character12.jpg", managerName: undefined, ratingTrend: [7.5, 7.8, 8.0], designation: "Head Of Marketing", gradeLevel: "-", employmentDate: "2025-08-01 00:00:00", company: "NETS", location: "Lagos" },
   { id: "260324", name: "Egba Stella Adutomivie", email: "egba.adutomivie@neweratransports.com", password: "12345678", role: "employee", department: "HR 1 (HR Executive 1)", avatar: "/character13.jpg", managerName: "Kalu Gift Kelechi", ratingTrend: [7.5, 7.8, 8.0], designation: "HR EXECUTIVE", gradeLevel: "-", employmentDate: "2025-08-01 00:00:00", company: "NETS", location: "Lagos" },
   { id: "260325", name: "Isaac Ekpo James", email: "isaac.james@neweratransports.com", password: "12345678", role: "employee", department: "Marketing 2 (Marketing Executive & CSR)", avatar: "/character1.jpg", managerName: "Divine Favour Chi Egbomuche", ratingTrend: [7.5, 7.8, 8.0], designation: "MARKETING EXECUTIVE", gradeLevel: "-", employmentDate: "2025-08-01 00:00:00", company: "NETS", location: "Lagos" },
-  { id: "260326", name: "Kalu Gift Kelechi", email: "kalu.kelechi@neweratransports.com", password: "12345678", role: "hr", department: "Admin/HR 1 (Front Desk & Account Support)", avatar: "/character2.jpg", managerName: undefined, ratingTrend: [7.5, 7.8, 8.0], designation: "HEAD HR", gradeLevel: "-", employmentDate: "2025-08-11 00:00:00", company: "NETS", location: "Lagos" },
+  { id: "260326", name: "Kalu Gift Kelechi", email: "kalu.kelechi@neweratransports.com", password: "12345678", role: "hr", department: "HR 3 (Head of HR)", avatar: "/character2.jpg", managerName: undefined, ratingTrend: [7.5, 7.8, 8.0], designation: "HEAD HR", gradeLevel: "-", employmentDate: "2025-08-11 00:00:00", company: "NETS", location: "Lagos" },
   { id: "260327", name: "Ekwealor Oluchi Ugochi", email: "ekwealor.ugochi@neweratransports.com", password: "12345678", role: "employee", department: "NOC 2 (Fleet Monitoring Officer)", avatar: "/character3.jpg", managerName: "Chidimma Maureen Uzoukwu", ratingTrend: [7.5, 7.8, 8.0], designation: "Fleet Monitoring Officer NOC", gradeLevel: "-", employmentDate: "2025-08-15 00:00:00", company: "NETS", location: "Lagos" },
   { id: "260328", name: "Onebunne Ginika Perpetus", email: "onebunne.perpetus@neweratransports.com", password: "12345678", role: "employee", department: "NOC 2 (Fleet Monitoring Officer)", avatar: "/character4.jpg", managerName: "Chidimma Maureen Uzoukwu", ratingTrend: [7.5, 7.8, 8.0], designation: "Fleet Monitoring Officer NOC", gradeLevel: "-", employmentDate: "2025-08-15 00:00:00", company: "NETS", location: "Lagos" },
   { id: "260329", name: "Ogundipe Femi Felix", email: "ogundipe.felix@neweratransports.com", password: "12345678", role: "employee", department: "Finance 4 (Finance Analyst)", avatar: "/character5.jpg", managerName: "Arotile Rotimi Seyi", ratingTrend: [7.5, 7.8, 8.0], designation: "FINANCE ANALYST", gradeLevel: "-", employmentDate: "2025-09-01 00:00:00", company: "NETS", location: "Lagos" },
@@ -170,8 +211,8 @@ const INITIAL_USERS: User[] = [
 ];
 
 const INITIAL_CYCLES: ReviewCycle[] = [
-  { id: "CYC001", name: "2026 Mid-Year Performance Cycle", startDate: "2026-06-01", endDate: "2026-07-31", status: "Active", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)"] },
-  { id: "CYC002", name: "2025 Annual Review Cycle", startDate: "2025-11-01", endDate: "2025-12-15", status: "Completed", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)"] }
+  { id: "CYC001", name: "2026 Mid-Year Performance Cycle", startDate: "2026-06-01", endDate: "2026-07-31", status: "Active", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)"] },
+  { id: "CYC002", name: "2025 Annual Review Cycle", startDate: "2025-11-01", endDate: "2025-12-15", status: "Completed", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)"] }
 ];
 
 const DEFAULT_OBJECTIVES: Objective[] = [
@@ -260,6 +301,13 @@ const DEFAULT_OBJECTIVES: Objective[] = [
   { id: "OBJ_HUMAN_RESOURCES_20", text: "Employee Engagement & Satisfaction", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 2 (HR Executive 2)"], description: ["Employee Engagement and Satisfaction", "Bi-annual Execution of Employee Satisfaction Survey \u2013 Timeline 3weeks", "Ensure 75% participation rate in the surveys"] },
   { id: "OBJ_HUMAN_RESOURCES_21", text: "Employee Engagement & Satisfaction", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 2 (HR Executive 2)"], description: ["Achieve an 75% engagement score by the end of the year", "Exit Management", "Average Time-to-Exit: Average time taken to complete the exit process"] },
   { id: "OBJ_HUMAN_RESOURCES_22", text: "Exit Process Completion Rate", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 2 (HR Executive 2)"], description: ["Exit Process Completion Rate: Percentage of exit processes completed within a specified timeframe"] },
+  { id: "OBJ_HUMAN_RESOURCES_23", text: "Employee Engagement", weight: 6, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Increase employee engagement score by 10% as measured by an annual employee satisfaction survey", "Reduce employee turnover rate by 5% year-over-year", "Increase the number of employees receiving formal recognition for their contributions by 20%."] },
+  { id: "OBJ_HUMAN_RESOURCES_24", text: "Learning and Manpower Development", weight: 6, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Training Completion Rate: Achieve a 95% employee participation rate in mandatory training programs (e.g., safety, compliance)", "Employee Skill Improvement: Measured through assessments before and after training", "Achieve a 95% utilization rate of the allocated L&D budget", "%tage number of quarterly trainings for external clients (in collaboration with LASTMA, FRSC) etc executed"] },
+  { id: "OBJ_HUMAN_RESOURCES_25", text: "Strategic Workforce Management", weight: 6, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Workforce Planning Accuracy: Percentage accuracy of forecasting workforce needs across the group.", "Succession Planning Coverage: Percentage of key roles with identified successors ready within a set timeframe."] },
+  { id: "OBJ_HUMAN_RESOURCES_26", text: "Oversee Performance Management Process", weight: 6, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Ensuring 100% compliance regarding quarterly performance review", "Execution of result of bi-annual performance appraisal on or before the 2nd week of the next half year"] },
+  { id: "OBJ_HUMAN_RESOURCES_27", text: "Recruitment and Retention at the Group Level", weight: 6, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Group-Wide Turnover Rate: Aggregate employee turnover across all business units", "Diversity and Inclusion Metrics: Percentage representation of diverse groups in leadership and across the organization."] },
+  { id: "OBJ_HUMAN_RESOURCES_28", text: "Health, Safety, and Well-Being", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["Group Incident Reduction Rate: Reduction in workplace incidents across the group by 0% - 5%", "Employee Well-Being Participation: Percentage of employees engaging in group-wide wellness programs", "Health and Safety Audit Compliance: Percentage of units compliant with health and safety regulations."] },
+  { id: "OBJ_HUMAN_RESOURCES_29", text: "HR Operational Efficiency", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["HR 3 (Head of HR)"], description: ["HR Budget Utilization: Percentage of the HR budget effectively used.", "Policy Update Frequency: Ensuring policies are updated on schedule to match industry standards and legal requirements."] },
   { id: "OBJ_OTHER_1", text: "Service Delivery & Timeliness", weight: 20, type: "objective", expectedLevel: undefined, category: undefined, departments: ["Head of Operations"], description: ["Ensure 95% on-time service delivery for scheduled operations", "Reduce vehicle downtime to less than 10% per month", "Ensure 100% compliance with operational safety and regulatory standards"] },
   { id: "OBJ_OTHER_2", text: "Operational Staff Policy Compliance", weight: 20, type: "objective", expectedLevel: undefined, category: undefined, departments: ["Head of Operations"], description: ["Achieve 90%+ operational staff performance compliance with company policies"] },
   { id: "OBJ_INTERNAL_CONTROL_1", text: "Completing Audit Reports", weight: 14, type: "objective", expectedLevel: undefined, category: undefined, departments: ["Internal Control 1 (Internal Control)"], description: ["Completing Audit Reports", "Cycle time for completing Draft Audit Reports", "Cycle time for completing Final Audit Reports"] },

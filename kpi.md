@@ -269,6 +269,22 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 ---
 
+## Job Profile: HR 3 (Head of HR)
+**Source File:** `N/A`  
+**Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
+
+| KPI Title | Weight | Description Bullets |
+| --- | --- | --- |
+| Employee Engagement | 6% | • Increase employee engagement score by 10% as measured by an annual employee satisfaction survey<br>• Reduce employee turnover rate by 5% year-over-year<br>• Increase the number of employees receiving formal recognition for their contributions by 20% |
+| Learning and Manpower Development | 6% | • Training Completion Rate: Achieve a 95% employee participation rate in mandatory training programs (e.g., safety, compliance)<br>• Employee Skill Improvement: Measured through assessments before and after training<br>• Achieve a 95% utilization rate of the allocated L&D budget<br>• %tage number of quarterly trainings for external clients (in collaboration with LASTMA, FRSC) etc executed |
+| Strategic Workforce Management | 6% | • Workforce Planning Accuracy: Percentage accuracy of forecasting workforce needs across the group.<br>• Succession Planning Coverage: Percentage of key roles with identified successors ready within a set timeframe. |
+| Oversee Performance Management Process | 6% | • Ensuring 100% compliance regarding quarterly performance review<br>• Execution of result of bi-annual performance appraisal on or before the 2nd week of the next half year |
+| Recruitment and Retention at the Group Level | 6% | • Group-Wide Turnover Rate: Aggregate employee turnover across all business units<br>• Diversity and Inclusion Metrics: Percentage representation of diverse groups in leadership and across the organization. |
+| Health, Safety, and Well-Being | 5% | • Group Incident Reduction Rate: Reduction in workplace incidents across the group by 0% - 5%<br>• Employee Well-Being Participation: Percentage of employees engaging in group-wide wellness programs<br>• Health and Safety Audit Compliance: Percentage of units compliant with health and safety regulations. |
+| HR Operational Efficiency | 5% | • HR Budget Utilization: Percentage of the HR budget effectively used.<br>• Policy Update Frequency: Ensuring policies are updated on schedule to match industry standards and legal requirements. |
+
+---
+
 ## Job Profile: Head of Operations
 **Source File:** `Head of Operations JD.docx`  
 **Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  

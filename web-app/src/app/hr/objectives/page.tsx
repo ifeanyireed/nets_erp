@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useERPStore, Objective } from "@/lib/erp-store";
+import { useERPStore, Objective, DEPARTMENTS } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
 
 export default function ObjectiveManagement() {
@@ -13,7 +13,7 @@ export default function ObjectiveManagement() {
   const [category, setCategory] = useState<string>("Behavioural");
   const [selectedDepts, setSelectedDepts] = useState<string[]>([]);
   const [filterDept, setFilterDept] = useState<string>("All");
-  const [depts, setDepts] = useState<string[]>([]);
+  const [depts, setDepts] = useState<string[]>([...DEPARTMENTS]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [isAddingDept, setIsAddingDept] = useState(false);
@@ -26,49 +26,6 @@ export default function ObjectiveManagement() {
   const [editObjDepts, setEditObjDepts] = useState<string[]>([]);
   const [editObjCategory, setEditObjCategory] = useState<string>("Behavioural");
   const [editObjExpectedLevel, setEditObjExpectedLevel] = useState<number>(3);
-
-  useEffect(() => {
-    const initialDepts = [
-      "Finance 1 (Acc Payable)",
-      "Finance 2 (Acc Receivable)",
-      "Finance 3 (Accountant)",
-      "Finance 4 (Finance Analyst)",
-      "Finance 5 (Head of Finance)",
-      "HR 1 (HR Executive 1)",
-      "HR 2 (HR Executive 2)",
-      "HR 3 (Admin Manager)",
-      "HR 4 (Office Assistant)",
-      "HR 5 (HR Manager)",
-      "ERP/IT 1 (ERP/IT Officer)",
-      "Internal Control 1 (IC Manager)",
-      "Legal 1 (Legal Counsel/EA)",
-      "Legal 2 (EA to MD)",
-      "Marketing 1 (Marketing Executive)",
-      "Marketing 2 (Retail Marketing)",
-      "Marketing 3 (Marketing Head)",
-      "Marketing 4 (Business Manager)",
-      "Marketing 5 (Social Media Executive)",
-      "Marketing 6 (Sales Closer)",
-      "NOC 1 (Fleet Monitoring Officer)",
-      "Fleet 1 (Driver)",
-      "Fleet 2 (Fleet Supervisor)",
-      "Fleet 3 (Fleet Maintenance Officer)",
-      "Fleet 4 (HSE Officer)",
-      "Fleet 5 (Facility Manager)",
-      "Fleet 6 (Corporate Bus Deployer)",
-      "Fleet 7 (HSE Executive)",
-      "Workshop 1 (Mechanic Intern)",
-      "Workshop 2 (Mechanic)",
-      "Workshop 3 (Workshop Manager)",
-      "KHLC 1 (Instructor)",
-      "KHLC 2 (Supervisor)",
-      "KHLC 3 (Skill Up Coordinator)",
-      "KHLC 4 (Program Coordinator)",
-      "KHLC 5 (Robotics Head)",
-      "KHLC 6 (Social Media/Admin)"
-    ];
-    setDepts(initialDepts);
-  }, []);
 
   // Automatically enforce 100% aggregation per department
   useEffect(() => {
