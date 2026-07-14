@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useERPStore, PerformanceReview, User } from "@/lib/erp-store";
+import { useERPStore, PerformanceReview, User, getParentDept } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
 
 export default function DepartmentPerformancePage() {
@@ -23,14 +23,14 @@ export default function DepartmentPerformancePage() {
   if (!currentUser) return null;
 
   // Filter employees and reviews for this department
-  const deptEmployees = users.filter(u => u.department === deptId && u.role === "employee");
+  const deptEmployees = users.filter(u => getParentDept(u.department) === deptId && u.role === "employee");
   const deptEmpIds = deptEmployees.map(u => u.id);
   const deptReviews = reviews.filter(r => deptEmpIds.includes(r.employeeId));
 
   // Averages by Department
   const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC/Skillup"];
   const allDeptAverages = depts.map(d => {
-    const deptRevs = reviews.filter(r => r.department === d && r.status === "HR Approved" && r.finalScore !== undefined);
+    const deptRevs = reviews.filter(r => getParentDept(r.department) === d && r.status === "HR Approved" && r.finalScore !== undefined);
     const avg = deptRevs.length > 0
       ? (deptRevs.reduce((sum, r) => sum + (r.finalScore || 0), 0) / deptRevs.length)
       : 0;

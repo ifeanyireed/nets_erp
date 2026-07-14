@@ -21,6 +21,22 @@ export interface User {
   password?: string;
 }
 
+export function getParentDept(deptName: string): string {
+  if (!deptName) return "Other";
+  const name = deptName.trim();
+  if (name.startsWith("Fleet")) return "Fleet";
+  if (name.startsWith("Marketing")) return "Marketing";
+  if (name.startsWith("NOC")) return "NOC";
+  if (name.startsWith("Finance") || name.startsWith("ERP/IT")) return "Finance & Accounts";
+  if (name.startsWith("Admin/HR")) return "Admin/HR";
+  if (name.startsWith("HR")) return "Human Resources";
+  if (name.startsWith("Legal")) return "Legal";
+  if (name.startsWith("Workshop")) return "Workshop";
+  if (name.startsWith("Internal Control")) return "Internal Control";
+  if (name.startsWith("KHLC")) return "KHLC/Skillup";
+  return "Other";
+}
+
 export interface ReviewCycle {
   id: string;
   name: string;

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useERPStore, PerformanceReview, User } from "@/lib/erp-store";
+import { useERPStore, PerformanceReview, User, getParentDept } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
 import StatCards from "@/components/nets_erp/StatCards";
 
@@ -26,7 +26,7 @@ export default function MDDashboard() {
   // Averages by Department
   const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC/Skillup"];
   const deptAverages = depts.map(d => {
-    const deptRevs = completedReviews.filter(r => r.department === d && r.finalScore !== undefined);
+    const deptRevs = completedReviews.filter(r => getParentDept(r.department) === d && r.finalScore !== undefined);
     const avg = deptRevs.length > 0
       ? (deptRevs.reduce((sum, r) => sum + (r.finalScore || 0), 0) / deptRevs.length)
       : 0;
