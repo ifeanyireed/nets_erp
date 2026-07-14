@@ -510,3 +510,20 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 | Reporting and Documentation | 8% | • Submit accurate quarterly report before end of term<br>• Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy. |
 
 ---
+
+## Job Profile: KHLC 5 (Head of C&R/CBT)
+**Source File:** `N/A (KHLC Head of C&R/CBT)`  
+**Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
+
+| KPI Title | Weight | Description Bullets |
+| --- | --- | --- |
+| Curriculum Updates | 5% | • Percentage of curriculum updated annually based on industry trends. |
+| Stakeholder Feedback | 5% | • Positive feedback from students and instructors. |
+| Student Enrollment | 5% | • Percentage increase in student enrollment compared to the previous period. |
+| Student Retention | 5% | • Retention rate for students advancing to higher-level courses. |
+| Instructor Ratings | 5% | • Percentage of instructors rated 4+ out of 5 in student feedback surveys. |
+| Instructor Development | 5% | • Percentage of instructors completing professional development programs annually. |
+| Course Tools Utilization | 5% | • Percentage of courses utilizing the latest coding and robotics tools. |
+| Event Participation | 5% | • Percentage increase in students participating in coding-related events. |
+
+---

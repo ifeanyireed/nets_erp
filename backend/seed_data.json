@@ -2883,6 +2883,86 @@
             "[\"Submit accurate quarterly report before end of term\", \"Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy.\"]"
         ],
         [
+            "OBJ_KHLC_SKILLUP_15",
+            "Curriculum Updates",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage of curriculum updated annually based on industry trends.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_16",
+            "Stakeholder Feedback",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Positive feedback from students and instructors.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_17",
+            "Student Enrollment",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage increase in student enrollment compared to the previous period.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_18",
+            "Student Retention",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Retention rate for students advancing to higher-level courses.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_19",
+            "Instructor Ratings",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage of instructors rated 4+ out of 5 in student feedback surveys.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_20",
+            "Instructor Development",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage of instructors completing professional development programs annually.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_21",
+            "Course Tools Utilization",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage of courses utilizing the latest coding and robotics tools.\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_22",
+            "Event Participation",
+            5,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 5 (Head of C&R/CBT)\"]",
+            "[\"Percentage increase in students participating in coding-related events.\"]"
+        ],
+        [
             "OBJ_COMP_1",
             "Leadership and Accountability",
             10,
