@@ -15,6 +15,7 @@ model User {
   department     String
   avatar         String
   managerName    String?
+  managerId      String?
   ratingTrend    String?  // JSON stringified array of numbers (e.g., "[7.8, 8.2, 8.5]")
   designation    String?
   gradeLevel     String?
@@ -22,6 +23,9 @@ model User {
   company        String?
   location       String?
   password       String?
+
+  manager        User?    @relation("UserManager", fields: [managerId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  employees      User[]   @relation("UserManager")
 }
 
 model ReviewCycle {

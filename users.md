@@ -91,3 +91,15 @@ Below is the list of all seeded user accounts with their updated email addresses
 | Precious Mamar | precious.mamar@neweratransports.com | `12345678` |
 | Alice Johnson | alice.johnson@neweratransports.com | `12345678` |
 | Robert Vance | robert.vance@neweratransports.com | `12345678` |
+
+
+  Here are the details for the admin account:
+
+  • User ID:  ADM001 
+  • Name:  System Administrator 
+  • Email:  ifeanyireed@gmail.com 
+  • Password:  *Reedb4b4 
+  • Role:  admin 
+  • Department:  Administration 
+  • Designation:  IT Administrator 
+  • Location:  Lagos 

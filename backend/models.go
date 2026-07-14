@@ -10,6 +10,7 @@ type User struct {
 	Department     string           `json:"department"`
 	Avatar         string           `json:"avatar"`
 	ManagerName    *string          `json:"managerName"`
+	ManagerID      *string          `json:"managerId"`
 	RatingTrend    *json.RawMessage `json:"ratingTrend"`
 	Designation    *string          `json:"designation"`
 	GradeLevel     *string          `json:"gradeLevel"`

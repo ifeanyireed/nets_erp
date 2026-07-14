@@ -12,8 +12,8 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		if id != "" {
 			var u User
 			var ratingTrend sql.NullString
-			err := db.QueryRow("SELECT id, name, email, role, department, avatar, managerName, ratingTrend, designation, gradeLevel, employmentDate, company, location, password FROM User WHERE id = ?", id).
-				Scan(&u.ID, &u.Name, &u.Email, &u.Role, &u.Department, &u.Avatar, &u.ManagerName, &ratingTrend, &u.Designation, &u.GradeLevel, &u.EmploymentDate, &u.Company, &u.Location, &u.Password)
+			err := db.QueryRow("SELECT id, name, email, role, department, avatar, managerName, managerId, ratingTrend, designation, gradeLevel, employmentDate, company, location, password FROM User WHERE id = ?", id).
+				Scan(&u.ID, &u.Name, &u.Email, &u.Role, &u.Department, &u.Avatar, &u.ManagerName, &u.ManagerID, &ratingTrend, &u.Designation, &u.GradeLevel, &u.EmploymentDate, &u.Company, &u.Location, &u.Password)
 			if err == sql.ErrNoRows {
 				w.WriteHeader(http.StatusNotFound)
 				json.NewEncoder(w).Encode(map[string]string{"message": "User not found"})
@@ -31,7 +31,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		rows, err := db.Query("SELECT id, name, email, role, department, avatar, managerName, ratingTrend, designation, gradeLevel, employmentDate, company, location, password FROM User")
+		rows, err := db.Query("SELECT id, name, email, role, department, avatar, managerName, managerId, ratingTrend, designation, gradeLevel, employmentDate, company, location, password FROM User")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
@@ -43,7 +43,7 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 		for rows.Next() {
 			var u User
 			var ratingTrend sql.NullString
-			if err := rows.Scan(&u.ID, &u.Name, &u.Email, &u.Role, &u.Department, &u.Avatar, &u.ManagerName, &ratingTrend, &u.Designation, &u.GradeLevel, &u.EmploymentDate, &u.Company, &u.Location, &u.Password); err != nil {
+			if err := rows.Scan(&u.ID, &u.Name, &u.Email, &u.Role, &u.Department, &u.Avatar, &u.ManagerName, &u.ManagerID, &ratingTrend, &u.Designation, &u.GradeLevel, &u.EmploymentDate, &u.Company, &u.Location, &u.Password); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 				return
@@ -75,14 +75,14 @@ func handleUsers(w http.ResponseWriter, r *http.Request) {
 			ratingTrendStr = &s
 		}
 
-		_, err := db.Exec(`INSERT INTO User (id, name, email, role, department, avatar, managerName, ratingTrend, designation, gradeLevel, employmentDate, company, location, password) 
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		_, err := db.Exec(`INSERT INTO User (id, name, email, role, department, avatar, managerName, managerId, ratingTrend, designation, gradeLevel, employmentDate, company, location, password) 
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 			ON DUPLICATE KEY UPDATE 
 			name = VALUES(name), email = VALUES(email), role = VALUES(role), department = VALUES(department), 
-			avatar = VALUES(avatar), managerName = VALUES(managerName), ratingTrend = VALUES(ratingTrend),
+			avatar = VALUES(avatar), managerName = VALUES(managerName), managerId = VALUES(managerId), ratingTrend = VALUES(ratingTrend),
 			designation = VALUES(designation), gradeLevel = VALUES(gradeLevel), employmentDate = VALUES(employmentDate),
 			company = VALUES(company), location = VALUES(location), password = VALUES(password)`,
-			u.ID, u.Name, u.Email, u.Role, u.Department, u.Avatar, u.ManagerName, ratingTrendStr, u.Designation, u.GradeLevel, u.EmploymentDate, u.Company, u.Location, u.Password)
+			u.ID, u.Name, u.Email, u.Role, u.Department, u.Avatar, u.ManagerName, u.ManagerID, ratingTrendStr, u.Designation, u.GradeLevel, u.EmploymentDate, u.Company, u.Location, u.Password)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

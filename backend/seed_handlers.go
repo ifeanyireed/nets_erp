@@ -40,7 +40,7 @@ func handleSeed(w http.ResponseWriter, r *http.Request) {
 	_, _ = tx.Exec("SET FOREIGN_KEY_CHECKS = 1")
 
 	// Seed Users
-	userStmt, err := tx.Prepare("INSERT INTO User (id, name, email, role, department, avatar, managerName, ratingTrend, designation, gradeLevel, employmentDate, company, location, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+	userStmt, err := tx.Prepare("INSERT INTO User (id, name, email, role, department, avatar, managerName, managerId, ratingTrend, designation, gradeLevel, employmentDate, company, location, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to prepare User stmt: " + err.Error()})
@@ -49,9 +49,9 @@ func handleSeed(w http.ResponseWriter, r *http.Request) {
 	defer userStmt.Close()
 
 	for _, u := range data.Users {
-		if len(u) > 7 && u[7] != nil {
-			if s, ok := u[7].(string); ok {
-				u[7] = s
+		if len(u) > 8 && u[8] != nil {
+			if s, ok := u[8].(string); ok {
+				u[8] = s
 			}
 		}
 		if _, err := userStmt.Exec(u...); err != nil {
