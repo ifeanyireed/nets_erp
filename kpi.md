@@ -496,3 +496,17 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 | Instructor Skill-up & Professional Courses | 10% | • Complete at least 2 professional courses annually to improve skills and coordination |
 
 ---
+
+## Job Profile: KHLC 4 (Admin Officer)
+**Source File:** `N/A (KHLC Admin Officer)`  
+**Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
+
+| KPI Title | Weight | Description Bullets |
+| --- | --- | --- |
+| Stakeholder Relationships | 8% | • Achieve an average stakeholder relationship rating of 4/5 or higher (>=90%) |
+| Professional Compliance | 8% | • Ensure a compliance rate of 100% with regards to professionalism from all instructors, supervisor |
+| Client Invoicing | 8% | • Ensure accurate invoicing of clients on or before 5th week of the term |
+| Receivables Management | 8% | • Ensure 85% – 90% receivables of all client invoices before 11th week of the term |
+| Reporting and Documentation | 8% | • Submit accurate quarterly report before end of term<br>• Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy. |
+
+---

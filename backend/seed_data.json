@@ -1400,7 +1400,7 @@
             "2026-06-01",
             "2026-07-31",
             "Active",
-            "[\"Admin/HR 1 (Front Desk & Account Support)\", \"Admin/HR 2 (Front Desk)\", \"Admin/HR 3 (Office Assistant)\", \"ERP/IT 1 (ERP/IT Officer)\", \"Finance 1 (Acc Payable)\", \"Finance 2 (Acc Receivable)\", \"Finance 3 (Accountant)\", \"Finance 4 (Finance Analyst)\", \"Finance 5 (Head of Finance)\", \"Fleet 1 (Bus Assistant)\", \"Fleet 2 (Fleet Officer)\", \"Fleet 3 (Fleet Support Officer)\", \"Fleet 4 (Facility Manager)\", \"Fleet 5 (Fleet Maintenance North)\", \"Fleet 6 (Fleet Operations Manager)\", \"Fleet 7 (HSE Executive)\", \"Fleet 8 (Fleet Supervisor)\", \"HR 1 (HR Executive 1)\", \"HR 2 (HR Executive 2)\", \"HR 3 (Head of HR)\", \"Head of Operations\", \"Internal Control 1 (Internal Control)\", \"Legal 1 (Legal Counsel & EA)\", \"Legal 2 (Legal Counsel)\", \"Marketing 1 (Head of Marketing)\", \"Marketing 2 (Marketing Executive & CSR)\", \"Marketing 3 (Marketing Executive)\", \"Marketing 4 (Marketing Manager)\", \"Marketing 5 (Social Media Executive)\", \"Marketing 6 (Sales Closer)\", \"NOC 1 (Fleet Monitoring & NOC Supervisor)\", \"NOC 2 (Fleet Monitoring Officer)\", \"Workshop 1 (Mechanic)\", \"Workshop 2 (Workshop Assistant)\", \"Workshop 3 (Workshop Manager)\", \"KHLC 1 (Instructor)\", \"KHLC 2 (Supervisor)\", \"KHLC 3 (Program Coordinator)\"]"
+            "[\"Admin/HR 1 (Front Desk & Account Support)\", \"Admin/HR 2 (Front Desk)\", \"Admin/HR 3 (Office Assistant)\", \"ERP/IT 1 (ERP/IT Officer)\", \"Finance 1 (Acc Payable)\", \"Finance 2 (Acc Receivable)\", \"Finance 3 (Accountant)\", \"Finance 4 (Finance Analyst)\", \"Finance 5 (Head of Finance)\", \"Fleet 1 (Bus Assistant)\", \"Fleet 2 (Fleet Officer)\", \"Fleet 3 (Fleet Support Officer)\", \"Fleet 4 (Facility Manager)\", \"Fleet 5 (Fleet Maintenance North)\", \"Fleet 6 (Fleet Operations Manager)\", \"Fleet 7 (HSE Executive)\", \"Fleet 8 (Fleet Supervisor)\", \"HR 1 (HR Executive 1)\", \"HR 2 (HR Executive 2)\", \"HR 3 (Head of HR)\", \"Head of Operations\", \"Internal Control 1 (Internal Control)\", \"Legal 1 (Legal Counsel & EA)\", \"Legal 2 (Legal Counsel)\", \"Marketing 1 (Head of Marketing)\", \"Marketing 2 (Marketing Executive & CSR)\", \"Marketing 3 (Marketing Executive)\", \"Marketing 4 (Marketing Manager)\", \"Marketing 5 (Social Media Executive)\", \"Marketing 6 (Sales Closer)\", \"NOC 1 (Fleet Monitoring & NOC Supervisor)\", \"NOC 2 (Fleet Monitoring Officer)\", \"Workshop 1 (Mechanic)\", \"Workshop 2 (Workshop Assistant)\", \"Workshop 3 (Workshop Manager)\", \"KHLC 1 (Instructor)\", \"KHLC 2 (Supervisor)\", \"KHLC 3 (Program Coordinator)\", \"KHLC 4 (Admin Officer)\"]"
         ],
         [
             "CYC002",
@@ -1408,7 +1408,7 @@
             "2025-11-01",
             "2025-12-15",
             "Completed",
-            "[\"Admin/HR 1 (Front Desk & Account Support)\", \"Admin/HR 2 (Front Desk)\", \"Admin/HR 3 (Office Assistant)\", \"ERP/IT 1 (ERP/IT Officer)\", \"Finance 1 (Acc Payable)\", \"Finance 2 (Acc Receivable)\", \"Finance 3 (Accountant)\", \"Finance 4 (Finance Analyst)\", \"Finance 5 (Head of Finance)\", \"Fleet 1 (Bus Assistant)\", \"Fleet 2 (Fleet Officer)\", \"Fleet 3 (Fleet Support Officer)\", \"Fleet 4 (Facility Manager)\", \"Fleet 5 (Fleet Maintenance North)\", \"Fleet 6 (Fleet Operations Manager)\", \"Fleet 7 (HSE Executive)\", \"Fleet 8 (Fleet Supervisor)\", \"HR 1 (HR Executive 1)\", \"HR 2 (HR Executive 2)\", \"HR 3 (Head of HR)\", \"Head of Operations\", \"Internal Control 1 (Internal Control)\", \"Legal 1 (Legal Counsel & EA)\", \"Legal 2 (Legal Counsel)\", \"Marketing 1 (Head of Marketing)\", \"Marketing 2 (Marketing Executive & CSR)\", \"Marketing 3 (Marketing Executive)\", \"Marketing 4 (Marketing Manager)\", \"Marketing 5 (Social Media Executive)\", \"Marketing 6 (Sales Closer)\", \"NOC 1 (Fleet Monitoring & NOC Supervisor)\", \"NOC 2 (Fleet Monitoring Officer)\", \"Workshop 1 (Mechanic)\", \"Workshop 2 (Workshop Assistant)\", \"Workshop 3 (Workshop Manager)\", \"KHLC 1 (Instructor)\", \"KHLC 2 (Supervisor)\", \"KHLC 3 (Program Coordinator)\"]"
+            "[\"Admin/HR 1 (Front Desk & Account Support)\", \"Admin/HR 2 (Front Desk)\", \"Admin/HR 3 (Office Assistant)\", \"ERP/IT 1 (ERP/IT Officer)\", \"Finance 1 (Acc Payable)\", \"Finance 2 (Acc Receivable)\", \"Finance 3 (Accountant)\", \"Finance 4 (Finance Analyst)\", \"Finance 5 (Head of Finance)\", \"Fleet 1 (Bus Assistant)\", \"Fleet 2 (Fleet Officer)\", \"Fleet 3 (Fleet Support Officer)\", \"Fleet 4 (Facility Manager)\", \"Fleet 5 (Fleet Maintenance North)\", \"Fleet 6 (Fleet Operations Manager)\", \"Fleet 7 (HSE Executive)\", \"Fleet 8 (Fleet Supervisor)\", \"HR 1 (HR Executive 1)\", \"HR 2 (HR Executive 2)\", \"HR 3 (Head of HR)\", \"Head of Operations\", \"Internal Control 1 (Internal Control)\", \"Legal 1 (Legal Counsel & EA)\", \"Legal 2 (Legal Counsel)\", \"Marketing 1 (Head of Marketing)\", \"Marketing 2 (Marketing Executive & CSR)\", \"Marketing 3 (Marketing Executive)\", \"Marketing 4 (Marketing Manager)\", \"Marketing 5 (Social Media Executive)\", \"Marketing 6 (Sales Closer)\", \"NOC 1 (Fleet Monitoring & NOC Supervisor)\", \"NOC 2 (Fleet Monitoring Officer)\", \"Workshop 1 (Mechanic)\", \"Workshop 2 (Workshop Assistant)\", \"Workshop 3 (Workshop Manager)\", \"KHLC 1 (Instructor)\", \"KHLC 2 (Supervisor)\", \"KHLC 3 (Program Coordinator)\", \"KHLC 4 (Admin Officer)\"]"
         ]
     ],
     "objectives": [
@@ -2831,6 +2831,56 @@
             null,
             "[\"KHLC 3 (Program Coordinator)\"]",
             "[\"Complete at least 2 professional courses annually to improve skills and coordination\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_10",
+            "Stakeholder Relationships",
+            8,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 4 (Admin Officer)\"]",
+            "[\"Achieve an average stakeholder relationship rating of 4/5 or higher (>=90%)\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_11",
+            "Professional Compliance",
+            8,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 4 (Admin Officer)\"]",
+            "[\"Ensure a compliance rate of 100% with regards to professionalism from all instructors, supervisor\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_12",
+            "Client Invoicing",
+            8,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 4 (Admin Officer)\"]",
+            "[\"Ensure accurate invoicing of clients on or before 5th week of the term\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_13",
+            "Receivables Management",
+            8,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 4 (Admin Officer)\"]",
+            "[\"Ensure 85% – 90% receivables of all client invoices before 11th week of the term\"]"
+        ],
+        [
+            "OBJ_KHLC_SKILLUP_14",
+            "Reporting and Documentation",
+            8,
+            "objective",
+            null,
+            null,
+            "[\"KHLC 4 (Admin Officer)\"]",
+            "[\"Submit accurate quarterly report before end of term\", \"Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy.\"]"
         ],
         [
             "OBJ_COMP_1",
