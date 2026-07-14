@@ -76,7 +76,7 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 
 	origin := r.Header.Get("Origin")
 	if origin == "" {
-		origin = "http://localhost:3000"
+		origin = "https://nets.reedbreed.cc"
 	}
 
 	// Fetch users from database
