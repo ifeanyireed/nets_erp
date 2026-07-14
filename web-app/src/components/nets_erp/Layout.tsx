@@ -101,6 +101,19 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
   
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  const dbUser = currentUser ? users.find(u => u.id === currentUser.id) : null;
+  const originalRole = dbUser?.role || (currentUser?.id === "260326" ? "hr" : currentUser?.id === "MD001" ? "md" : null);
+  const canSwitchRole = originalRole === "hr" || originalRole === "md";
+
+  const toggleRoleView = () => {
+    if (!currentUser || !originalRole) return;
+    const targetRole = currentUser.role === "manager" ? originalRole : "manager";
+    const updatedUser = { ...currentUser, role: targetRole as Role };
+    setCurrentUser(updatedUser);
+    localStorage.setItem("erp_current_user", JSON.stringify(updatedUser));
+    router.push(`/${targetRole}`);
+  };
+
   // Sync current user from local storage or set default employee
   useEffect(() => {
     if (users.length > 0) {
@@ -110,7 +123,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           const parsed = JSON.parse(stored);
           const found = users.find(u => u.id === parsed.id);
           if (found) {
-            setCurrentUser(found);
+            setCurrentUser({ ...found, role: parsed.role });
             return;
           }
         } catch {}
@@ -250,6 +263,16 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
             {/* User Profile Info (Static Display) */}
             <div className="flex items-center gap-3 self-end sm:self-auto">
+              {canSwitchRole && originalRole && (
+                <button
+                  onClick={toggleRoleView}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all duration-300 active:scale-95 cursor-pointer"
+                >
+                  <RefreshIcon />
+                  {currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View"}
+                </button>
+              )}
+
               <div className="text-right hidden sm:block">
                 <p className="text-xs text-slate-400 font-semibold">Logged in as</p>
                 <p className="text-sm font-bold text-slate-800">{currentUser.name}</p>

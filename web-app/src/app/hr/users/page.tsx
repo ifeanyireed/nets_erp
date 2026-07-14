@@ -35,6 +35,9 @@ export default function UserRoleManagement() {
       return;
     }
 
+    const managers = users.filter(u => u.role === "manager" || u.role === "hr" || u.role === "md");
+    const defaultManager = managers.length > 0 ? managers[0].name : "Robert Vance";
+
     const newUser: User = {
       id: `${role === "employee" ? "EMP" : role === "manager" ? "MGR" : role.toUpperCase()}00${users.length + 1}`,
       name,
@@ -42,7 +45,7 @@ export default function UserRoleManagement() {
       role,
       department,
       avatar: `/character${Math.floor(Math.random() * 9) + 1}.jpg`,
-      managerName: role === "employee" ? managerName || "John Smith" : undefined,
+      managerName: role === "employee" ? managerName || defaultManager : undefined,
     };
 
     const updated = [...users, newUser];
@@ -289,14 +292,22 @@ export default function UserRoleManagement() {
 
               {role === "employee" && (
                 <div>
-                  <label className="block text-[10px] font-extrabold text-slate-450 uppercase mb-1.5 tracking-wider">Reports to Manager</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. John Smith"
+                  <label className="block text-[10px] font-extrabold text-slate-455 uppercase mb-1.5 tracking-wider">Reports to Manager</label>
+                  <select
                     value={managerName}
                     onChange={(e) => setManagerName(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold"
-                  />
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                  >
+                    <option value="">Select Manager</option>
+                    {users
+                      .filter(u => u.role === "manager" || u.role === "hr" || u.role === "md")
+                      .map(u => (
+                        <option key={u.id} value={u.name}>
+                          {u.name} ({u.role === "manager" ? "Line Manager" : u.role === "hr" ? "HR Admin" : "MD"})
+                        </option>
+                      ))
+                    }
+                  </select>
                 </div>
               )}
 
