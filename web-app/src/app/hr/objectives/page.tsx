@@ -276,7 +276,7 @@ export default function ObjectiveManagement() {
                   <select
                     value={filterDept}
                     onChange={(e) => setFilterDept(e.target.value)}
-                    className="px-2 py-1 border border-gray-200 rounded-lg text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                    className="pl-2 pr-8 py-1 border border-gray-200 rounded-lg text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
                   >
                     <option value="All">All Departments</option>
                     {depts.map(d => (
@@ -468,7 +468,7 @@ export default function ObjectiveManagement() {
                 <select
                   value={objType}
                   onChange={(e) => setObjType(e.target.value as "objective" | "competency")}
-                  className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                  className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                 >
                   <option value="objective">Work-Related Objective</option>
                   <option value="competency">Core Competency Rating</option>
@@ -566,7 +566,7 @@ export default function ObjectiveManagement() {
                     <select
                       value={category}
                       onChange={(e) => setCategory(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                      className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                     >
                       <option value="Behavioural">Behavioural</option>
                       <option value="Leadership">Leadership</option>
@@ -582,7 +582,7 @@ export default function ObjectiveManagement() {
                     <select
                       value={expectedLevel}
                       onChange={(e) => setExpectedLevel(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                      className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                     >
                       {[1, 2, 3, 4, 5].map((lvl) => (
                         <option key={lvl} value={lvl}>Level {lvl}</option>
@@ -696,7 +696,7 @@ export default function ObjectiveManagement() {
                     <select
                       value={editObjCategory}
                       onChange={(e) => setEditObjCategory(e.target.value)}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                      className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                     >
                       <option value="Behavioural">Behavioural</option>
                       <option value="Leadership">Leadership</option>
@@ -712,7 +712,7 @@ export default function ObjectiveManagement() {
                     <select
                       value={editObjExpectedLevel}
                       onChange={(e) => setEditObjExpectedLevel(Number(e.target.value))}
-                      className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                      className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                     >
                       {[1, 2, 3, 4, 5].map((lvl) => (
                         <option key={lvl} value={lvl}>Level {lvl}</option>

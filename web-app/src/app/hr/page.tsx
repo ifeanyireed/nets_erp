@@ -242,7 +242,7 @@ export default function HRDashboard() {
                   setSubmissionsDeptFilter(e.target.value);
                   setSubmissionsPage(1);
                 }}
-                className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+                className="pl-3 pr-8 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
               >
                 <option value="">All Departments</option>
                 {departmentsList.map(dept => (
@@ -257,7 +257,7 @@ export default function HRDashboard() {
                   setSubmissionsStatusFilter(e.target.value);
                   setSubmissionsPage(1);
                 }}
-                className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
+                className="pl-3 pr-8 py-1.5 bg-gray-50 border border-gray-200 text-slate-700 font-bold rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 cursor-pointer"
               >
                 <option value="">All Statuses</option>
                 <option value="Draft">Draft</option>

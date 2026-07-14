@@ -202,7 +202,7 @@ export default function ManagerReviewClient() {
               <select
                 value={obj.managerScore ?? ""}
                 onChange={(e) => handleScoreChange(originalIndex, Number(e.target.value))}
-                className="px-3 py-1.5 border border-gray-205 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white"
+                className="pl-3 pr-8 py-1.5 border border-gray-205 rounded-lg text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 bg-white"
               >
                 <option value="">Select</option>
                 {isWorkObj ? (

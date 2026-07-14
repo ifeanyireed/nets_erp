@@ -104,7 +104,7 @@ export default function UserRoleManagement() {
                 <select
                   value={selectedDept}
                   onChange={(e) => handleDeptChange(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold text-slate-700"
+                  className="w-full pl-3 pr-10 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold text-slate-700"
                 >
                   <option value="All">All Departments</option>
                   {DEPARTMENTS.map(d => (
@@ -131,7 +131,7 @@ export default function UserRoleManagement() {
                           <select
                             value={editDept}
                             onChange={(e) => setEditDept(e.target.value)}
-                            className="px-2 py-0.5 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700"
+                            className="pl-2 pr-6 py-0.5 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700"
                           >
                             {DEPARTMENTS.map(d => (
                               <option key={d} value={d}>{d}</option>
@@ -268,7 +268,7 @@ export default function UserRoleManagement() {
                   <select
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                    className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                   >
                     {DEPARTMENTS.map(d => (
                       <option key={d} value={d}>{d}</option>
@@ -280,7 +280,7 @@ export default function UserRoleManagement() {
                   <select
                     value={role}
                     onChange={(e) => setRole(e.target.value as Role)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                    className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                   >
                     <option value="employee">Employee</option>
                     <option value="manager">Line Manager</option>
@@ -296,7 +296,7 @@ export default function UserRoleManagement() {
                   <select
                     value={managerName}
                     onChange={(e) => setManagerName(e.target.value)}
-                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
+                    className="w-full pl-3 pr-10 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-bold"
                   >
                     <option value="">Select Manager</option>
                     {users
