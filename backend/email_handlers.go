@@ -7,16 +7,32 @@ import (
 	"log"
 	"net/http"
 	"net/smtp"
+	"os"
 	"strings"
 )
 
 // Send SMTP Email via Hostinger
 func sendEmail(to, subject, htmlBody string) error {
-	smtpHost := "smtp.hostinger.com"
-	smtpPort := "587"
-	smtpUser := "hello@resultspro.ng"
-	smtpPassword := "*Reedb4b4"
-	fromEmail := "hr@neweratransports.com"
+	smtpHost := os.Getenv("SMTP_HOST")
+	if smtpHost == "" {
+		smtpHost = "smtp.hostinger.com"
+	}
+	smtpPort := os.Getenv("SMTP_PORT")
+	if smtpPort == "" {
+		smtpPort = "587"
+	}
+	smtpUser := os.Getenv("SMTP_USER")
+	if smtpUser == "" {
+		smtpUser = "hello@resultspro.ng"
+	}
+	smtpPassword := os.Getenv("SMTP_PASSWORD")
+	if smtpPassword == "" {
+		smtpPassword = "*Reedb4b4"
+	}
+	fromEmail := os.Getenv("SMTP_FROM_EMAIL")
+	if fromEmail == "" {
+		fromEmail = "hr@neweratransports.com"
+	}
 
 	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpHost)
 
