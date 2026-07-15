@@ -199,110 +199,174 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0F2F5] text-[#1E293B] font-sans antialiased flex flex-col md:flex-row w-full">
+    <div className="min-h-screen bg-[#F0F2F5] text-[#1E293B] font-sans antialiased flex flex-col md:flex-row w-full relative">
+      
+      {/* MOBILE TOP BAR */}
+      <div className="flex md:hidden items-center justify-between bg-white border-b border-[#E2E5E9] px-4 py-3 sticky top-0 z-50 shadow-sm">
+        <div className="flex items-center gap-2">
+          <img src="/nets.webp" alt="Nets Logo" className="h-8 w-auto object-contain" />
+        </div>
+        <div className="flex items-center gap-3">
+          {canSwitchRole && originalRole && (
+            <button
+              onClick={toggleRoleView}
+              className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all duration-300 active:scale-95 cursor-pointer"
+              title="Switch View"
+            >
+              <RefreshIcon />
+            </button>
+          )}
+          
+          <div className="w-[1px] h-5 bg-gray-200 mx-0.5" />
+          
+          <img
+            src={currentUser.avatar}
+            alt={currentUser.name}
+            className="w-7 h-7 rounded-full object-cover border border-gray-100"
+          />
+
+          <button
+            onClick={() => {
+              localStorage.removeItem("erp_current_user");
+              router.push("/");
+            }}
+            className="p-1.5 text-slate-450 hover:text-red-650 hover:bg-red-50 rounded-xl transition-all duration-300 cursor-pointer"
+            title="Logout"
+          >
+            <LogoutIcon />
+          </button>
+        </div>
+      </div>
+
+      {/* SIDEBAR (Desktop Only) */}
+      <aside className="hidden md:flex md:w-64 bg-[#EAECEF]/60 border-r border-[#D2D5DA] p-6 flex-col justify-between shrink-0">
         
-        {/* SIDEBAR */}
-        <aside className="w-full md:w-64 bg-[#EAECEF]/60 border-r border-[#D2D5DA] p-6 flex flex-col justify-between">
-          
-          <div>
-            {/* Logo */}
-            <div className="flex items-center mb-8 px-1">
-              <img src="/nets.webp" alt="Nets Logo" className="h-10 w-auto object-contain" />
-            </div>
-
-            {/* Menu Items */}
-            <nav className="space-y-1.5">
-              {sidebarItems.map((item) => {
-                const isActive = pathname === item.route;
-                return (
-                  <button
-                    key={item.name}
-                    onClick={() => router.push(item.route)}
-                    className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
-                      isActive
-                        ? "bg-white text-blue-600 font-bold shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-transparent"
-                        : "text-slate-500 hover:text-slate-800 hover:bg-white/40"
-                    }`}
-                  >
-                    <span className={isActive ? "text-blue-600" : "text-slate-450"}>
-                      {item.icon}
-                    </span>
-                    {item.name}
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="my-6 border-t border-[#D2D5DA]" />
-
-            {/* Common System Menu */}
-            <nav className="space-y-1.5">
-              <button
-                onClick={() => {
-                  localStorage.removeItem("erp_current_user");
-                  router.push("/");
-                }}
-                className="w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all duration-300"
-              >
-                <span className="text-slate-450"><LogoutIcon /></span>
-                Logout
-              </button>
-            </nav>
+        <div>
+          {/* Logo */}
+          <div className="flex items-center mb-8 px-1">
+            <img src="/nets.webp" alt="Nets Logo" className="h-10 w-auto object-contain" />
           </div>
 
-          {/* Sidebar Footer info */}
-          <div className="hidden md:block px-2 text-[11px] text-slate-400 font-semibold mt-auto">
-            © 2026 NETS System
-          </div>
-
-        </aside>
-
-        {/* MAIN BODY AREA */}
-        <main className="flex-1 p-6 md:p-8 overflow-y-auto flex flex-col gap-6 bg-[#F3F4F6]/90 relative">
-          
-          {/* TOP BAR / HEADER */}
-          <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
-            <div>
-              <span className="text-xs uppercase tracking-widest text-slate-400 font-extrabold">Performance Module</span>
-              <h1 className="text-xl font-extrabold text-slate-850 capitalize">{currentUser.role} Dashboard</h1>
-            </div>
-
-            {/* User Profile Info (Static Display) */}
-            <div className="flex items-center gap-3 self-end sm:self-auto">
-              {canSwitchRole && originalRole && (
+          {/* Menu Items */}
+          <nav className="space-y-1.5">
+            {sidebarItems.map((item) => {
+              const isActive = pathname === item.route;
+              return (
                 <button
-                  onClick={toggleRoleView}
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all duration-300 active:scale-95 cursor-pointer"
+                  key={item.name}
+                  onClick={() => router.push(item.route)}
+                  className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
+                    isActive
+                      ? "bg-white text-blue-600 font-bold shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-transparent"
+                      : "text-slate-500 hover:text-slate-800 hover:bg-white/40"
+                  }`}
                 >
-                  <RefreshIcon />
-                  {currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View"}
+                  <span className={isActive ? "text-blue-600" : "text-slate-450"}>
+                    {item.icon}
+                  </span>
+                  {item.name}
                 </button>
-              )}
+              );
+            })}
+          </nav>
 
-              <div className="text-right hidden sm:block">
-                <p className="text-xs text-slate-400 font-semibold">Logged in as</p>
-                <p className="text-sm font-bold text-slate-800">{currentUser.name}</p>
-              </div>
+          <div className="my-6 border-t border-[#D2D5DA]" />
 
-              <div className="flex items-center gap-2.5 px-3.5 py-2 bg-white border border-[#E2E5E9] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-                <img
-                  src={currentUser.avatar}
-                  alt={currentUser.name}
-                  className="w-7 h-7 rounded-full object-cover border border-gray-100"
-                />
-                <span className="text-[12px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">
-                  {currentUser.role}
-                </span>
-              </div>
-            </div>
-          </header>
+          {/* Common System Menu */}
+          <nav className="space-y-1.5">
+            <button
+              onClick={() => {
+                localStorage.removeItem("erp_current_user");
+                router.push("/");
+              }}
+              className="w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all duration-300"
+            >
+              <span className="text-slate-450"><LogoutIcon /></span>
+              Logout
+            </button>
+          </nav>
+        </div>
 
-          {/* MAIN PAGE CONTENT WRAPPER */}
-          <div className="flex-1">
-            {children}
+        {/* Sidebar Footer info */}
+        <div className="hidden md:block px-2 text-[11px] text-slate-400 font-semibold mt-auto">
+          © 2026 NETS System
+        </div>
+
+      </aside>
+
+      {/* MAIN BODY AREA */}
+      <main className="flex-1 p-6 md:p-8 pb-18 md:pb-8 overflow-y-auto flex flex-col gap-6 bg-[#F3F4F6]/90 relative">
+        
+        {/* TOP BAR / HEADER */}
+        <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-200">
+          <div>
+            <span className="text-xs uppercase tracking-widest text-slate-400 font-extrabold">Performance Module</span>
+            <h1 className="text-xl font-extrabold text-slate-850 capitalize">{currentUser.role} Dashboard</h1>
           </div>
 
-        </main>
+          {/* User Profile Info (Desktop Only) */}
+          <div className="hidden md:flex items-center gap-3">
+            {canSwitchRole && originalRole && (
+              <button
+                onClick={toggleRoleView}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all duration-300 active:scale-95 cursor-pointer"
+              >
+                <RefreshIcon />
+                {currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View"}
+              </button>
+            )}
+
+            <div className="text-right hidden sm:block">
+              <p className="text-xs text-slate-400 font-semibold">Logged in as</p>
+              <p className="text-sm font-bold text-slate-800">{currentUser.name}</p>
+            </div>
+
+            <div className="flex items-center gap-2.5 px-3.5 py-2 bg-white border border-[#E2E5E9] rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-7 h-7 rounded-full object-cover border border-gray-100"
+              />
+              <span className="text-[12px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md uppercase">
+                {currentUser.role}
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* MAIN PAGE CONTENT WRAPPER */}
+        <div className="flex-1">
+          {children}
+        </div>
+
+      </main>
+      {/* MOBILE BOTTOM NAVIGATION */}
+      <nav className="md:hidden fixed bottom-3.5 left-3.5 right-3.5 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-xl px-1.5 py-1 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        {sidebarItems.map((item) => {
+          const isActive = pathname === item.route;
+          return (
+            <button
+              key={item.name}
+              onClick={() => router.push(item.route)}
+              className={`flex flex-col items-center justify-center flex-1 py-1 relative transition-all duration-300 ${
+                isActive ? "text-blue-600 font-bold" : "text-slate-450 hover:text-slate-700"
+              }`}
+            >
+              <span className={`w-5 h-5 mb-0.5 flex items-center justify-center z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-450"}`}>
+                {item.icon}
+              </span>
+              <span className={`text-[10px] font-bold tracking-tight z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-500"}`}>{item.name}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="bottomNavPill"
+                  className="absolute inset-x-1.5 inset-y-0.5 bg-blue-50/80 rounded-lg"
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
