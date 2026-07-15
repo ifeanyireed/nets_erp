@@ -9,6 +9,7 @@ import (
 	"net/smtp"
 	"os"
 	"strings"
+	"sync"
 )
 
 // Send SMTP Email via Hostinger
@@ -100,7 +101,10 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 		userMap[u.ID] = u
 	}
 
+	var wg sync.WaitGroup
+	var mu sync.Mutex
 	successCount := 0
+
 	for _, id := range req.UserIDs {
 		u, ok := userMap[id]
 		if !ok || u.Email == "" {
@@ -143,13 +147,20 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 </body>
 </html>`, u.Name, resetLink)
 
-		// Send email in a goroutine so it doesn't block the HTTP thread
+		wg.Add(1)
 		go func(toEmail, subject, body string) {
-			_ = sendEmail(toEmail, subject, body)
+			defer wg.Done()
+			err := sendEmail(toEmail, subject, body)
+			if err == nil {
+				mu.Lock()
+				successCount++
+				mu.Unlock()
+			} else {
+				log.Printf("Failed to send reset email to %s: %v", toEmail, err)
+			}
 		}(u.Email, "Reset Your Password - New Era Performance Portal", htmlBody)
-
-		successCount++
 	}
+	wg.Wait()
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
@@ -195,7 +206,10 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 		userMap[u.ID] = u
 	}
 
+	var wg sync.WaitGroup
+	var mu sync.Mutex
 	successCount := 0
+
 	for _, id := range req.UserIDs {
 		u, ok := userMap[id]
 		if !ok || u.Email == "" {
@@ -230,13 +244,20 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 </body>
 </html>`, u.Name, formattedMsg)
 
-		// Send email in a goroutine so it doesn't block the HTTP thread
+		wg.Add(1)
 		go func(toEmail, subject, body string) {
-			_ = sendEmail(toEmail, subject, body)
+			defer wg.Done()
+			err := sendEmail(toEmail, subject, body)
+			if err == nil {
+				mu.Lock()
+				successCount++
+				mu.Unlock()
+			} else {
+				log.Printf("Failed to send notification email to %s: %v", toEmail, err)
+			}
 		}(u.Email, req.Subject, htmlBody)
-
-		successCount++
 	}
+	wg.Wait()
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{
