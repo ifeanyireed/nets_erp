@@ -8,7 +8,7 @@ import StatCards from "@/components/nets_erp/StatCards";
 
 export default function HRDashboard() {
   const router = useRouter();
-  const { reviews, users } = useERPStore();
+  const { reviews, users, cycles } = useERPStore();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [submissionsPage, setSubmissionsPage] = useState(1);
   const [queuePage, setQueuePage] = useState(1);
@@ -30,9 +30,13 @@ export default function HRDashboard() {
   const completedReviews = reviews.filter(r => r.status === "HR Approved");
 
   // Statistics
-  const totalEmployees = users.filter(u => u.role !== "admin").length;
-  const cycleSubmitted = reviews.filter(r => ["Submitted", "Manager Reviewed", "HR Approved"].includes(r.status)).length;
-  const companyCompletionRate = totalEmployees > 0 ? (cycleSubmitted / totalEmployees) * 100 : 0;
+  const activeCycle = cycles.find(c => c.status === "Active");
+  const activeCycleReviews = activeCycle
+    ? reviews.filter(r => r.cycleId === activeCycle.id)
+    : reviews.filter(r => r.cycleId === "CYC001");
+  const totalEvaluations = activeCycleReviews.length;
+  const cycleSubmitted = activeCycleReviews.filter(r => ["Submitted", "Manager Reviewed", "HR Approved"].includes(r.status)).length;
+  const companyCompletionRate = totalEvaluations > 0 ? (cycleSubmitted / totalEvaluations) * 100 : 0;
   const finalScoreAverages = completedReviews.map(r => r.finalScore).filter((s): s is number => s !== undefined);
   const companyAverageRating = finalScoreAverages.length > 0
     ? (finalScoreAverages.reduce((a, b) => a + b, 0) / finalScoreAverages.length).toFixed(1)

@@ -209,10 +209,14 @@ export default function StatCards() {
   }
 
   // HR & MD Global stats
-  const activeCycleReviews = reviews.filter(r => r.cycleId === "CYC001");
+  const activeCycle = cycles.find(c => c.status === "Active");
+  const activeCycleReviews = activeCycle
+    ? reviews.filter(r => r.cycleId === activeCycle.id)
+    : reviews.filter(r => r.cycleId === "CYC001");
   const totalEmployeesCount = users.filter(u => u.role !== "admin").length;
+  const totalEvaluations = activeCycleReviews.length;
   const hrApprovedCount = activeCycleReviews.filter(r => r.status === "HR Approved").length;
-  const globalCompletionRate = totalEmployeesCount > 0 ? Math.round((hrApprovedCount / totalEmployeesCount) * 100) : 0;
+  const globalCompletionRate = totalEvaluations > 0 ? Math.round((hrApprovedCount / totalEvaluations) * 100) : 0;
 
   const hrScoredReviews = activeCycleReviews.filter(r => r.finalScore !== undefined && r.finalScore !== null);
   const globalAvgScore = hrScoredReviews.length > 0
@@ -235,7 +239,7 @@ export default function StatCards() {
         </div>
         <div className="mt-4">
           <h3 className="text-2xl font-black text-white">{globalCompletionRate}%</h3>
-          <p className="text-[10px] text-blue-200/80 font-semibold mt-1">{hrApprovedCount} of {totalEmployeesCount} evaluations completed</p>
+          <p className="text-[10px] text-blue-200/80 font-semibold mt-1">{hrApprovedCount} of {totalEvaluations} evaluations completed</p>
         </div>
       </div>
 
