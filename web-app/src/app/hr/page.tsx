@@ -30,7 +30,7 @@ export default function HRDashboard() {
   const completedReviews = reviews.filter(r => r.status === "HR Approved");
 
   // Statistics
-  const totalEmployees = users.filter(u => u.role === "employee").length;
+  const totalEmployees = users.filter(u => u.role !== "admin").length;
   const cycleSubmitted = reviews.filter(r => ["Submitted", "Manager Reviewed", "HR Approved"].includes(r.status)).length;
   const companyCompletionRate = totalEmployees > 0 ? (cycleSubmitted / totalEmployees) * 100 : 0;
   const finalScoreAverages = completedReviews.map(r => r.finalScore).filter((s): s is number => s !== undefined);

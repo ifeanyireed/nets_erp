@@ -76,8 +76,8 @@ export default function MDDashboard() {
           </div>
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-1">
             <span className="text-[10px] font-bold text-slate-450 uppercase tracking-wide">Total Corporate Headcount</span>
-            <h2 className="text-2xl font-black text-slate-800 mt-1">{users.filter(u => u.role === "employee").length}</h2>
-            <p className="text-[10px] text-slate-400 font-semibold mt-1">Active full-time employees</p>
+            <h2 className="text-2xl font-black text-slate-800 mt-1">{users.filter(u => u.role !== "admin").length}</h2>
+            <p className="text-[10px] text-slate-400 font-semibold mt-1">Active corporate staff</p>
           </div>
         </section>
 

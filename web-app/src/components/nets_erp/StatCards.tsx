@@ -204,7 +204,7 @@ export default function StatCards() {
 
   // HR & MD Global stats
   const activeCycleReviews = reviews.filter(r => r.cycleId === "CYC001");
-  const totalEmployeesCount = users.filter(u => u.role === "employee").length;
+  const totalEmployeesCount = users.filter(u => u.role !== "admin").length;
   const hrApprovedCount = activeCycleReviews.filter(r => r.status === "HR Approved").length;
   const globalCompletionRate = totalEmployeesCount > 0 ? Math.round((hrApprovedCount / totalEmployeesCount) * 100) : 0;
 
@@ -276,7 +276,7 @@ export default function StatCards() {
           </div>
         </div>
         <div className="mt-4">
-          <h3 className="text-2xl font-black text-blue-900">{totalEmployeesCount} Employees</h3>
+          <h3 className="text-2xl font-black text-blue-900">{totalEmployeesCount} Staff</h3>
           <p className="text-[10px] text-blue-700/60 font-semibold mt-1">Total active staff enrolled in cycle</p>
         </div>
       </div>
