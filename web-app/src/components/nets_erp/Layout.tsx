@@ -342,10 +342,10 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       </main>
       {/* MOBILE BOTTOM NAVIGATION */}
       <nav 
-        className="md:hidden fixed bottom-2 left-3 right-3 bg-white/[0.001] backdrop-blur-[2px] border rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[inset_0_1px_1px_rgba(255,255,255,0.45),_0_8px_32px_rgba(0,0,0,0.06)]"
+        className="md:hidden fixed bottom-2 left-3 right-3 bg-white/[0.001] backdrop-blur-[2px] border rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[inset_0_1.5px_1.5px_rgba(255,255,255,0.85),_0_8px_32px_rgba(0,0,0,0.06)]"
         style={{
-          borderTopColor: "rgba(255,255,255,0.45)",
-          borderLeftColor: "rgba(255,255,255,0.35)",
+          borderTopColor: "rgba(255,255,255,0.85)",
+          borderLeftColor: "rgba(255,255,255,0.7)",
           borderBottomColor: "rgba(255,255,255,0.1)",
           borderRightColor: "rgba(255,255,255,0.1)",
         }}
