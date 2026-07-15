@@ -341,7 +341,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
       </main>
       {/* MOBILE BOTTOM NAVIGATION */}
-      <nav className="md:hidden fixed bottom-2 left-3 right-3 bg-white/[0.03] backdrop-blur-md border border-white/[0.08] rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.06)]">
+      <nav className="md:hidden fixed bottom-2 left-3 right-3 bg-white/[0.005] backdrop-blur-md border border-white/[0.08] rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.06)]">
         {sidebarItems.map((item) => {
           const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
           const isActive = isDashboard ? pathname === item.route : (pathname === item.route || pathname.startsWith(item.route + "/"));
