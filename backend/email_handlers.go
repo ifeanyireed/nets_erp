@@ -65,6 +65,7 @@ func generateResetToken(email, currentPassword string) string {
 func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
 		return
 	}
 
@@ -172,6 +173,7 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
 		return
 	}
 
@@ -269,6 +271,7 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
 		return
 	}
 
@@ -289,17 +292,22 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	tx, err := db.Begin()
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to begin transaction: " + err.Error()})
 		return
 	}
 	defer tx.Rollback()
 
 	var u User
-	var pwd string
-	err = tx.QueryRow("SELECT id, name, email, password FROM User WHERE email = ?", req.Email).Scan(&u.ID, &u.Name, &u.Email, &pwd)
+	err = tx.QueryRow("SELECT id, name, email, password FROM User WHERE email = ?", req.Email).Scan(&u.ID, &u.Name, &u.Email, &u.Password)
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		json.NewEncoder(w).Encode(map[string]string{"error": "User not found"})
 		return
+	}
+
+	pwd := ""
+	if u.Password != nil {
+		pwd = *u.Password
 	}
 
 	// Validate token
@@ -320,6 +328,7 @@ func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 
 	if err := tx.Commit(); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to commit transaction: " + err.Error()})
 		return
 	}
 

@@ -108,7 +108,16 @@ export default function AdminDashboard() {
         body: JSON.stringify({ userIds: selectedUserIds }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const responseText = await res.text();
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseErr) {
+          // not JSON
+        }
+      }
+
       if (res.ok) {
         setStatusMessage({
           text: `Successfully initiated password reset emails for ${selectedUserIds.length} user(s).`,
@@ -117,7 +126,7 @@ export default function AdminDashboard() {
         setSelectedUserIds([]);
       } else {
         setStatusMessage({
-          text: `Error: ${data.error || "Failed to send reset emails"}`,
+          text: `Error: ${data.error || responseText || "Failed to send reset emails"}`,
           type: "error",
         });
       }
@@ -155,7 +164,16 @@ export default function AdminDashboard() {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const responseText = await res.text();
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseErr) {
+          // not JSON
+        }
+      }
+
       if (res.ok) {
         setStatusMessage({
           text: `Successfully sent bulk notifications to ${selectedUserIds.length} user(s).`,
@@ -166,7 +184,7 @@ export default function AdminDashboard() {
         setSelectedUserIds([]);
       } else {
         setStatusMessage({
-          text: `Error: ${data.error || "Failed to send notifications"}`,
+          text: `Error: ${data.error || responseText || "Failed to send notifications"}`,
           type: "error",
         });
       }

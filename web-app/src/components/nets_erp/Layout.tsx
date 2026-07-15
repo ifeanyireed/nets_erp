@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useERPStore, Role, User } from "@/lib/erp-store";
 import { motion } from "framer-motion";
+import LoadingScreen from "./LoadingScreen";
 
 // Custom SVG Icons
 const DashboardIcon = () => (
@@ -97,7 +98,7 @@ interface SidebarItem {
 export default function ERPLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { users } = useERPStore();
+  const { users, isLoading } = useERPStore();
   
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 

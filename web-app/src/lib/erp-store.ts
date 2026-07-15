@@ -460,26 +460,33 @@ export function useERPStore() {
   const [cycles, setCycles] = useState<ReviewCycle[]>([]);
   const [reviews, setReviews] = useState<PerformanceReview[]>([]);
   const [objectives, setObjectives] = useState<Objective[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
-      const usersData = await fetchFromApi("/users", INITIAL_USERS);
-      setUsers(usersData);
+      try {
+        const usersData = await fetchFromApi("/users", INITIAL_USERS);
+        setUsers(usersData);
 
-      const cyclesData = await fetchFromApi("/cycles", INITIAL_CYCLES);
-      setCycles(cyclesData);
+        const cyclesData = await fetchFromApi("/cycles", INITIAL_CYCLES);
+        setCycles(cyclesData);
 
-      const reviewsData = await fetchFromApi("/reviews", INITIAL_REVIEWS);
-      setReviews(reviewsData);
+        const reviewsData = await fetchFromApi("/reviews", INITIAL_REVIEWS);
+        setReviews(reviewsData);
 
-      const objectivesData = await fetchFromApi("/objectives", DEFAULT_OBJECTIVES);
-      setObjectives(objectivesData);
+        const objectivesData = await fetchFromApi("/objectives", DEFAULT_OBJECTIVES);
+        setObjectives(objectivesData);
 
-      // Auto-initialize reviews for the active cycle
-      await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
-        setReviews(updated);
-        setStoredData("erp_reviews", updated);
-      });
+        // Auto-initialize reviews for the active cycle
+        await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
+          setReviews(updated);
+          setStoredData("erp_reviews", updated);
+        });
+      } catch (e) {
+        console.warn("Error loading data inside erp-store hook:", e);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     loadData();
@@ -599,6 +606,7 @@ export function useERPStore() {
     cycles,
     reviews,
     objectives,
+    isLoading,
     updateReview,
     addReviewCycle,
     updateCycles,

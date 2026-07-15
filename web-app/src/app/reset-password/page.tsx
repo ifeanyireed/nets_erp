@@ -52,7 +52,16 @@ function ResetPasswordForm() {
         body: JSON.stringify({ userIds: [user.id] }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const responseText = await res.text();
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseErr) {
+          // not JSON
+        }
+      }
+
       if (res.ok) {
         setStatusMessage({
           text: `A password reset link has been sent to ${user.email}. Please check your inbox.`,
@@ -61,7 +70,7 @@ function ResetPasswordForm() {
         setEmailInput("");
       } else {
         setStatusMessage({
-          text: `Error: ${data.error || "Failed to initiate reset email"}`,
+          text: `Error: ${data.error || responseText || "Failed to initiate reset email"}`,
           type: "error",
         });
       }
@@ -103,7 +112,16 @@ function ResetPasswordForm() {
         }),
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const responseText = await res.text();
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseErr) {
+          // not JSON
+        }
+      }
+
       if (res.ok) {
         setStatusMessage({
           text: "Your password has been reset successfully! Redirecting you to login page...",
@@ -116,7 +134,7 @@ function ResetPasswordForm() {
         }, 3000);
       } else {
         setStatusMessage({
-          text: `Error: ${data.error || "Failed to update password"}`,
+          text: `Error: ${data.error || responseText || "Failed to update password"}`,
           type: "error",
         });
       }
