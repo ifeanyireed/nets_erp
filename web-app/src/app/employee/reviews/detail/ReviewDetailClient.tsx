@@ -67,6 +67,15 @@ export default function ReviewDetailClient() {
     const updated = [...objectives];
     updated[originalIndex].selfScore = score;
     setObjectives(updated);
+
+    const updatedReview: PerformanceReview = {
+      ...review,
+      objectives: updated,
+      employeeComments,
+      improvementPlan,
+      updatedAt: new Date().toISOString(),
+    };
+    updateReview(updatedReview);
   };
 
   const handleCommentChange = (originalIndex: number, comment: string) => {
@@ -275,6 +284,16 @@ export default function ReviewDetailClient() {
               placeholder={isWorkObj ? "Enter key performance indicators achieved, targets reached..." : "Provide behavioral evidence, collaborative highlights..."}
               value={obj.comments || ""}
               onChange={(e) => handleCommentChange(originalIndex, e.target.value)}
+              onBlur={() => {
+                const updatedReview: PerformanceReview = {
+                  ...review,
+                  objectives,
+                  employeeComments,
+                  improvementPlan,
+                  updatedAt: new Date().toISOString(),
+                };
+                updateReview(updatedReview);
+              }}
               rows={2}
               className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
             />
@@ -364,13 +383,23 @@ export default function ReviewDetailClient() {
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col gap-3">
           <h3 className="font-extrabold text-slate-800 text-xs uppercase tracking-wider">Overall Comments</h3>
           {isEditable ? (
-            <div className="flex flex-col gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block mb-1">Self Comments / Summary</label>
                 <textarea
                   placeholder="Provide a summary of your performance, highlights, and career development goals..."
                   value={employeeComments}
                   onChange={(e) => setEmployeeComments(e.target.value)}
+                  onBlur={() => {
+                    const updatedReview: PerformanceReview = {
+                      ...review,
+                      objectives,
+                      employeeComments,
+                      improvementPlan,
+                      updatedAt: new Date().toISOString(),
+                    };
+                    updateReview(updatedReview);
+                  }}
                   rows={3}
                   className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
                 />
@@ -381,6 +410,16 @@ export default function ReviewDetailClient() {
                   placeholder="Detail your goals and actions for improvement over the next review cycle..."
                   value={improvementPlan}
                   onChange={(e) => setImprovementPlan(e.target.value)}
+                  onBlur={() => {
+                    const updatedReview: PerformanceReview = {
+                      ...review,
+                      objectives,
+                      employeeComments,
+                      improvementPlan,
+                      updatedAt: new Date().toISOString(),
+                    };
+                    updateReview(updatedReview);
+                  }}
                   rows={3}
                   className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
                 />

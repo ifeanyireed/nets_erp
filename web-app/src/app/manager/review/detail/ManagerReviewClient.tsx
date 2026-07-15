@@ -74,6 +74,15 @@ export default function ManagerReviewClient() {
     const updated = [...objectives];
     updated[originalIndex].managerScore = score;
     setObjectives(updated);
+
+    const updatedReview: PerformanceReview = {
+      ...review,
+      objectives: updated,
+      managerComments,
+      improvementPlan,
+      updatedAt: new Date().toISOString(),
+    };
+    updateReview(updatedReview);
   };
 
   const handleFeedbackChange = (originalIndex: number, feedback: string) => {
@@ -255,6 +264,16 @@ export default function ManagerReviewClient() {
               placeholder="Provide manager guidance / evaluation feedback..."
               value={obj.managerFeedback || ""}
               onChange={(e) => handleFeedbackChange(originalIndex, e.target.value)}
+              onBlur={() => {
+                const updatedReview: PerformanceReview = {
+                  ...review,
+                  objectives,
+                  managerComments,
+                  improvementPlan,
+                  updatedAt: new Date().toISOString(),
+                };
+                updateReview(updatedReview);
+              }}
               rows={2}
               className="w-full px-3.5 py-2.5 bg-white border border-emerald-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 text-xs font-semibold"
             />
@@ -344,6 +363,16 @@ export default function ManagerReviewClient() {
                 placeholder="Detail the goals and actions for improvement over the next review cycle..."
                 value={improvementPlan}
                 onChange={(e) => setImprovementPlan(e.target.value)}
+                onBlur={() => {
+                  const updatedReview: PerformanceReview = {
+                    ...review,
+                    objectives,
+                    managerComments,
+                    improvementPlan,
+                    updatedAt: new Date().toISOString(),
+                  };
+                  updateReview(updatedReview);
+                }}
                 rows={3}
                 className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
               />
@@ -356,6 +385,16 @@ export default function ManagerReviewClient() {
               placeholder="Provide a comprehensive evaluation of employee achievements, strengths, and areas requiring development. This comment will be visible to HR/MD audits and employee."
               value={managerComments}
               onChange={(e) => setManagerComments(e.target.value)}
+              onBlur={() => {
+                const updatedReview: PerformanceReview = {
+                  ...review,
+                  objectives,
+                  managerComments,
+                  improvementPlan,
+                  updatedAt: new Date().toISOString(),
+                };
+                updateReview(updatedReview);
+              }}
               rows={3}
               className="w-full px-3.5 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs"
             />
