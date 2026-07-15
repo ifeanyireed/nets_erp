@@ -344,7 +344,15 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       <nav className="md:hidden fixed bottom-2 left-3 right-3 bg-white/[0.001] backdrop-blur-[2px] border border-white/[0.08] rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.06)]">
         {sidebarItems.map((item) => {
           const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
-          const isActive = isDashboard ? pathname === item.route : (pathname === item.route || pathname.startsWith(item.route + "/"));
+          
+          // Check if any other sibling tab matches the current path to avoid overlapping activation
+          const otherItemMatches = sidebarItems
+            .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin"].includes(sibling.route))
+            .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route + "/"));
+
+          const isActive = isDashboard 
+            ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
+            : (pathname === item.route || pathname.startsWith(item.route + "/"));
           return (
             <button
               key={item.name}
