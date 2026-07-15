@@ -341,7 +341,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
       </main>
       {/* MOBILE BOTTOM NAVIGATION */}
-      <nav className="md:hidden fixed bottom-3.5 left-3.5 right-3.5 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-xl px-3 py-2.5 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+      <nav className="md:hidden fixed bottom-3.5 left-3.5 right-3.5 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl px-3 py-2.5 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         {sidebarItems.map((item) => {
           const isActive = pathname === item.route;
           return (
