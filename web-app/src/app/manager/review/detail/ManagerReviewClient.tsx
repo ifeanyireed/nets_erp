@@ -25,11 +25,10 @@ const getCategoryBadgeStyle = (cat?: string) => {
 };
 
 export default function ManagerReviewClient() {
-  const params = useParams();
   const router = useRouter();
-  const employeeId = params.employeeId as string;
   const { reviews, users, updateReview } = useERPStore();
 
+  const [employeeId, setEmployeeId] = useState<string>("");
   const [review, setReview] = useState<PerformanceReview | null>(null);
   const [employee, setEmployee] = useState<User | null>(null);
   const [objectives, setObjectives] = useState<Objective[]>([]);
@@ -37,20 +36,28 @@ export default function ManagerReviewClient() {
   const [improvementPlan, setImprovementPlan] = useState("");
 
   useEffect(() => {
-    if (reviews.length > 0) {
-      const activeCycleId = "CYC001"; // current active cycle
-      const foundReview = reviews.find(r => r.employeeId === employeeId && r.cycleId === activeCycleId);
-      if (foundReview) {
-        setReview(foundReview);
-        setObjectives(foundReview.objectives);
-        setManagerComments(foundReview.managerComments || "");
-        setImprovementPlan(foundReview.improvementPlan || "");
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("employeeId") || "";
+    setEmployeeId(id);
+  }, []);
+
+  useEffect(() => {
+    if (employeeId) {
+      if (reviews.length > 0) {
+        const activeCycleId = "CYC001"; // current active cycle
+        const foundReview = reviews.find(r => r.employeeId === employeeId && r.cycleId === activeCycleId);
+        if (foundReview) {
+          setReview(foundReview);
+          setObjectives(foundReview.objectives);
+          setManagerComments(foundReview.managerComments || "");
+          setImprovementPlan(foundReview.improvementPlan || "");
+        }
       }
-    }
-    if (users.length > 0) {
-      const foundEmp = users.find(u => u.id === employeeId);
-      if (foundEmp) {
-        setEmployee(foundEmp);
+      if (users.length > 0) {
+        const foundEmp = users.find(u => u.id === employeeId);
+        if (foundEmp) {
+          setEmployee(foundEmp);
+        }
       }
     }
   }, [reviews, users, employeeId]);

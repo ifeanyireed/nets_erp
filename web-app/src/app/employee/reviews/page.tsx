@@ -87,7 +87,7 @@ export default function MyPerformanceReviews() {
                       </td>
                       <td className="px-6 py-4">
                         <button
-                          onClick={() => router.push(`/employee/reviews/${rev.id}`)}
+                          onClick={() => router.push(`/employee/reviews/detail?id=${rev.id}`)}
                           className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold rounded-xl text-xs transition-all"
                         >
                           {rev.status === "Draft" || rev.status === "Returned" ? "Complete" : "View"}

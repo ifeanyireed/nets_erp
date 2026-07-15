@@ -25,11 +25,10 @@ const getCategoryBadgeStyle = (cat?: string) => {
 };
 
 export default function ReviewDetailClient() {
-  const params = useParams();
   const router = useRouter();
-  const reviewId = params.id as string;
   const { reviews, updateReview } = useERPStore();
   
+  const [reviewId, setReviewId] = useState<string>("");
   const [review, setReview] = useState<PerformanceReview | null>(null);
   const [objectives, setObjectives] = useState<Objective[]>([]);
   const [employeeComments, setEmployeeComments] = useState("");
@@ -37,7 +36,13 @@ export default function ReviewDetailClient() {
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
 
   useEffect(() => {
-    if (reviews.length > 0) {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("id") || "";
+    setReviewId(id);
+  }, []);
+
+  useEffect(() => {
+    if (reviewId && reviews.length > 0) {
       const found = reviews.find(r => r.id === reviewId);
       if (found) {
         setReview(found);

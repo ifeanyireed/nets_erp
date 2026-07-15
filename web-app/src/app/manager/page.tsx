@@ -124,7 +124,7 @@ export default function ManagerDashboard() {
                         </td>
                         <td className="py-4">
                           <button
-                            onClick={() => router.push(`/manager/review/${rev.employeeId}`)}
+                            onClick={() => router.push(`/manager/review/detail?employeeId=${rev.employeeId}`)}
                             className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm"
                           >
                             Evaluate Performance
@@ -189,7 +189,7 @@ export default function ManagerDashboard() {
                       <td className="py-4">
                         {rev ? (
                           <button
-                            onClick={() => router.push(rev.status === "Submitted" ? `/manager/review/${emp.id}` : `/employee/reviews/${rev.id}`)}
+                            onClick={() => router.push(rev.status === "Submitted" ? `/manager/review/detail?employeeId=${emp.id}` : `/employee/reviews/detail?id=${rev.id}`)}
                             className="px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-slate-650 font-bold rounded-xl text-xs transition-all border border-gray-200"
                           >
                             View

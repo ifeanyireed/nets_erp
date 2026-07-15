@@ -124,7 +124,7 @@ export default function EmployeeDashboard() {
             {/* Actions button */}
             {currentReview && (currentReview.status === "Draft" || currentReview.status === "Returned") && (
               <button
-                onClick={() => router.push(`/employee/reviews/${currentReview.id}`)}
+                onClick={() => router.push(`/employee/reviews/detail?id=${currentReview.id}`)}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md transition-all text-xs"
               >
                 {currentReview.status === "Returned" ? "Edit and Re-submit Review" : "Fill Performance Self-Assessment Form"}
@@ -148,7 +148,7 @@ export default function EmployeeDashboard() {
             )}
             {currentReview && currentReview.status === "HR Approved" && (
               <button
-                onClick={() => router.push(`/employee/reviews/${currentReview.id}`)}
+                onClick={() => router.push(`/employee/reviews/detail?id=${currentReview.id}`)}
                 className="w-full py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition-all text-center"
               >
                 View Final Review Summary

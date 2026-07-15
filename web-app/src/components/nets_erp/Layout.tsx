@@ -182,7 +182,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       case "md":
         return [
           { name: "MD Dashboard", route: "/md", icon: <BarChartIcon /> },
-          { name: "Department Details", route: "/md/department/Fleet", icon: <BuildingIcon /> },
+          { name: "Department Details", route: "/md/department/detail?deptId=Fleet", icon: <BuildingIcon /> },
         ];
       case "admin":
         return [
@@ -255,7 +255,14 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           {/* Menu Items */}
           <nav className="space-y-1.5">
             {sidebarItems.map((item) => {
-              const isActive = pathname === item.route;
+              const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
+              const otherItemMatches = sidebarItems
+                .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin"].includes(sibling.route))
+                .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route.split("?")[0] + "/"));
+
+              const isActive = isDashboard 
+                ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
+                : (pathname === item.route.split("?")[0] || pathname.startsWith(item.route.split("?")[0] + "/"));
               return (
                 <button
                   key={item.name}
@@ -363,11 +370,11 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           // Check if any other sibling tab matches the current path to avoid overlapping activation
           const otherItemMatches = sidebarItems
             .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin"].includes(sibling.route))
-            .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route + "/"));
+            .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route.split("?")[0] + "/"));
 
           const isActive = isDashboard 
             ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
-            : (pathname === item.route || pathname.startsWith(item.route + "/"));
+            : (pathname === item.route.split("?")[0] || pathname.startsWith(item.route.split("?")[0] + "/"));
           return (
             <button
               key={item.name}

@@ -159,7 +159,7 @@ export default function HRDashboard() {
                         </td>
                         <td className="py-4">
                           <button
-                            onClick={() => router.push(`/hr/review/${rev.employeeId}`)}
+                            onClick={() => router.push(`/hr/review/detail?employeeId=${rev.employeeId}`)}
                             className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer"
                           >
                             Audit & Sign-off
@@ -304,7 +304,7 @@ export default function HRDashboard() {
                         </td>
                         <td className="py-4">
                           <button
-                            onClick={() => router.push(rev.status === "Manager Reviewed" ? `/hr/review/${rev.employeeId}` : `/employee/reviews/${rev.id}`)}
+                            onClick={() => router.push(rev.status === "Manager Reviewed" ? `/hr/review/detail?employeeId=${rev.employeeId}` : `/employee/reviews/detail?id=${rev.id}`)}
                             className="px-3 py-1 bg-gray-50 border border-gray-200 text-slate-600 font-bold rounded-xl text-xs hover:bg-gray-100 transition-all cursor-pointer"
                           >
                             View

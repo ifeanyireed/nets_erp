@@ -6,14 +6,17 @@ import { useERPStore, PerformanceReview, User, getParentDept } from "@/lib/erp-s
 import ERPLayout from "@/components/nets_erp/Layout";
 
 export default function DepartmentPerformancePage() {
-  const params = useParams();
   const router = useRouter();
-  const deptId = params.deptId as string;
   const { reviews, users } = useERPStore();
 
+  const [deptId, setDeptId] = useState<string>("");
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const id = searchParams.get("deptId") || "";
+    setDeptId(id);
+
     const stored = localStorage.getItem("erp_current_user");
     if (stored) {
       setCurrentUser(JSON.parse(stored));

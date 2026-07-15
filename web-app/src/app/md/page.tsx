@@ -92,7 +92,7 @@ export default function MDDashboard() {
               {deptAverages.map((dept) => (
                 <div
                   key={dept.name}
-                  onClick={() => router.push(`/md/department/${dept.name}`)}
+                  onClick={() => router.push(`/md/department/detail?deptId=${dept.name}`)}
                   className="p-3 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200 cursor-pointer transition-all flex flex-col gap-2"
                 >
                   <div className="flex justify-between items-center text-xs">
