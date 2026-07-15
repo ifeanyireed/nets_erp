@@ -50,7 +50,7 @@ export default function EmployeeProfilePage() {
             <div>
               <h2 className="text-xl font-black text-slate-800 leading-tight">{profileUser.name}</h2>
               <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mt-1">{profileUser.role} • {profileUser.department}</p>
-              <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 font-semibold justify-center sm:justify-start">
+              <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-3 text-xs text-slate-500 font-semibold justify-center sm:justify-start">
                 <span className="flex items-center gap-1">
                   <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
