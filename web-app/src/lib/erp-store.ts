@@ -417,16 +417,11 @@ export function setStoredData<T>(key: string, data: T): void {
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 async function fetchFromApi<T>(endpoint: string, fallbackData: T): Promise<T> {
-  try {
-    const res = await fetch(`${API_BASE_URL}${endpoint}`);
-    if (res.ok) {
-      const data = await res.json();
-      return data;
-    }
-  } catch (e) {
-    console.warn(`Failed to fetch from API endpoint ${endpoint}, falling back to local storage.`, e);
+  const res = await fetch(`${API_BASE_URL}${endpoint}`);
+  if (!res.ok) {
+    throw new Error(`Failed to fetch from API endpoint ${endpoint}: ${res.statusText}`);
   }
-  return fallbackData;
+  return await res.json();
 }
 
 async function ensureReviewsForActiveCycles(
@@ -512,12 +507,18 @@ export function useERPStore() {
         setObjectives(objectivesData);
 
         // Auto-initialize reviews for the active cycle
+        // Only run this if ALL data fetches completed successfully from the backend
         await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
           setReviews(updated);
           setStoredData("erp_reviews", updated);
         });
       } catch (e) {
-        console.warn("Error loading data inside erp-store hook:", e);
+        console.error("Failed to connect to the backend server. Skipping review auto-initialization to protect data integrity.", e);
+        // Fallback to static seeds for frontend UI rendering only in case of complete network outage
+        setUsers(INITIAL_USERS);
+        setCycles(INITIAL_CYCLES);
+        setReviews(INITIAL_REVIEWS);
+        setObjectives(DEFAULT_OBJECTIVES);
       } finally {
         setIsLoading(false);
       }
