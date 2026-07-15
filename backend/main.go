@@ -2,11 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-	"fmt"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -21,6 +22,11 @@ func main() {
 		log.Fatalf("Error opening database connection: %v", err)
 	}
 	defer db.Close()
+
+	// Configure connection pooling to stay within Hostinger resources
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(10 * time.Minute)
 
 	// Verify database connection
 	err = db.Ping()

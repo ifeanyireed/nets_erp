@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -66,37 +67,83 @@ func handleReviews(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(reviews)
 
 	} else if r.Method == http.MethodPost || r.Method == http.MethodPut {
-		var pr PerformanceReview
-		if err := json.NewDecoder(r.Body).Decode(&pr); err != nil {
+		var rawBody json.RawMessage
+		if err := json.NewDecoder(r.Body).Decode(&rawBody); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(map[string]string{"error": "Invalid request body"})
 			return
 		}
-		if pr.ID == "" || pr.EmployeeID == "" || pr.CycleID == "" {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{"error": "Incomplete parameters"})
+
+		var reviewsToUpsert []PerformanceReview
+		if len(rawBody) > 0 && rawBody[0] == '[' {
+			if err := json.Unmarshal(rawBody, &reviewsToUpsert); err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(map[string]string{"error": "Invalid array format"})
+				return
+			}
+		} else {
+			var pr PerformanceReview
+			if err := json.Unmarshal(rawBody, &pr); err != nil {
+				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(map[string]string{"error": "Invalid object format"})
+				return
+			}
+			reviewsToUpsert = append(reviewsToUpsert, pr)
+		}
+
+		tx, err := db.Begin()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Transaction start failed: " + err.Error()})
 			return
 		}
 
-		var objJSONStr string = "[]"
-		if pr.Objectives != nil {
-			objJSONStr = string(*pr.Objectives)
-		}
-
-		_, err := db.Exec(`INSERT INTO PerformanceReview 
+		stmt, err := tx.Prepare(`INSERT INTO PerformanceReview 
 			(id, employeeId, employeeName, department, cycleId, cycleName, status, employeeComments, managerComments, hrComments, improvementPlan, finalScore, objectivesJson, updatedAt) 
 			VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())
 			ON DUPLICATE KEY UPDATE 
 			status = VALUES(status), employeeComments = VALUES(employeeComments), managerComments = VALUES(managerComments), hrComments = VALUES(hrComments), improvementPlan = VALUES(improvementPlan),
-			finalScore = VALUES(finalScore), objectivesJson = VALUES(objectivesJson), updatedAt = NOW()`,
-			pr.ID, pr.EmployeeID, pr.EmployeeName, pr.Department, pr.CycleID, pr.CycleName, pr.Status, pr.EmployeeComments, pr.ManagerComments, pr.HRComments, pr.ImprovementPlan, pr.FinalScore, objJSONStr)
-
+			finalScore = VALUES(finalScore), objectivesJson = VALUES(objectivesJson), updatedAt = NOW()`)
 		if err != nil {
+			tx.Rollback()
 			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			json.NewEncoder(w).Encode(map[string]string{"error": "Prepare statement failed: " + err.Error()})
 			return
 		}
-		json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Review upserted successfully"})
+		defer stmt.Close()
+
+		for _, pr := range reviewsToUpsert {
+			if pr.ID == "" || pr.EmployeeID == "" || pr.CycleID == "" {
+				tx.Rollback()
+				w.WriteHeader(http.StatusBadRequest)
+				json.NewEncoder(w).Encode(map[string]string{"error": "Incomplete parameters in one of the reviews"})
+				return
+			}
+
+			var objJSONStr string = "[]"
+			if pr.Objectives != nil {
+				objJSONStr = string(*pr.Objectives)
+			}
+
+			_, err = stmt.Exec(pr.ID, pr.EmployeeID, pr.EmployeeName, pr.Department, pr.CycleID, pr.CycleName, pr.Status, pr.EmployeeComments, pr.ManagerComments, pr.HRComments, pr.ImprovementPlan, pr.FinalScore, objJSONStr)
+			if err != nil {
+				tx.Rollback()
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(map[string]string{"error": "Database execute failed: " + err.Error()})
+				return
+			}
+		}
+
+		if err := tx.Commit(); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Transaction commit failed: " + err.Error()})
+			return
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{
+			"status":  "success",
+			"message": fmt.Sprintf("Successfully upserted %d review(s)", len(reviewsToUpsert)),
+		})
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}

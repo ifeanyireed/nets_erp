@@ -406,7 +406,7 @@ async function ensureReviewsForActiveCycles(
   if (!activeCycle || usersList.length === 0 || objectivesList.length === 0) return;
 
   let updatedReviews = [...reviewsList];
-  let hasNew = false;
+  let newReviewsToPost: PerformanceReview[] = [];
 
   for (const user of usersList) {
     const hasReview = updatedReviews.some(r => r.employeeId === user.id && r.cycleId === activeCycle.id);
@@ -437,21 +437,20 @@ async function ensureReviewsForActiveCycles(
       };
 
       updatedReviews.push(newReview);
-      hasNew = true;
-
-      try {
-        await fetch(`${API_BASE_URL}/reviews`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(newReview)
-        });
-      } catch (e) {
-        console.warn("Failed to sync auto-created review", e);
-      }
+      newReviewsToPost.push(newReview);
     }
   }
 
-  if (hasNew) {
+  if (newReviewsToPost.length > 0) {
+    try {
+      await fetch(`${API_BASE_URL}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newReviewsToPost)
+      });
+    } catch (e) {
+      console.warn("Failed to sync auto-created reviews batch", e);
+    }
     onReviewsCreated(updatedReviews);
   }
 }
