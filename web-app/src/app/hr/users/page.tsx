@@ -13,6 +13,8 @@ export default function UserRoleManagement() {
   const [managerName, setManagerName] = useState("");
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [editDept, setEditDept] = useState("");
+  const [editRole, setEditRole] = useState<Role>("employee");
+  const [editManagerId, setEditManagerId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [searchQuery, setSearchQuery] = useState("");
@@ -121,65 +123,120 @@ export default function UserRoleManagement() {
                 </div>
               ) : (
                 paginatedUsers.map((u) => (
-                <div key={u.id} className="p-3 bg-gray-50 rounded-xl flex items-center justify-between border border-gray-150/40">
-                  <div className="flex items-center gap-3">
+                <div key={u.id} className={`p-3 bg-gray-50 rounded-xl border border-gray-150/40 flex justify-between ${editingUserId === u.id ? "flex-col sm:flex-row gap-4 items-start" : "items-center"}`}>
+                  <div className="flex items-center gap-3 w-full">
                     <img src={u.avatar} alt={u.name} className="w-8 h-8 rounded-full object-cover border" />
-                    <div>
+                    <div className="flex-1">
                       <p className="font-bold text-slate-700 text-xs">{u.name}</p>
                       {editingUserId === u.id ? (
-                        <div className="flex items-center gap-2 mt-1">
-                          <select
-                            value={editDept}
-                            onChange={(e) => setEditDept(e.target.value)}
-                            className="pl-2 pr-6 py-0.5 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700"
-                          >
-                            {DEPARTMENTS.map(d => (
-                              <option key={d} value={d}>{d}</option>
-                            ))}
-                          </select>
-                          <button
-                            onClick={() => {
-                              const updated = users.map(user => user.id === u.id ? { ...user, department: editDept } : user);
-                              updateUsers(updated);
-                              setEditingUserId(null);
-                            }}
-                            className="bg-blue-600 hover:bg-blue-750 text-white text-[9px] font-extrabold px-1.5 py-0.5 rounded-md"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => setEditingUserId(null)}
-                            className="text-slate-400 hover:text-slate-650 text-[9px] font-extrabold px-1.5 py-0.5"
-                          >
-                            Cancel
-                          </button>
+                        <div className="flex flex-col gap-2.5 mt-2 p-3 bg-white border border-gray-150 rounded-xl shadow-inner w-full max-w-md">
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[8px] font-extrabold text-slate-400 uppercase tracking-wide mb-0.5">Department</label>
+                              <select
+                                value={editDept}
+                                onChange={(e) => setEditDept(e.target.value)}
+                                className="w-full pl-2 pr-6 py-1 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              >
+                                {DEPARTMENTS.map(d => (
+                                  <option key={d} value={d}>{d}</option>
+                                ))}
+                              </select>
+                            </div>
+                            
+                            <div>
+                              <label className="block text-[8px] font-extrabold text-slate-400 uppercase tracking-wide mb-0.5">Role</label>
+                              <select
+                                value={editRole}
+                                onChange={(e) => setEditRole(e.target.value as Role)}
+                                className="w-full pl-2 pr-6 py-1 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                              >
+                                <option value="employee">Employee</option>
+                                <option value="manager">Line Manager</option>
+                                <option value="hr">HR Admin</option>
+                                <option value="md">Managing Director</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[8px] font-extrabold text-slate-400 uppercase tracking-wide mb-0.5">Line Manager</label>
+                            <select
+                              value={editManagerId}
+                              onChange={(e) => setEditManagerId(e.target.value)}
+                              className="w-full pl-2 pr-6 py-1 bg-white border border-gray-250 rounded-md text-[10px] font-bold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                            >
+                              <option value="">No Manager / Self</option>
+                              {users
+                                .filter(mgr => mgr.id !== u.id && (mgr.role === "manager" || mgr.role === "hr" || mgr.role === "md"))
+                                .map(mgr => (
+                                  <option key={mgr.id} value={mgr.id}>
+                                    {mgr.name} ({mgr.role})
+                                  </option>
+                                ))
+                              }
+                            </select>
+                          </div>
+
+                          <div className="flex gap-2 justify-end mt-1">
+                            <button
+                              onClick={() => {
+                                const selectedMgr = users.find(mgr => mgr.id === editManagerId);
+                                const updated = users.map(user => {
+                                  if (user.id === u.id) {
+                                    return {
+                                      ...user,
+                                      department: editDept,
+                                      role: editRole,
+                                      managerName: selectedMgr ? selectedMgr.name : undefined,
+                                      managerId: selectedMgr ? selectedMgr.id : undefined,
+                                    };
+                                  }
+                                  return user;
+                                });
+                                updateUsers(updated);
+                                setEditingUserId(null);
+                              }}
+                              className="bg-blue-600 hover:bg-blue-750 text-white text-[9px] font-extrabold px-3 py-1 rounded-md transition-all active:scale-95"
+                            >
+                              Save
+                            </button>
+                            <button
+                              onClick={() => setEditingUserId(null)}
+                              className="text-slate-400 hover:text-slate-650 text-[9px] font-extrabold px-3 py-1 border border-gray-200 rounded-md transition-all"
+                            >
+                              Cancel
+                            </button>
+                          </div>
                         </div>
                       ) : (
-                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">
-                          ID: {u.id} • {u.role} • {u.department}
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide mt-0.5">
+                          ID: {u.id} • {u.role} • {u.department} {u.managerName ? `• Mgr: ${u.managerName}` : ""}
                         </p>
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {editingUserId !== u.id && (
+                  {editingUserId !== u.id && (
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => {
                           setEditingUserId(u.id);
                           setEditDept(u.department);
+                          setEditRole(u.role);
+                          setEditManagerId(u.managerId || "");
                         }}
-                        className="text-blue-600 hover:text-blue-750 text-xs font-bold mr-2"
+                        className="text-blue-600 hover:text-blue-750 text-xs font-bold mr-2 transition-all"
                       >
                         Edit
                       </button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(u.id)}
-                      className="text-red-500 hover:text-red-750 text-xs font-bold"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                      <button
+                        onClick={() => handleDelete(u.id)}
+                        className="text-red-500 hover:text-red-750 text-xs font-bold transition-all"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
               )}
