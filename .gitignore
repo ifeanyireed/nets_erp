@@ -29,5 +29,8 @@ server
 *.exe
 *.exe~
 *.dll
-*.so
 *.dylib
+
+# SQL database dumps
+*.sql
+

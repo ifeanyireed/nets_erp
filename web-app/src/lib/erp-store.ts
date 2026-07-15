@@ -406,18 +406,12 @@ const DEFAULT_OBJECTIVES: Objective[] = [
 
 const INITIAL_REVIEWS: PerformanceReview[] = [];
 
-export function getStoredData<T>(key: string, initial: T): T {
-  return initial;
-}
 
-export function setStoredData<T>(key: string, data: T): void {
-  // Disabled: all fetches must load directly from database
-}
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 async function fetchFromApi<T>(endpoint: string, fallbackData: T): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${endpoint}`);
+  const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`Failed to fetch from API endpoint ${endpoint}: ${res.statusText}`);
   }
@@ -510,7 +504,6 @@ export function useERPStore() {
         // Only run this if ALL data fetches completed successfully from the backend
         await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
           setReviews(updated);
-          setStoredData("erp_reviews", updated);
         });
       } catch (e) {
         console.error("Failed to connect to the backend server. Skipping review auto-initialization to protect data integrity.", e);
@@ -533,7 +526,6 @@ export function useERPStore() {
       ? reviews.map(r => r.id === updated.id ? updated : r)
       : [...reviews, updated];
     setReviews(list);
-    setStoredData("erp_reviews", list);
     try {
       await fetch(`${API_BASE_URL}/reviews`, {
         method: "POST",
@@ -548,7 +540,6 @@ export function useERPStore() {
   const addReviewCycle = async (cycle: ReviewCycle) => {
     const list = [...cycles, cycle];
     setCycles(list);
-    setStoredData("erp_cycles", list);
     try {
       await fetch(`${API_BASE_URL}/cycles`, {
         method: "POST",
@@ -559,7 +550,6 @@ export function useERPStore() {
       if (cycle.status === "Active") {
         await ensureReviewsForActiveCycles(users, list, reviews, objectives, (updated) => {
           setReviews(updated);
-          setStoredData("erp_reviews", updated);
         });
       }
     } catch (e) {
@@ -569,7 +559,6 @@ export function useERPStore() {
 
   const updateCycles = async (updatedList: ReviewCycle[]) => {
     setCycles(updatedList);
-    setStoredData("erp_cycles", updatedList);
     try {
       for (const cycle of updatedList) {
         await fetch(`${API_BASE_URL}/cycles`, {
@@ -581,7 +570,6 @@ export function useERPStore() {
       // Ensure reviews are created for the newly activated cycle
       await ensureReviewsForActiveCycles(users, updatedList, reviews, objectives, (updated) => {
         setReviews(updated);
-        setStoredData("erp_reviews", updated);
       });
     } catch (e) {
       console.warn("Failed to sync updateCycles with backend database", e);
@@ -591,7 +579,6 @@ export function useERPStore() {
   const updateObjectives = async (updatedList: Objective[]) => {
     const previous = [...objectives];
     setObjectives(updatedList);
-    setStoredData("erp_objectives", updatedList);
     try {
       // Find deleted objectives
       const deleted = previous.filter(p => !updatedList.some(u => u.id === p.id));
@@ -624,7 +611,6 @@ export function useERPStore() {
     });
 
     setUsers(updatedList);
-    setStoredData("erp_users", updatedList);
     try {
       if (changedUser) {
         await fetch(`${API_BASE_URL}/users`, {
@@ -636,7 +622,6 @@ export function useERPStore() {
       // Ensure reviews are created for newly created users
       await ensureReviewsForActiveCycles(updatedList, cycles, reviews, objectives, (updated) => {
         setReviews(updated);
-        setStoredData("erp_reviews", updated);
       });
     } catch (e) {
       console.warn("Failed to sync updateUsers with backend database", e);
