@@ -103,11 +103,16 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
   const dbUser = currentUser ? users.find(u => u.id === currentUser.id) : null;
   const originalRole = dbUser?.role || (currentUser?.id === "260326" ? "hr" : currentUser?.id === "MD001" ? "md" : null);
-  const canSwitchRole = originalRole === "hr" || originalRole === "md";
+  const canSwitchRole = originalRole === "hr" || originalRole === "md" || originalRole === "admin";
 
   const toggleRoleView = () => {
     if (!currentUser || !originalRole) return;
-    const targetRole = currentUser.role === "manager" ? originalRole : "manager";
+    let targetRole = "";
+    if (originalRole === "admin") {
+      targetRole = currentUser.role === "admin" ? "hr" : "admin";
+    } else {
+      targetRole = currentUser.role === "manager" ? originalRole : "manager";
+    }
     const updatedUser = { ...currentUser, role: targetRole as Role };
     setCurrentUser(updatedUser);
     localStorage.setItem("erp_current_user", JSON.stringify(updatedUser));
@@ -312,7 +317,9 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all duration-300 active:scale-95 cursor-pointer"
               >
                 <RefreshIcon />
-                {currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View"}
+                {originalRole === "admin" 
+                  ? (currentUser.role === "admin" ? "Switch to HR View" : "Switch to Admin View")
+                  : (currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View")}
               </button>
             )}
 
