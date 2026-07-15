@@ -36,8 +36,40 @@ export default function EmployeeProfilePage() {
 
   if (!currentUser || !profileUser) return null;
 
-  // Render a simple trend SVG Sparkline
-  const trendData = profileUser.ratingTrend || [7.0, 7.5, 8.0];
+  // Compute dynamic trend data: historical plus completed cycles in DB
+  const completedScores = userReviews
+    .filter(r => r.status === "HR Approved" && r.finalScore !== undefined)
+    .map(r => Number((r.finalScore || 0).toFixed(1)));
+
+  const trendData = profileUser.ratingTrend && profileUser.ratingTrend.length > 0
+    ? [...profileUser.ratingTrend, ...completedScores]
+    : [7.0, 7.5, 8.0, ...completedScores];
+
+  // Dynamic SVG coordinates
+  const getX = (index: number) => {
+    if (trendData.length <= 1) return 150;
+    return 15 + (index * (270 / (trendData.length - 1)));
+  };
+
+  const linePath = trendData.map((val, i) => `${i === 0 ? "M" : "L"} ${getX(i)} ${100 - (val * 9)}`).join(" ");
+  const areaPath = trendData.length > 0
+    ? `${linePath} L ${getX(trendData.length - 1)} 100 L 15 100 Z`
+    : "";
+
+  const getLabel = (index: number, total: number) => {
+    if (total === 3) {
+      if (index === 0) return "2024 Annual";
+      if (index === 1) return "2025 Mid-Year";
+      return "2025 Annual";
+    }
+    if (total === 4) {
+      if (index === 0) return "2024 Annual";
+      if (index === 1) return "2025 Mid-Year";
+      if (index === 2) return "2025 Annual";
+      return "2026 Mid-Year";
+    }
+    return `Cycle ${index + 1}`;
+  };
 
   return (
     <ERPLayout>
@@ -96,24 +128,26 @@ export default function EmployeeProfilePage() {
                     </linearGradient>
                   </defs>
                   
-                  {/* Graph Line */}
-                  <path
-                    d={`M 15 ${100 - (trendData[0] * 9)} L 150 ${100 - (trendData[1] * 9)} L 285 ${100 - (trendData[2] * 9)}`}
-                    fill="none"
-                    stroke="#3B82F6"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+                  {/* Area fill */}
+                  {areaPath && (
+                    <path d={areaPath} fill="url(#trendGrad)" />
+                  )}
 
-                  <path
-                    d={`M 15 ${100 - (trendData[0] * 9)} L 150 ${100 - (trendData[1] * 9)} L 285 ${100 - (trendData[2] * 9)} L 285 100 L 15 100 Z`}
-                    fill="url(#trendGrad)"
-                  />
+                  {/* Graph Line */}
+                  {linePath && (
+                    <path
+                      d={linePath}
+                      fill="none"
+                      stroke="#3B82F6"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  )}
                   
                   {/* Rating dots */}
                   {trendData.map((val, i) => {
-                    const cx = i === 0 ? 15 : i === 1 ? 150 : 285;
+                    const cx = getX(i);
                     const cy = 100 - (val * 9);
                     return (
                       <g key={i}>
@@ -126,9 +160,9 @@ export default function EmployeeProfilePage() {
               </div>
               
               <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wider px-2 mt-2">
-                <span>2024 Annual</span>
-                <span>2025 Mid-Year</span>
-                <span>2025 Annual</span>
+                {trendData.map((_, i) => (
+                  <span key={i}>{getLabel(i, trendData.length)}</span>
+                ))}
               </div>
             </div>
           </div>

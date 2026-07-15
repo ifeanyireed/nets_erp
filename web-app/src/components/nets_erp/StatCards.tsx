@@ -37,7 +37,13 @@ export default function StatCards() {
     const myActiveReview = reviews.find(r => r.employeeId === currentUser.id && r.cycleId === activeCycle?.id);
     const myReviewStatus = myActiveReview ? myActiveReview.status : "No Active Cycle";
 
-    const trend = currentUser.ratingTrend || [];
+    const completedScores = reviews
+      .filter(r => r.employeeId === currentUser.id && r.status === "HR Approved" && r.finalScore !== undefined)
+      .map(r => Number((r.finalScore || 0).toFixed(1)));
+
+    const trend = currentUser.ratingTrend && currentUser.ratingTrend.length > 0
+      ? [...currentUser.ratingTrend, ...completedScores]
+      : [7.0, 7.5, ...completedScores];
     const latestRating = trend.length > 0 ? trend[trend.length - 1] : 0;
 
     const pendingText = myReviewStatus === "Draft" || myReviewStatus === "Returned" 
