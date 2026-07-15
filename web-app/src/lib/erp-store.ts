@@ -614,14 +614,21 @@ export function useERPStore() {
   };
 
   const updateUsers = async (updatedList: User[]) => {
+    // Find the user that was actually changed or added
+    const changedUser = updatedList.find(u => {
+      const prev = users.find(prevUser => prevUser.id === u.id);
+      if (!prev) return true; // New user
+      return JSON.stringify(prev) !== JSON.stringify(u);
+    });
+
     setUsers(updatedList);
     setStoredData("erp_users", updatedList);
     try {
-      for (const user of updatedList) {
+      if (changedUser) {
         await fetch(`${API_BASE_URL}/users`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(user)
+          body: JSON.stringify(changedUser)
         });
       }
       // Ensure reviews are created for newly created users

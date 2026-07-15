@@ -110,20 +110,16 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     if (!currentUser || !originalRole) return;
     let targetRole = "";
     if (originalRole === "admin") {
-      if (currentUser.role === "admin") {
-        targetRole = "hr";
-      } else if (currentUser.role === "hr") {
-        targetRole = "employee";
-      } else {
-        targetRole = "admin";
-      }
-    } else if (originalRole === "hr" || originalRole === "md") {
-      if (currentUser.role === originalRole) {
+      targetRole = currentUser.role === "admin" ? "hr" : "admin";
+    } else if (originalRole === "md") {
+      targetRole = currentUser.role === "md" ? "manager" : "md";
+    } else if (originalRole === "hr") {
+      if (currentUser.role === "hr") {
         targetRole = "manager";
       } else if (currentUser.role === "manager") {
         targetRole = "employee";
       } else {
-        targetRole = originalRole;
+        targetRole = "hr";
       }
     } else {
       targetRole = "employee";
@@ -138,7 +134,6 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     if (!currentUser || !originalRole) return "";
     if (originalRole === "admin") {
       if (currentUser.role === "admin") return "Switch to HR View";
-      if (currentUser.role === "hr") return "Switch to Employee View";
       return "Switch to Admin View";
     }
     if (originalRole === "hr") {
@@ -148,7 +143,6 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     }
     if (originalRole === "md") {
       if (currentUser.role === "md") return "Switch to Manager View";
-      if (currentUser.role === "manager") return "Switch to Employee View";
       return "Switch to MD View";
     }
     return "Switch View";
