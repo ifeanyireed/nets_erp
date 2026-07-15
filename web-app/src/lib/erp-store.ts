@@ -34,7 +34,7 @@ export function getParentDept(deptName: string): string {
   if (name.startsWith("Legal")) return "Legal";
   if (name.startsWith("Workshop")) return "Workshop";
   if (name.startsWith("Internal Control")) return "Internal Control";
-  if (name.startsWith("KHLC")) return "KHLC/Skillup";
+  if (name.startsWith("KHLC") || name.startsWith("SU ")) return "KHLC/Skillup";
   return "Other";
 }
 
@@ -78,7 +78,8 @@ export const DEPARTMENTS = [
   "KHLC 2 (Supervisor)",
   "KHLC 3 (Program Coordinator)",
   "KHLC 4 (Admin Officer)",
-  "KHLC 5 (Head of C&R/CBT)"
+  "KHLC 5 (Head of C&R/CBT)",
+  "SU 1 (Program Coordinator)"
 ] as const;
 
 export interface ReviewCycle {
@@ -175,9 +176,9 @@ const INITIAL_USERS: User[] = [
   { id: "MGR009", name: "Solomon Grace Amarachi", email: "grace.solomon@kingshouselearning.com", password: "12345678", role: "manager", department: "KHLC 3 (Program Coordinator)", avatar: "/character11.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "Program Coordinator", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP034", name: "Banwo Ibisola Yetunde", email: "yetunde.ibisola@kingshouselearning.com", password: "12345678", role: "employee", department: "KHLC 2 (Supervisor)", avatar: "/character12.jpg", managerName: "Solomon Grace Amarachi", managerId: "MGR009", ratingTrend: undefined, designation: "Supervisor", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "MGR010", name: "Lawal Obanle Promise", email: "promise.obanla@kingshouselearning.com", password: "12345678", role: "manager", department: "KHLC 5 (Head of   C&R/CBT)", avatar: "/character1.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "Head of Robotics/CBT", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
-  { id: "MGR011", name: "Akinwale Akinola Samson", email: "Akinwale.Samson@kingshouselearning.com", password: "12345678", role: "manager", department: "KHLC 3 (Program Coordinator)", avatar: "/character2.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "Skill Up Coordinator", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
+  { id: "MGR011", name: "Akinwale Akinola Samson", email: "Akinwale.Samson@kingshouselearning.com", password: "12345678", role: "manager", department: "SU 1 (Program Coordinator)", avatar: "/character2.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "Skill Up Coordinator", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "MGR012", name: "Bala Blessing", email: "blessing.bala@kingshouselearning.com", password: "12345678", role: "manager", department: "KHLC 2 (Supervisor)", avatar: "/character3.jpg", managerName: "Solomon Grace Amarachi", managerId: "MGR009", ratingTrend: undefined, designation: "Supervisor", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
-  { id: "EMP035", name: "Iniobong Christiana Okokon", email: "Okokon.Christiana@kingshouselearning.com", password: "12345678", role: "employee", department: "KHLC 3 (Program Coordinator)", avatar: "/character4.jpg", managerName: "Akinwale Akinola Samson", managerId: "MGR011", ratingTrend: undefined, designation: "Skill up Coordinator", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
+  { id: "EMP035", name: "Iniobong Christiana Okokon", email: "Okokon.Christiana@kingshouselearning.com", password: "12345678", role: "employee", department: "SU 1 (Program Coordinator)", avatar: "/character4.jpg", managerName: "Akinwale Akinola Samson", managerId: "MGR011", ratingTrend: undefined, designation: "Skill up Coordinator", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "MGR013", name: "Adedokun Khaleed Oluwatobiloba", email: "Adedokun.khaleed@kingshouselearning.com", password: "12345678", role: "manager", department: "KHLC 2 (Supervisor)", avatar: "/character5.jpg", managerName: "Solomon Grace Amarachi", managerId: "MGR009", ratingTrend: undefined, designation: "Supervisor", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP036", name: "Nwantu Faith Titus", email: "faith.nwantu@kingshouselearning.com", password: "12345678", role: "employee", department: "KHLC 1 (Instructor)", avatar: "/character6.jpg", managerName: "Banwo Ibisola Yetunde", managerId: "EMP034", ratingTrend: undefined, designation: "Instructor", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP037", name: "Favour Ezekiel Oladapo", email: "favour.oladapo@kingshouselearning.com", password: "12345678", role: "employee", department: "KHLC 1 (Instructor)", avatar: "/character7.jpg", managerName: "Lawal Obanle Promise", managerId: "MGR010", ratingTrend: undefined, designation: "Instructor", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
@@ -202,8 +203,8 @@ const INITIAL_USERS: User[] = [
 ];
 
 const INITIAL_CYCLES: ReviewCycle[] = [
-  { id: "CYC001", name: "2026 Mid-Year Performance Cycle", startDate: "2026-06-01", endDate: "2026-07-31", status: "Active", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)", "KHLC 4 (Admin Officer)", "KHLC 5 (Head of C&R/CBT)"] },
-  { id: "CYC002", name: "2025 Annual Review Cycle", startDate: "2025-11-01", endDate: "2025-12-15", status: "Completed", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)", "KHLC 4 (Admin Officer)", "KHLC 5 (Head of C&R/CBT)"] }
+  { id: "CYC001", name: "2026 Mid-Year Performance Cycle", startDate: "2026-06-01", endDate: "2026-07-31", status: "Active", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)", "KHLC 4 (Admin Officer)", "KHLC 5 (Head of C&R/CBT)", "SU 1 (Program Coordinator)"] },
+  { id: "CYC002", name: "2025 Annual Review Cycle", startDate: "2025-11-01", endDate: "2025-12-15", status: "Completed", departments: ["Admin/HR 1 (Front Desk & Account Support)", "Admin/HR 2 (Front Desk)", "Admin/HR 3 (Office Assistant)", "ERP/IT 1 (ERP/IT Officer)", "Finance 1 (Acc Payable)", "Finance 2 (Acc Receivable)", "Finance 3 (Accountant)", "Finance 4 (Finance Analyst)", "Finance 5 (Head of Finance)", "Fleet 1 (Bus Assistant)", "Fleet 2 (Fleet Officer)", "Fleet 3 (Fleet Support Officer)", "Fleet 4 (Facility Manager)", "Fleet 5 (Fleet Maintenance North)", "Fleet 6 (Fleet Operations Manager)", "Fleet 7 (HSE Executive)", "Fleet 8 (Fleet Supervisor)", "HR 1 (HR Executive 1)", "HR 2 (HR Executive 2)", "HR 3 (Head of HR)", "Head of Operations", "Internal Control 1 (Internal Control)", "Legal 1 (Legal Counsel & EA)", "Legal 2 (Legal Counsel)", "Marketing 1 (Head of Marketing)", "Marketing 2 (Marketing Executive & CSR)", "Marketing 3 (Marketing Executive)", "Marketing 4 (Marketing Manager)", "Marketing 5 (Social Media Executive)", "Marketing 6 (Sales Closer)", "NOC 1 (Fleet Monitoring & NOC Supervisor)", "NOC 2 (Fleet Monitoring Officer)", "Workshop 1 (Mechanic)", "Workshop 2 (Workshop Assistant)", "Workshop 3 (Workshop Manager)", "KHLC 1 (Instructor)", "KHLC 2 (Supervisor)", "KHLC 3 (Program Coordinator)", "KHLC 4 (Admin Officer)", "KHLC 5 (Head of C&R/CBT)", "SU 1 (Program Coordinator)"] }
 ];
 
 const DEFAULT_OBJECTIVES: Objective[] = [
@@ -362,6 +363,37 @@ const DEFAULT_OBJECTIVES: Objective[] = [
   { id: "OBJ_KHLC_SKILLUP_20", text: "Instructor Development", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["KHLC 5 (Head of C&R/CBT)"], description: ["Percentage of instructors completing professional development programs annually."] },
   { id: "OBJ_KHLC_SKILLUP_21", text: "Course Tools Utilization", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["KHLC 5 (Head of C&R/CBT)"], description: ["Percentage of courses utilizing the latest coding and robotics tools."] },
   { id: "OBJ_KHLC_SKILLUP_22", text: "Event Participation", weight: 5, type: "objective", expectedLevel: undefined, category: undefined, departments: ["KHLC 5 (Head of C&R/CBT)"], description: ["Percentage increase in students participating in coding-related events."] },
+  { id: "OBJ_SU_SKILLUP_1", text: "Program Planning & Coordination", weight: 8, type: "objective", expectedLevel: undefined, category: undefined, departments: ["SU 1 (Program Coordinator)"], description: [
+      "Develop and implement training schedules and skill-up calendars for various cohorts, as well as courses offered at the Academy.",
+      "Teach and coordinate soft and technical skills programs in line with Academy objectives.",
+      "Manage enrollment and payment processes and class rosters and ensure learners have access to relevant resources.",
+      "Organize in-person and virtual training sessions to accommodate learners' different demands.",
+      "Assist in recruiting and onboarding new instructors to meet program demands.",
+      "Manage daily operations of Skill-up Academy, including scheduling, resource allocation, and staff management."
+    ]
+  },
+  { id: "OBJ_SU_SKILLUP_2", text: "Instructor & Learner Engagement", weight: 8, type: "objective", expectedLevel: undefined, category: undefined, departments: ["SU 1 (Program Coordinator)"], description: [
+      "Work closely with instructors to ensure smooth course delivery and learning experiences.",
+      "Serves as a point of contact for learners, addressing any issues related to course content, schedules, or resources.",
+      "Conduct regular feedback sessions with instructors and learners to monitor progress and areas of improvement.",
+      "Motivate learners by tracking their progress and celebrating achievements."
+    ]
+  },
+  { id: "OBJ_SU_SKILLUP_3", text: "Resource Management", weight: 8, type: "objective", expectedLevel: undefined, category: undefined, departments: ["SU 1 (Program Coordinator)"], description: [
+      "Ensure all training materials, equipment, and resources are available during training sessions.",
+      "Collaborate with instructors to update and improve course materials as needed."
+    ]
+  },
+  { id: "OBJ_SU_SKILLUP_4", text: "Performance Tracking & Reporting", weight: 8, type: "objective", expectedLevel: undefined, category: undefined, departments: ["SU 1 (Program Coordinator)"], description: [
+      "Analyze learner performance data and generate reports to measure the effectiveness of the training programs.",
+      "Identify trends and suggest improvements to enhance the learning experience and overall program effectiveness.",
+      "Report key performance metrics and end-of-cohort activities to the Program Coordinator at the end of every cohort training."
+    ]
+  },
+  { id: "OBJ_SU_SKILLUP_5", text: "Partnership Development", weight: 8, type: "objective", expectedLevel: undefined, category: undefined, departments: ["SU 1 (Program Coordinator)"], description: [
+      "Establish partnerships with industry professionals, organizations, and companies to provide learners with opportunities for internships, job placements, and real-world experience."
+    ]
+  },
   { id: "OBJ_COMP_1", text: "Leadership and Accountability", weight: 10, type: "competency", expectedLevel: 4, category: "Leadership", departments: undefined, description: ["Demonstrate responsibility and ownership of task outcomes", "Lead by example and guide colleagues", "Maintain accountability for deliverables"] },
   { id: "OBJ_COMP_2", text: "Initiative and Perseverance", weight: 10, type: "competency", expectedLevel: 4, category: "Behavioural", departments: undefined, description: ["Take proactive steps to resolve issues without waiting for instructions", "Persist in overcoming obstacles and difficulties", "Seek continuous improvements in workflows"] },
   { id: "OBJ_COMP_3", text: "Communication and Interpersonal Ability", weight: 10, type: "competency", expectedLevel: 4, category: "Behavioural", departments: undefined, description: ["Communicate clearly and effectively with team members and stakeholders", "Listen actively and cooperate well with others", "Build constructive work relationships"] },

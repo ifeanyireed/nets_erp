@@ -527,3 +527,18 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 | Event Participation | 5% | • Percentage increase in students participating in coding-related events. |
 
 ---
+
+## Job Profile: SU 1 (Program Coordinator)
+**Source File:** `N/A (SU Program Coordinator)`  
+**Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
+
+| KPI Title | Weight | Description Bullets |
+| --- | --- | --- |
+| Program Planning & Coordination | 8% | • Develop and implement training schedules and skill-up calendars for various cohorts, as well as courses offered at the Academy. Teach and coordinate soft and technical skills programs in line with Academy objectives.<br>• Manage enrollment and payment processes and class rosters and ensure learners have access to relevant resources.<br>• Organize in-person and virtual training sessions to accommodate learners' different demands.<br>• Assist in recruiting and onboarding new instructors to meet program demands. Manage daily operations of Skill-up Academy, including scheduling, resource allocation, and staff management. |
+| Instructor & Learner Engagement | 8% | • Work closely with instructors to ensure smooth course delivery and learning experiences.<br>• Serves as a point of contact for learners, addressing any issues related to course content, schedules, or resources. Conduct regular feedback sessions with instructors and learners to monitor progress and areas of improvement.<br>• Motivate learners by tracking their progress and celebrating achievements. |
+| Resource Management | 8% | • Ensure all training materials, equipment, and resources are available during training sessions.<br>• Collaborate with instructors to update and improve course materials as needed. |
+| Performance Tracking & Reporting | 8% | • Analyze learner performance data and generate reports to measure the effectiveness of the training programs.<br>• Identify trends and suggest improvements to enhance the learning experience and overall program effectiveness.<br>• Report key performance metrics and end-of-cohort activities to the Program Coordinator at the end of every cohort training. |
+| Partnership Development | 8% | • Establish partnerships with industry professionals, organizations, and companies to provide learners with opportunities for internships, job placements, and real-world experience. |
+
+---
+
