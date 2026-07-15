@@ -110,14 +110,48 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     if (!currentUser || !originalRole) return;
     let targetRole = "";
     if (originalRole === "admin") {
-      targetRole = currentUser.role === "admin" ? "hr" : "admin";
+      if (currentUser.role === "admin") {
+        targetRole = "hr";
+      } else if (currentUser.role === "hr") {
+        targetRole = "employee";
+      } else {
+        targetRole = "admin";
+      }
+    } else if (originalRole === "hr" || originalRole === "md") {
+      if (currentUser.role === originalRole) {
+        targetRole = "manager";
+      } else if (currentUser.role === "manager") {
+        targetRole = "employee";
+      } else {
+        targetRole = originalRole;
+      }
     } else {
-      targetRole = currentUser.role === "manager" ? originalRole : "manager";
+      targetRole = "employee";
     }
     const updatedUser = { ...currentUser, role: targetRole as Role };
     setCurrentUser(updatedUser);
     localStorage.setItem("erp_current_user", JSON.stringify(updatedUser));
     router.push(`/${targetRole}`);
+  };
+
+  const getSwitchLabel = () => {
+    if (!currentUser || !originalRole) return "";
+    if (originalRole === "admin") {
+      if (currentUser.role === "admin") return "Switch to HR View";
+      if (currentUser.role === "hr") return "Switch to Employee View";
+      return "Switch to Admin View";
+    }
+    if (originalRole === "hr") {
+      if (currentUser.role === "hr") return "Switch to Manager View";
+      if (currentUser.role === "manager") return "Switch to Employee View";
+      return "Switch to HR View";
+    }
+    if (originalRole === "md") {
+      if (currentUser.role === "md") return "Switch to Manager View";
+      if (currentUser.role === "manager") return "Switch to Employee View";
+      return "Switch to MD View";
+    }
+    return "Switch View";
   };
 
   // Sync current user from local storage or set default employee
@@ -217,7 +251,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
             <button
               onClick={toggleRoleView}
               className="p-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl transition-all duration-300 active:scale-95 cursor-pointer"
-              title="Switch View"
+              title={getSwitchLabel()}
             >
               <RefreshIcon />
             </button>
@@ -325,9 +359,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 className="flex items-center gap-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all duration-300 active:scale-95 cursor-pointer"
               >
                 <RefreshIcon />
-                {originalRole === "admin" 
-                  ? (currentUser.role === "admin" ? "Switch to HR View" : "Switch to Admin View")
-                  : (currentUser.role === "manager" ? `Switch to ${originalRole.toUpperCase()} View` : "Switch to Manager View")}
+                {getSwitchLabel()}
               </button>
             )}
 
