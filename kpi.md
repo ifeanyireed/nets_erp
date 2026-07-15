@@ -319,18 +319,19 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 ---
 
-## Job Profile: Legal 2 (Legal Counsel)
+## Job Profile: Legal 2 (Legal Counsel & PM)
 **Source File:** `Legal Counsel JD.docx`  
 **Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
 
 | KPI Title | Weight | Description Bullets |
 | --- | --- | --- |
-| Contract Review Efficiency | 7% | • Reduce the average contract review time to 3 business days or less within the next 12 months<br>• Cycle time for drafting agreements<br>• Maintain a draft accuracy rate of 95% or better, with no material errors, within the next 12 months |
-| Legal Document Drafting Speed | 7% | • Reviewing contracts and drafting legal documents within 24 hours of receiving the request<br>• Risk Management and Compliance<br>• Reduce potential legal exposure by 10 – 15% annually through proactive measures |
-| Regulatory Compliance & Deadlines | 7% | • Maintain a regulatory compliance rate of 100%, with no material fines or penalties within the next 12 months<br>• Policy and Procedure Updates<br>• Quarterly review of policy document to ensure 100% adherence to relevant laws and regulations |
-| Legislative Policy Drafting Speed | 7% | • Draft new company policy documents that are in line with new legislative laws within 5 working days<br>• Reporting and Document Management<br>• Submit an accurate weekly/ activity report before the close of business on Fridays |
-| Quarterly Compliance Audit & Reporting | 6% | • Submit an accurate quarterly report before the quarterly review<br>• Conduct quarterly audit and maintenance of legal documents with a 90% accuracy<br>• Maintain accurate and up-to-date documents and records, with 100% compliance with document management policies within the next 6 months |
-| Legal Counsel | 6% | • Legal Counsel<br>• Represent the company periodically in legal proceedings/meetings |
+| Cycle time for executing contractual agreements | 6% | • Reduce the average contract review time to 3 business days or less within the next 12 months. |
+| Cycle time for drafting agreements | 6% | • Maintain a draft accuracy rate of 95% or better, with no material errors, within the next 12 months.<br>• Reviewing contracts and drafting legal documents within 24 hours of receiving the request. |
+| Risk Management and Compliance | 6% | • Reduce potential legal exposure by 10 – 15% annually through proactive measures.<br>• Maintain a regulatory compliance rate of 100%, with no material fines or penalties within the next 12 months. |
+| Policy and Procedure Updates | 6% | • Quarterly review of policy document to ensure 100% adherence to relevant laws and regulations.<br>• Draft new company policy documents that are in line with new legislative laws within 5 working days. |
+| Reporting and Document Management | 6% | • Submit an accurate weekly/ activity report before the close of business on Fridays.<br>• Submit an accurate quarterly report before the quarterly review.<br>• Conduct quarterly audit and maintenance of legal documents with a 90% accuracy.<br>• Maintain accurate and up-to-date documents and records, with 100% compliance with document management policies within the next 6 months. |
+| Legal Counsel | 5% | • Represent the company periodically in legal proceedings/meetings. |
+| Property Management | 5% | • Ensure timely renewal of leases, permits, and property documentation.<br>• Conduct regular facility inspections and ensure prompt resolution of maintenance issues.<br>• Maintain company properties in safe and functional condition within approved budgets. |
 
 ---
 
