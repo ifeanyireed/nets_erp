@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { useERPStore, User } from "@/lib/erp-store";
+import { useERPStore, User, DEPARTMENTS } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export default function AdminDashboard() {
-  const { users } = useERPStore();
+  const { users, updateUsers } = useERPStore();
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,9 +18,59 @@ export default function AdminDashboard() {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
 
+  // User Editing Modal State
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editDept, setEditDept] = useState("");
+  const [editDesignation, setEditDesignation] = useState("");
+  const [editRole, setEditRole] = useState<any>("employee");
+
   // Loading & Feedback states
   const [isLoading, setIsLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ text: string; type: "success" | "error" | "" }>({ text: "", type: "" });
+
+  const handleEditClick = (u: User) => {
+    setEditingUser(u);
+    setEditName(u.name);
+    setEditEmail(u.email);
+    setEditDept(u.department);
+    setEditDesignation(u.designation || "");
+    setEditRole(u.role);
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingUser) return;
+
+    setIsLoading(true);
+    try {
+      const updatedUser: User = {
+        ...editingUser,
+        name: editName,
+        email: editEmail,
+        department: editDept,
+        designation: editDesignation,
+        role: editRole,
+      };
+
+      const newList = users.map(u => u.id === editingUser.id ? updatedUser : u);
+      await updateUsers(newList);
+
+      setStatusMessage({
+        text: `Successfully updated user ${editName} (${editingUser.id}).`,
+        type: "success",
+      });
+      setEditingUser(null);
+    } catch (e: any) {
+      setStatusMessage({
+        text: `Failed to update user: ${e.message}`,
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSearchChange = (val: string) => {
     setSearchQuery(val);
@@ -259,6 +309,7 @@ export default function AdminDashboard() {
                   <th className="py-3 px-3">Department</th>
                   <th className="py-3 px-3">Designation</th>
                   <th className="py-3 px-3">Role</th>
+                  <th className="py-3 px-3">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 text-xs font-semibold text-slate-700">
@@ -311,12 +362,20 @@ export default function AdminDashboard() {
                           {u.role}
                         </span>
                       </td>
+                      <td className="py-3 px-3" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          onClick={() => handleEditClick(u)}
+                          className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-[10px] font-black transition-all duration-200 hover:scale-[1.03] active:scale-97 cursor-pointer"
+                        >
+                          Edit
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
                 {paginatedUsers.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="text-center py-8 text-slate-400 text-xs">
+                    <td colSpan={7} className="text-center py-8 text-slate-400 text-xs">
                       No matching user accounts found in directory.
                     </td>
                   </tr>
@@ -403,6 +462,104 @@ export default function AdminDashboard() {
                   className="px-5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-colors duration-200 cursor-pointer"
                 >
                   Dispatch Notifications
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Edit User Modal */}
+      {editingUser && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
+            <div>
+              <h3 className="font-black text-slate-800 text-base">Edit User Details</h3>
+              <p className="text-xs text-slate-450 font-semibold mt-1">Modifying details for user ID: <span className="font-extrabold text-blue-600">{editingUser.id}</span></p>
+            </div>
+            
+            <form onSubmit={handleSaveEdit} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Full Name</label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  required
+                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold text-slate-700"
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Email Address</label>
+                <input
+                  type="email"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  required
+                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold text-slate-700"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Department</label>
+                  <select
+                    value={editDept}
+                    onChange={(e) => setEditDept(e.target.value)}
+                    required
+                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold text-slate-700"
+                  >
+                    <option value="">Select Department</option>
+                    <option value="Administration">Administration</option>
+                    <option value="Head of Operations">Head of Operations</option>
+                    {DEPARTMENTS.map((d) => (
+                      <option key={d} value={d}>{d}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Role</label>
+                  <select
+                    value={editRole}
+                    onChange={(e) => setEditRole(e.target.value as any)}
+                    required
+                    className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold text-slate-700"
+                  >
+                    <option value="employee">Employee</option>
+                    <option value="manager">Manager</option>
+                    <option value="hr">HR</option>
+                    <option value="md">MD</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Designation</label>
+                <input
+                  type="text"
+                  value={editDesignation}
+                  onChange={(e) => setEditDesignation(e.target.value)}
+                  placeholder="e.g. Senior Accountant"
+                  className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-xs font-semibold text-slate-700"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingUser(null)}
+                  className="px-4 py-2 border border-gray-200 text-slate-500 hover:bg-gray-50 font-bold rounded-xl text-xs transition-colors duration-200 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-colors duration-200 cursor-pointer disabled:opacity-50"
+                >
+                  {isLoading ? "Saving..." : "Save Changes"}
                 </button>
               </div>
             </form>
