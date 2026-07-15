@@ -341,25 +341,26 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
       </main>
       {/* MOBILE BOTTOM NAVIGATION */}
-      <nav className="md:hidden fixed bottom-2 left-3 right-3 bg-white/90 backdrop-blur-md border border-slate-200/80 rounded-2xl px-3 py-2.5 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+      <nav className="md:hidden fixed bottom-2 left-3 right-3 bg-white/20 backdrop-blur-xl border border-white/35 rounded-2xl px-3 py-2 flex justify-around items-center z-50 shadow-[0_8px_32px_rgba(0,0,0,0.06)]">
         {sidebarItems.map((item) => {
-          const isActive = pathname === item.route;
+          const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
+          const isActive = isDashboard ? pathname === item.route : (pathname === item.route || pathname.startsWith(item.route + "/"));
           return (
             <button
               key={item.name}
               onClick={() => router.push(item.route)}
               className={`flex flex-col items-center justify-center flex-1 py-2 relative transition-all duration-300 ${
-                isActive ? "text-blue-600 font-bold" : "text-slate-450 hover:text-slate-700"
+                isActive ? "text-blue-600 font-bold" : "text-slate-600 hover:text-slate-800"
               }`}
             >
-              <span className={`w-5 h-5 mb-0.5 flex items-center justify-center z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-450"}`}>
+              <span className={`w-5 h-5 mb-0.5 flex items-center justify-center z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-600"}`}>
                 {item.icon}
               </span>
-              <span className={`text-[10px] font-bold tracking-tight z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-500"}`}>{item.name}</span>
+              <span className={`text-[10px] font-bold tracking-tight z-10 transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-600"}`}>{item.name}</span>
               {isActive && (
                 <motion.div
                   layoutId="bottomNavPill"
-                  className="absolute inset-x-2 inset-y-1 bg-blue-50/80 rounded-xl"
+                  className="absolute inset-x-2 inset-y-1 bg-blue-600/15 border border-blue-600/20 rounded-xl"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
