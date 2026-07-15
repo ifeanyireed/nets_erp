@@ -361,7 +361,9 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 isActive ? "text-blue-600 font-bold" : "text-slate-600 hover:text-slate-800"
               }`}
             >
-              <span className={`w-5 h-5 mb-0.5 flex items-center justify-center transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-600"}`}>
+              <span className={`w-5 h-5 mb-0.5 flex items-center justify-center transition-all duration-300 ${
+                isActive ? "text-blue-600 drop-shadow-[0_0_8px_rgba(37,99,235,0.65)]" : "text-slate-600"
+              }`}>
                 {item.icon}
               </span>
               <span className={`text-[10px] font-bold tracking-tight transition-colors duration-300 ${isActive ? "text-blue-600" : "text-slate-600"}`}>{item.name}</span>
