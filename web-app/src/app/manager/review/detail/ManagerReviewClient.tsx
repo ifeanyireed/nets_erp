@@ -97,19 +97,30 @@ export default function ManagerReviewClient() {
     return (weightedSum / totalWeight);
   };
 
-  // Normalized overall manager score out of 10
+  // Normalized composite score out of 10 (40% self-score, 60% manager-score)
   const calculateFinalAverage = () => {
-    let weightedSum = 0;
-    let totalWeight = 0;
+    let selfWeightedSum = 0;
+    let selfTotalWeight = 0;
+    let mgrWeightedSum = 0;
+    let mgrTotalWeight = 0;
+
     objectives.forEach(o => {
+      if (o.selfScore !== undefined) {
+        const normalized = o.type === "objective" ? (o.selfScore / 10) : (o.selfScore * 2);
+        selfWeightedSum += normalized * o.weight;
+        selfTotalWeight += o.weight;
+      }
       if (o.managerScore !== undefined) {
         const normalized = o.type === "objective" ? (o.managerScore / 10) : (o.managerScore * 2);
-        weightedSum += normalized * o.weight;
-        totalWeight += o.weight;
+        mgrWeightedSum += normalized * o.weight;
+        mgrTotalWeight += o.weight;
       }
     });
-    if (totalWeight === 0) return 0;
-    return (weightedSum / totalWeight);
+
+    const selfAvg = selfTotalWeight > 0 ? (selfWeightedSum / selfTotalWeight) : 0;
+    const mgrAvg = mgrTotalWeight > 0 ? (mgrWeightedSum / mgrTotalWeight) : 0;
+
+    return (selfAvg * 0.4) + (mgrAvg * 0.6);
   };
 
   const handleApprove = () => {
