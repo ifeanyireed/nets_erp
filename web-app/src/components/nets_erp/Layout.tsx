@@ -104,7 +104,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
   const dbUser = currentUser ? users.find(u => u.id === currentUser.id) : null;
   const originalRole = dbUser?.role || (currentUser?.id === "260326" ? "hr" : currentUser?.id === "MD001" ? "md" : null);
-  const canSwitchRole = originalRole === "hr" || originalRole === "md" || originalRole === "admin";
+  const canSwitchRole = originalRole === "hr" || originalRole === "md" || originalRole === "admin" || originalRole === "manager";
 
   const toggleRoleView = () => {
     if (!currentUser || !originalRole) return;
@@ -121,6 +121,8 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       } else {
         targetRole = "hr";
       }
+    } else if (originalRole === "manager") {
+      targetRole = currentUser.role === "manager" ? "employee" : "manager";
     } else {
       targetRole = "employee";
     }
@@ -144,6 +146,10 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
     if (originalRole === "md") {
       if (currentUser.role === "md") return "Switch to Manager View";
       return "Switch to MD View";
+    }
+    if (originalRole === "manager") {
+      if (currentUser.role === "manager") return "Switch to Employee View";
+      return "Switch to Manager View";
     }
     return "Switch View";
   };
