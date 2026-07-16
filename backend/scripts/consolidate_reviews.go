@@ -40,6 +40,42 @@ type Objective struct {
 	Comments  *string  `json:"comments"`
 }
 
+type SeedObjective struct {
+	ID            string
+	Text          string
+	Weight        int
+	Type          string
+	ExpectedLevel *int
+	Category      *string
+	Departments   []string
+	Description   []string
+}
+
+type ReviewObjective struct {
+	ID              string   `json:"id"`
+	Text            string   `json:"text"`
+	Weight          int      `json:"weight"`
+	Type            string   `json:"type"`
+	ExpectedLevel   *int     `json:"expectedLevel"`
+	Category        *string  `json:"category"`
+	Departments     []string `json:"departments"`
+	Description     []string `json:"description"`
+	SelfScore       *int     `json:"selfScore"`
+	ManagerScore    *int     `json:"managerScore"`
+	Comments        *string  `json:"comments"`
+	Evidence        *string  `json:"evidence"`
+	ManagerFeedback *string  `json:"managerFeedback"`
+}
+
+func contains(slice []string, val string) bool {
+	for _, item := range slice {
+		if item == val {
+			return true
+		}
+	}
+	return false
+}
+
 func getDSN() string {
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {
@@ -274,6 +310,8 @@ func main() {
 		{"/Users/user/Downloads/nets_erp/u721451974_nets_db.20260715185623.sql", "6:56 PM Backup"},
 		{"/Users/user/Downloads/nets_erp/PerformanceReview.sql", "10:28 PM Backup"},
 		{"/Users/user/Downloads/nets_erp/u721451974_nets_db.sql", "11:32 PM Backup"},
+		{"/Users/user/Downloads/nets_erp/u721451974_nets_db (1).sql", "New Backup 1"},
+		{"/Users/user/Downloads/nets_erp/u721451974_nets_db (2).sql", "New Backup 2"},
 	}
 
 	mergedRecords := make(map[string]DumpRecord)
@@ -376,20 +414,53 @@ func main() {
 	}
 	defer objStmt.Close()
 
+	var seedObjectives []SeedObjective
 	for _, o := range seedData.Objectives {
+		var expectedLevel, category interface{}
 		if len(o) > 4 && o[4] != nil {
 			if f, ok := o[4].(float64); ok {
-				o[4] = int(f)
+				expectedLevel = int(f)
+			} else {
+				expectedLevel = o[4]
 			}
+		}
+		if len(o) > 5 && o[5] != nil {
+			category = o[5]
 		}
 		if len(o) > 2 && o[2] != nil {
 			if f, ok := o[2].(float64); ok {
 				o[2] = int(f)
 			}
 		}
-		if _, err := objStmt.Exec(o...); err != nil {
+		
+		_, err = objStmt.Exec(o[0], o[1], o[2], o[3], expectedLevel, category, o[6], o[7])
+		if err != nil {
 			log.Fatalf("Failed to seed objective: %v", err)
 		}
+
+		// Also populate seedObjectives in memory for reviews upgrading
+		var depts, desc []string
+		if deptsStr, ok := o[6].(string); ok {
+			json.Unmarshal([]byte(deptsStr), &depts)
+		}
+		if descStr, ok := o[7].(string); ok {
+			json.Unmarshal([]byte(descStr), &desc)
+		}
+		
+		so := SeedObjective{
+			ID:          o[0].(string),
+			Text:        o[1].(string),
+			Weight:      toInt(o[2]),
+			Type:        o[3].(string),
+			Departments: depts,
+			Description: desc,
+		}
+		if o[4] != nil {
+			lvl := toInt(o[4])
+			so.ExpectedLevel = &lvl
+		}
+		so.Category = toStringPtr(o[5])
+		seedObjectives = append(seedObjectives, so)
 	}
 	fmt.Printf("Successfully restored %d objectives in database!\n", len(seedData.Objectives))
 
@@ -430,6 +501,49 @@ func main() {
 
 		cleanObjectives := cleanSQLString(r.ObjectivesJSON)
 
+		// On-the-fly upgrade for KHLC 1, 2, and 3 employees
+		if r.Department == "KHLC 1 (Instructor)" || r.Department == "KHLC 2 (Supervisor)" || r.Department == "KHLC 3 (Program Coordinator)" {
+			var existingObjs []ReviewObjective
+			json.Unmarshal([]byte(cleanObjectives), &existingObjs)
+			scoresMap := make(map[string]ReviewObjective)
+			for _, eo := range existingObjs {
+				scoresMap[eo.ID] = eo
+			}
+
+			var newReviewObjs []ReviewObjective
+			for _, so := range seedObjectives {
+				isComp := so.Type == "competency"
+				isMatchingObj := so.Type == "objective" && contains(so.Departments, r.Department)
+
+				if isComp || isMatchingObj {
+					ro := ReviewObjective{
+						ID:            so.ID,
+						Text:          so.Text,
+						Weight:        so.Weight,
+						Type:          so.Type,
+						ExpectedLevel: so.ExpectedLevel,
+						Category:      so.Category,
+						Departments:   so.Departments,
+						Description:   so.Description,
+					}
+					// Preserve existing scores and comments if the objective matched by ID (e.g. competencies)
+					if val, exists := scoresMap[so.ID]; exists {
+						ro.SelfScore = val.SelfScore
+						ro.ManagerScore = val.ManagerScore
+						ro.Comments = val.Comments
+						ro.Evidence = val.Evidence
+						ro.ManagerFeedback = val.ManagerFeedback
+					}
+					newReviewObjs = append(newReviewObjs, ro)
+				}
+			}
+
+			newObjsBytes, err := json.Marshal(newReviewObjs)
+			if err == nil {
+				cleanObjectives = string(newObjsBytes)
+			}
+		}
+
 		_, err = stmt.Exec(
 			r.ID, r.EmployeeId, r.EmployeeName, r.Department, r.CycleId, r.CycleName, r.Status,
 			empComments, mgrComments, hrComments, finalScore, cleanObjectives, r.UpdatedAt, impPlan,
@@ -459,4 +573,27 @@ func cleanSQLString(s string) string {
 	s = strings.ReplaceAll(s, `\'`, `'`)
 	s = strings.ReplaceAll(s, `\\`, `\`)
 	return s
+}
+
+func toInt(v interface{}) int {
+	if v == nil {
+		return 0
+	}
+	if f, ok := v.(float64); ok {
+		return int(f)
+	}
+	if i, ok := v.(int); ok {
+		return i
+	}
+	return 0
+}
+
+func toStringPtr(v interface{}) *string {
+	if v == nil {
+		return nil
+	}
+	if s, ok := v.(string); ok {
+		return &s
+	}
+	return nil
 }

@@ -468,9 +468,16 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 | KPI Title | Weight | Description Bullets |
 | --- | --- | --- |
-| Class Delivery & Lesson Execution | 15% | • Ensure timely execution of all learning programmes by delivering >=95% of classes |
-| Resource Adherence & Lesson Plans | 15% | • Ensure instructors use lesson plans 100% of the time during teaching sessions |
-| Instructor Skill-up & Professional Courses | 10% | • Complete at least 2 professional courses annually to improve skills and coordination |
+| Resource Adherence & Lesson Plans | 4% | • Ensure instructors use the resources (Lesson plan) 100% of the time during sessions |
+| Dress Code & Professional compliance | 4% | • Ensure a compliance rate of 100% with the organization's professional dress code for all training sessions |
+| Stakeholder Relationships | 4% | • Achieve an average stakeholder relationship rating of 4/5 or higher |
+| Practical Training Ratio | 4% | • Ensure instructors train students using 80% practical session, 20% theory |
+| Instructor Clarity & Engagement Feedback | 4% | • Maintain an average feedback score of 4.5/5 for clarity of instruction and session engagement on post- training evaluations each term |
+| Professional Development | 4% | • Complete at least 2 professional courses annually to improve skills and knowledge relevant to program coordination |
+| Daily Activity & Attendance Reporting | 4% | • Submit accurate daily reports(/attendance) before close of business |
+| Term Reporting | 4% | • Submit accurate report for the term on the 12th week of the term |
+| Profile Updates | 4% | • Submit accurate profile form for the term on the 5th – 6th week |
+| Punctuality & Arrival Rate | 4% | • Achieve a 95% on-time arrival rate for all scheduled classes |
 
 ---
 
@@ -480,9 +487,11 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 | KPI Title | Weight | Description Bullets |
 | --- | --- | --- |
-| Class Delivery & Lesson Execution | 15% | • Ensure timely execution of all learning programmes by delivering >=95% of classes |
-| Resource Adherence & Lesson Plans | 15% | • Ensure instructors use lesson plans 100% of the time during teaching sessions |
-| Instructor Skill-up & Professional Courses | 10% | • Complete at least 2 professional courses annually to improve skills and coordination |
+| Program Execution & Delivery | 8% | • Ensure timely execution of all learning programmes within the term by delivering >=95% of programs |
+| Participant Engagement & Attendance | 8% | • Ensure at least 90% participation (internal and external teams) in the execution of each program |
+| Professional Development | 8% | • Complete at least 2 professional courses annually to improve skills and knowledge relevant to program coordination |
+| Instructor Management & Quality Assurance | 8% | • 90% participant satisfaction ratings in post-session feedback on subject matter expertise<br>• 95% adherence to class schedules without significant delays or cancellations<br>• Zero incidents of reported unprofessional conduct during the term<br>• Problem solving/ Thinking outside the box during execution of programs |
+| Team Performance Feedback | 8% | • Ensure 100% of team members receive formal performance feedback at least once per quarter |
 
 ---
 
@@ -492,9 +501,13 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 | KPI Title | Weight | Description Bullets |
 | --- | --- | --- |
-| Class Delivery & Lesson Execution | 15% | • Ensure timely execution of all learning programmes by delivering >=95% of classes |
-| Resource Adherence & Lesson Plans | 15% | • Ensure instructors use lesson plans 100% of the time during teaching sessions |
-| Instructor Skill-up & Professional Courses | 10% | • Complete at least 2 professional courses annually to improve skills and coordination |
+| Instructor Resource & Equipment Readiness | 6% | • Ensure instructors are 80% – 90% (i.e., notes, laptops, instructional materials, retooling) equipped, 2 weeks before the commencement of every academic session |
+| Project Execution & Budget Management | 6% | • Successfully execute 95% of assigned projects within the agreed timeline and budget |
+| Feedback Scores & Post-Training Evaluations | 6% | • Maintain an average feedback score between 80% - 90% on post-training evaluations each quarter |
+| Project Task Timelines | 6% | • Ensure 100% of assigned project-related tasks are completed within the agreed timelines for each program |
+| Deliverable Tracking & Coordination | 6% | • Achieve the target of 100% deliverable tracking and coordination by the end of each quarter/ session |
+| Stakeholder Relationships | 6% | • Achieve an average stakeholder relationship rating of 4/5 or higher (>=90%) |
+| Reporting and Documentation | 4% | • Submit accurate quarterly report before end of term<br>• Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy |
 
 ---
 
