@@ -339,10 +339,64 @@ func main() {
 		log.Fatalf("Failed to disable foreign keys: %v", err)
 	}
 
+	// 1. ALTER TABLE to convert columns to TEXT
+	fmt.Println("Altering columns departments and description to TEXT in MySQL...")
+	_, err = db.Exec("ALTER TABLE Objective MODIFY departments TEXT")
+	if err != nil {
+		log.Fatalf("Failed to alter departments column: %v", err)
+	}
+	_, err = db.Exec("ALTER TABLE Objective MODIFY description TEXT")
+	if err != nil {
+		log.Fatalf("Failed to alter description column: %v", err)
+	}
+	fmt.Println("Objective table columns altered to TEXT successfully.")
+
+	// 2. Load seed_data.json and re-seed Objectives
+	fmt.Println("Reading seed_data.json to restore objectives...")
+	seedBytes, err := os.ReadFile("seed_data.json")
+	if err != nil {
+		log.Fatalf("Failed to read seed_data.json: %v", err)
+	}
+
+	var seedData struct {
+		Objectives [][]interface{} `json:"objectives"`
+	}
+	if err := json.Unmarshal(seedBytes, &seedData); err != nil {
+		log.Fatalf("Failed to parse seed data: %v", err)
+	}
+
+	_, err = db.Exec("TRUNCATE TABLE Objective")
+	if err != nil {
+		log.Fatalf("Failed to truncate Objective table: %v", err)
+	}
+
+	objStmt, err := db.Prepare("INSERT INTO Objective (id, text, weight, type, expectedLevel, category, departments, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		log.Fatalf("Failed to prepare Objective statement: %v", err)
+	}
+	defer objStmt.Close()
+
+	for _, o := range seedData.Objectives {
+		if len(o) > 4 && o[4] != nil {
+			if f, ok := o[4].(float64); ok {
+				o[4] = int(f)
+			}
+		}
+		if len(o) > 2 && o[2] != nil {
+			if f, ok := o[2].(float64); ok {
+				o[2] = int(f)
+			}
+		}
+		if _, err := objStmt.Exec(o...); err != nil {
+			log.Fatalf("Failed to seed objective: %v", err)
+		}
+	}
+	fmt.Printf("Successfully restored %d objectives in database!\n", len(seedData.Objectives))
+
 	// We clear the PerformanceReview table and insert the consolidated rows
 	_, err = db.Exec("TRUNCATE TABLE PerformanceReview")
 	if err != nil {
-		log.Fatalf("Failed to truncate table: %v", err)
+		log.Fatalf("Failed to truncate PerformanceReview table: %v", err)
 	}
 
 	stmt, err := db.Prepare(`INSERT INTO PerformanceReview (
