@@ -502,9 +502,13 @@ export function useERPStore() {
 
         // Auto-initialize reviews for the active cycle
         // Only run this if ALL data fetches completed successfully from the backend
-        await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
-          setReviews(updated);
-        });
+        try {
+          await ensureReviewsForActiveCycles(usersData, cyclesData, reviewsData, objectivesData, (updated) => {
+            setReviews(updated);
+          });
+        } catch (initErr) {
+          console.warn("Failed to auto-initialize reviews:", initErr);
+        }
       } catch (e) {
         console.error("Failed to connect to the backend server. Skipping review auto-initialization to protect data integrity.", e);
         // Fallback to static seeds for frontend UI rendering only in case of complete network outage
