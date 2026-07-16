@@ -89,6 +89,18 @@ const BuildingIcon = () => (
   </svg>
 );
 
+const CollapseIcon = () => (
+  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="15 18 9 12 15 6" />
+  </svg>
+);
+
+const ExpandIcon = () => (
+  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
 interface SidebarItem {
   name: string;
   route: string;
@@ -101,6 +113,21 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
   const { users, isLoading } = useERPStore();
   
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  // Sync collapsed state from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("erp_sidebar_collapsed");
+      setIsCollapsed(stored === "true");
+    }
+  }, []);
+
+  const toggleCollapse = () => {
+    const next = !isCollapsed;
+    setIsCollapsed(next);
+    localStorage.setItem("erp_sidebar_collapsed", String(next));
+  };
 
   const dbUser = currentUser ? users.find(u => u.id === currentUser.id) : null;
   const originalRole = dbUser?.role || (currentUser?.id === "260326" ? "hr" : currentUser?.id === "MD001" ? "md" : null);
@@ -279,13 +306,33 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* SIDEBAR (Desktop Only) */}
-      <aside className="hidden md:flex md:w-64 bg-[#EAECEF]/60 border-r border-[#D2D5DA] p-6 flex-col justify-between shrink-0">
+      <aside className={`hidden md:flex ${isCollapsed ? "md:w-20 px-3" : "md:w-64 p-6"} bg-[#EAECEF]/60 border-r border-[#D2D5DA] py-6 flex-col justify-between shrink-0 transition-all duration-300`}>
         
         <div>
-          {/* Logo */}
-          <div className="flex items-center mb-8 px-1">
-            <img src="/nets.webp" alt="Nets Logo" className="h-10 w-auto object-contain" />
-          </div>
+          {/* Logo & Toggle Button */}
+          {isCollapsed ? (
+            <div className="flex flex-col items-center gap-6 mb-8">
+              <img src="/favicon.png" alt="Nets Icon" className="h-8 w-8 object-contain" />
+              <button 
+                onClick={toggleCollapse}
+                className="p-1.5 hover:bg-white/55 hover:text-slate-850 text-slate-500 rounded-lg transition-all duration-200 cursor-pointer shadow-sm border border-slate-200 bg-white"
+                title="Expand Sidebar"
+              >
+                <ExpandIcon />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between mb-8 px-1">
+              <img src="/nets.webp" alt="Nets Logo" className="h-10 w-auto object-contain" />
+              <button 
+                onClick={toggleCollapse}
+                className="p-1.5 hover:bg-white/55 hover:text-slate-850 text-slate-500 rounded-lg transition-all duration-200 cursor-pointer shadow-sm border border-slate-200 bg-white"
+                title="Collapse Sidebar"
+              >
+                <CollapseIcon />
+              </button>
+            </div>
+          )}
 
           {/* Menu Items */}
           <nav className="space-y-1.5">
@@ -302,16 +349,17 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 <button
                   key={item.name}
                   onClick={() => router.push(item.route)}
-                  className={`w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
+                  className={`w-full flex items-center ${isCollapsed ? "justify-center px-1" : "gap-3.5 px-3.5"} py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
                     isActive
                       ? "bg-white text-blue-600 font-bold shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-transparent"
                       : "text-slate-500 hover:text-slate-800 hover:bg-white/40"
                   }`}
+                  title={isCollapsed ? item.name : undefined}
                 >
                   <span className={isActive ? "text-blue-600" : "text-slate-450"}>
                     {item.icon}
                   </span>
-                  {item.name}
+                  {!isCollapsed && item.name}
                 </button>
               );
             })}
@@ -326,17 +374,18 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 localStorage.removeItem("erp_current_user");
                 router.push("/");
               }}
-              className="w-full flex items-center gap-3.5 px-3.5 py-2.5 rounded-xl text-[14px] font-semibold tracking-wide text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all duration-300"
+              className={`w-full flex items-center ${isCollapsed ? "justify-center px-1" : "gap-3.5 px-3.5"} py-2.5 rounded-xl text-[14px] font-semibold tracking-wide text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all duration-300`}
+              title={isCollapsed ? "Logout" : undefined}
             >
               <span className="text-slate-450"><LogoutIcon /></span>
-              Logout
+              {!isCollapsed && "Logout"}
             </button>
           </nav>
         </div>
 
         {/* Sidebar Footer info */}
-        <div className="hidden md:block px-2 text-[11px] text-slate-400 font-semibold mt-auto">
-          © 2026 NETS System
+        <div className={`hidden md:block text-[#A0AEC0] font-semibold mt-auto transition-all duration-300 text-center ${isCollapsed ? "text-[10px]" : "px-2 text-[11px]"}`}>
+          {isCollapsed ? "NETS" : "© 2026 NETS System"}
         </div>
 
       </aside>
