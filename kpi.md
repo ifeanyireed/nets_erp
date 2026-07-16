@@ -107,12 +107,12 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 | KPI Title | Weight | Description Bullets |
 | --- | --- | --- |
-| Fuel Efficiency & Usage Tracking | 7% | • Achieve 5–10% annual reduction in fuel wastage or inefficiencies through monitoring and analysis<br>• Maintain 100% accurate tracking of fuel purchases and usage records<br>• Fuel Data Accuracy & Reporting |
-| Fuel Reconciliations & Consumption Analysis | 7% | • Ensure 100% reconciliation of fuel logs with fuel purchase records and vehicle usage reports<br>• Submit monthly fuel consumption reports and cost analysis within the first 5 working days of each month<br>• Financial Reporting Timeliness |
-| Financial Reporting & Analysis Accuracy | 7% | • Deliver 100% of scheduled financial reports and management dashboards on time<br>• Maintain a financial reporting accuracy rate of at least 98–100%<br>• Operational Cost Monitoring |
-| Operational Cost Optimization | 7% | • Identify and report at least 3–5 cost-saving opportunities annually related to fuel usage, fleet operations, or maintenance<br>• Compliance Monitoring<br>• Conduct quarterly audits of fuel logs and maintenance documentation for all operational vehicles |
-| Fuel Compliance Auditing | 6% | • Maintain 100% documentation compliance for fuel and vehicle maintenance records<br>• Fleet Efficiency Monitoring<br>• Maintain complete fuel consumption records for 100% of operational vehicles |
-| Fuel Anomaly & Irregularity Detection | 6% | • Detect and report 100% of fuel anomalies or irregular usage patterns within 48 hours of discovery |
+| Timeliness of Financial Reporting | 7% | • Submit 100% of monthly management reports within the first 5 working days of the following month |
+| Financial Reporting Accuracy | 7% | • Maintain less than 2% reporting adjustment rate after management review<br>• Maintain 98–100% accuracy in financial reporting |
+| Financial Report Reconciliation | 7% | • Ensure 100% reconciliation of financial reports before submission |
+| Financial Analysis & Profitability Reporting | 7% | • Prepare quarterly profitability reports for all subsidiaries |
+| Management Reporting & Dashboard Delivery | 6% | • Submit all management dashboards and executive reports on schedule |
+| Budget Variance Analysis & Monitoring | 6% | • Complete all budget variance analyses within agreed timelines |
 
 ---
 

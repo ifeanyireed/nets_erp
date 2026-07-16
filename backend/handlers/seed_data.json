@@ -1546,66 +1546,6 @@
             "[\"All approved payment requests must be paid within 24 hours, except on weekends\"]"
         ],
         [
-            "OBJ_FINANCE_ACCOUNTS_18",
-            "Fuel Efficiency \u0026 Usage Tracking",
-            7,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Achieve 5\\u201310% annual reduction in fuel wastage or inefficiencies through monitoring and analysis\", \"Maintain 100% accurate tracking of fuel purchases and usage records\", \"Fuel Data Accuracy \u0026 Reporting\"]"
-        ],
-        [
-            "OBJ_FINANCE_ACCOUNTS_19",
-            "Fuel Reconciliations \u0026 Consumption Analysis",
-            7,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Ensure 100% reconciliation of fuel logs with fuel purchase records and vehicle usage reports\", \"Submit monthly fuel consumption reports and cost analysis within the first 5 working days of each month\", \"Financial Reporting Timeliness\"]"
-        ],
-        [
-            "OBJ_FINANCE_ACCOUNTS_20",
-            "Financial Reporting \u0026 Analysis Accuracy",
-            7,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Deliver 100% of scheduled financial reports and management dashboards on time\", \"Maintain a financial reporting accuracy rate of at least 98\\u2013100%\", \"Operational Cost Monitoring\"]"
-        ],
-        [
-            "OBJ_FINANCE_ACCOUNTS_21",
-            "Operational Cost Optimization",
-            7,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Identify and report at least 3\\u20135 cost-saving opportunities annually related to fuel usage, fleet operations, or maintenance\", \"Compliance Monitoring\", \"Conduct quarterly audits of fuel logs and maintenance documentation for all operational vehicles\"]"
-        ],
-        [
-            "OBJ_FINANCE_ACCOUNTS_22",
-            "Fuel Compliance Auditing",
-            6,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Maintain 100% documentation compliance for fuel and vehicle maintenance records\", \"Fleet Efficiency Monitoring\", \"Maintain complete fuel consumption records for 100% of operational vehicles\"]"
-        ],
-        [
-            "OBJ_FINANCE_ACCOUNTS_23",
-            "Fuel Anomaly \u0026 Irregularity Detection",
-            6,
-            "objective",
-            null,
-            null,
-            "[\"Finance 4 (Finance Analyst)\"]",
-            "[\"Detect and report 100% of fuel anomalies or irregular usage patterns within 48 hours of discovery\"]"
-        ],
-        [
             "OBJ_FINANCE_ACCOUNTS_24",
             "Operational Cost Reduction",
             7,
@@ -3094,6 +3034,66 @@
             null,
             "[\"KHLC 3 (Program Coordinator)\"]",
             "[\"Submit accurate quarterly report before end of term\", \"Ensure 100% of documents are filed (physical and digital) in the appropriate systems within 24 hours of receipt, maintaining 98% accuracy.\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_18",
+            "Timeliness of Financial Reporting",
+            7,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Submit 100% of monthly management reports within the first 5 working days of the following month\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_19",
+            "Financial Reporting Accuracy",
+            7,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Maintain less than 2% reporting adjustment rate after management review\", \"Maintain 98–100% accuracy in financial reporting.\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_20",
+            "Financial Report Reconciliation",
+            7,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Ensure 100% reconciliation of financial reports before submission\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_21",
+            "Financial Analysis \u0026 Profitability Reporting",
+            7,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Prepare quarterly profitability reports for all subsidiaries\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_22",
+            "Management Reporting \u0026 Dashboard Delivery",
+            6,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Submit all management dashboards and executive reports on schedule\"]"
+        ],
+        [
+            "OBJ_FINANCE_ACCOUNTS_23",
+            "Budget Variance Analysis \u0026 Monitoring",
+            6,
+            "objective",
+            null,
+            null,
+            "[\"Finance 4 (Finance Analyst)\"]",
+            "[\"Complete all budget variance analyses within agreed timelines\"]"
         ]
     ],
     "reviews": []
