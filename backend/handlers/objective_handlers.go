@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func handleObjectives(w http.ResponseWriter, r *http.Request) {
+func HandleObjectives(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT id, text, weight, type, expectedLevel, category, departments, description FROM Objective")
 		if err != nil {

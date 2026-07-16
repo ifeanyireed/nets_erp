@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func handleUsers(w http.ResponseWriter, r *http.Request) {
+func HandleUsers(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		id := r.URL.Query().Get("id")
 		if id != "" {

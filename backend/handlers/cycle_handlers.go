@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"database/sql"
@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func handleCycles(w http.ResponseWriter, r *http.Request) {
+func HandleCycles(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT id, name, startDate, endDate, status, departments FROM ReviewCycle")
 		if err != nil {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/handlers"
 	"database/sql"
 	"fmt"
 	"log"
@@ -18,6 +19,7 @@ func main() {
 	dsn := getDSN()
 	var err error
 	db, err = sql.Open("mysql", dsn)
+	handlers.SetDB(db)
 	if err != nil {
 		log.Fatalf("Error opening database connection: %v", err)
 	}

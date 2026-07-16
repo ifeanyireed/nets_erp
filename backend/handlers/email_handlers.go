@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"crypto/sha256"
@@ -62,7 +62,7 @@ func generateResetToken(email, currentPassword string) string {
 	return fmt.Sprintf("%x", sum)
 }
 
-func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
+func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
@@ -170,7 +170,7 @@ func handleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
+func HandleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})
@@ -268,7 +268,7 @@ func handleSendBulkNotification(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func handleUpdatePassword(w http.ResponseWriter, r *http.Request) {
+func HandleUpdatePassword(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed"})

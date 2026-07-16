@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	_ "embed"
@@ -9,7 +9,7 @@ import (
 //go:embed seed_data.json
 var seedDataBytes []byte
 
-func handleSeed(w http.ResponseWriter, r *http.Request) {
+func HandleSeed(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(map[string]string{"error": "Method not allowed. Use POST."})

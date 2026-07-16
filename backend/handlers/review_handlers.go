@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"database/sql"
@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func handleReviews(w http.ResponseWriter, r *http.Request) {
+func HandleReviews(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		id := r.URL.Query().Get("id")
 		employeeId := r.URL.Query().Get("employeeId")
