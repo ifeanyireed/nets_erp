@@ -163,7 +163,7 @@ export default function ManagerReviewClient() {
 
     const updatedReview: PerformanceReview = {
       ...review,
-      status: "Returned",
+      status: "Draft",
       managerComments,
       improvementPlan,
       updatedAt: new Date().toISOString(),

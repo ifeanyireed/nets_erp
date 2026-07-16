@@ -89,7 +89,7 @@ export default function HRReviewClient() {
 
     const updatedReview: PerformanceReview = {
       ...review,
-      status: "Returned",
+      status: "Draft",
       hrComments,
       improvementPlan,
       updatedAt: new Date().toISOString(),
