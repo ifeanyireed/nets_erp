@@ -359,24 +359,26 @@ func main() {
 		var empComments, mgrComments, hrComments, finalScore, impPlan interface{}
 
 		if r.EmployeeComments != "NULL" {
-			empComments = r.EmployeeComments
+			empComments = cleanSQLString(r.EmployeeComments)
 		}
 		if r.ManagerComments != "NULL" {
-			mgrComments = r.ManagerComments
+			mgrComments = cleanSQLString(r.ManagerComments)
 		}
 		if r.HrComments != "NULL" {
-			hrComments = r.HrComments
+			hrComments = cleanSQLString(r.HrComments)
 		}
 		if r.FinalScore != "NULL" {
 			finalScore = r.FinalScore
 		}
 		if r.ImprovementPlan != "NULL" {
-			impPlan = r.ImprovementPlan
+			impPlan = cleanSQLString(r.ImprovementPlan)
 		}
+
+		cleanObjectives := cleanSQLString(r.ObjectivesJSON)
 
 		_, err = stmt.Exec(
 			r.ID, r.EmployeeId, r.EmployeeName, r.Department, r.CycleId, r.CycleName, r.Status,
-			empComments, mgrComments, hrComments, finalScore, r.ObjectivesJSON, r.UpdatedAt, impPlan,
+			empComments, mgrComments, hrComments, finalScore, cleanObjectives, r.UpdatedAt, impPlan,
 		)
 		if err != nil {
 			log.Fatalf("Failed to insert record %s: %v", r.ID, err)
@@ -391,4 +393,16 @@ func main() {
 	}
 
 	fmt.Printf("Live restore completed successfully! Restored %d records to PerformanceReview table.\n", insertedCount)
+}
+
+func cleanSQLString(s string) string {
+	if s == "NULL" {
+		return s
+	}
+	// Unescape SQL escaped characters
+	s = strings.ReplaceAll(s, `''`, `'`)
+	s = strings.ReplaceAll(s, `\"`, `"`)
+	s = strings.ReplaceAll(s, `\'`, `'`)
+	s = strings.ReplaceAll(s, `\\`, `\`)
+	return s
 }
