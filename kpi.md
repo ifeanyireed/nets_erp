@@ -542,6 +542,24 @@ The 6 official competencies contribute **60% total weight** (10% each) to all pr
 
 ---
 
+## Job Profile: KHLC 6 (IT/Technical Support)
+**Source File:** `N/A (KHLC IT/Technical Support)`  
+**Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
+
+| KPI Title | Weight | Description Bullets |
+| --- | --- | --- |
+| System Readiness | 5% | • All CBT computers functional before training/exams<br>• 100% readiness before every session (Frequency: Every CBT session) |
+| System Uptime | 5% | • Availability of systems during training/exams<br>• 99% uptime (Frequency: Monthly) |
+| Preventive Maintenance | 5% | • Completion of scheduled system maintenance checks<br>• 100% completion (Frequency: Monthly) |
+| User Support | 5% | • Satisfaction level from students and instructors<br>• Minimum 90% satisfaction (Frequency: Quarterly) |
+| IT Asset Management | 5% | • Accuracy of equipment inventory records<br>• 100% accurate inventory (Frequency: Quarterly) |
+| Security Compliance | 5% | • Systems protected with updated antivirus and security protocols<br>• 100% compliance (Frequency: Monthly) |
+| Incident Reporting | 5% | • Documentation of technical incidents and resolutions<br>• Report submitted within 24 hours (Frequency: Per incident) |
+| CBT Session Support | 5% | • Number of CBT sessions conducted without technical disruption<br>• 95% disruption-free sessions (Frequency: Monthly) |
+
+---
+
+
 ## Job Profile: SU 1 (Program Coordinator)
 **Source File:** `N/A (SU Program Coordinator)`  
 **Total Work-Related KPI Weight:** 40% (Sum of weights listed below)  
