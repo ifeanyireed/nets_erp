@@ -17,7 +17,8 @@ export default function StatCards() {
         setCurrentUser(u);
 
         if (u.role === "accountant") {
-          fetch("http://localhost:8085/stats")
+          const financeApiUrl = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+          fetch(`${financeApiUrl}/stats`)
             .then(res => {
               if (res.ok) return res.json();
               throw new Error();
