@@ -35,7 +35,6 @@ export function getParentDept(deptName: string): string {
   if (name.startsWith("Legal")) return "Legal";
   if (name.startsWith("Workshop")) return "Workshop";
   if (name.startsWith("Internal Control")) return "Internal Control";
-  if (name.startsWith("KHLC 6")) return "Systems and IT";
   if (name.startsWith("KHLC") || name.startsWith("SU ")) return "KHLC - Skillup";
   return "Other";
 }
