@@ -418,7 +418,7 @@ const INITIAL_REVIEWS: PerformanceReview[] = [];
 
 
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8086";
 
 async function fetchFromApi<T>(endpoint: string, fallbackData: T): Promise<T> {
   const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: "no-store" });
