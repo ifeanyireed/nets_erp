@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export type Role = "employee" | "manager" | "hr" | "md" | "admin";
+export type Role = "employee" | "manager" | "hr" | "md" | "admin" | "accountant";
 
 export interface User {
   id: string;
@@ -166,7 +166,7 @@ const INITIAL_USERS: User[] = [
   { id: "EMP024", name: "Sanusi Hamid Agboworin", email: "sanusi.hamid@neweratransports.com", password: "12345678", role: "employee", department: "Workshop 3 (Workshop Manager)", avatar: "/character10.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "Workshop Manager", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "MGR008", name: "Emeka Okoro", email: "internal.control@neweratransports.com", password: "12345678", role: "manager", department: "Internal Control 1 (Internal Control)", avatar: "/character11.jpg", managerName: "Arotile Rotimi Seyi", managerId: "MGR006", ratingTrend: undefined, designation: "Internal Control Manager", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP025", name: "David Mbacha", email: "david.mbacha@neweratransports.com", password: "12345678", role: "employee", department: "ERP/IT 1 (ERP/IT Officer)", avatar: "/character12.jpg", managerName: "Olasupo Arogundade", managerId: "MD002", ratingTrend: undefined, designation: "ERP/IT Officer", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
-  { id: "EMP026", name: "Victoria Aghogho Otojareri", email: "accounts@neweratransports.com", password: "12345678", role: "employee", department: "Finance 1 (Acc Payable)", avatar: "/character1.jpg", managerName: "Arotile Rotimi Seyi", managerId: "MGR006", ratingTrend: undefined, designation: "Accountant (Payables)", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
+  { id: "EMP026", name: "Victoria Aghogho Otojareri", email: "accounts@neweratransports.com", password: "12345678", role: "accountant", department: "Finance 1 (Acc Payable)", avatar: "/character1.jpg", managerName: "Arotile Rotimi Seyi", managerId: "MGR006", ratingTrend: undefined, designation: "Accountant (Payables)", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP027", name: "Melissa Onwuanaku", email: "onwuanaku.Melissa@neweratransports.com", password: "12345678", role: "employee", department: "NOC 2 (Fleet Monitoring Officer)", avatar: "/character2.jpg", managerName: "Chidimma Maureen Uzoukwu", managerId: "MGR004", ratingTrend: undefined, designation: "Fleet Monitoring officer", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP028", name: "Bejamin Abe", email: "benjamin.abe@neweratransports.com", password: "12345678", role: "employee", department: "Internal Control 1 (Internal Control)", avatar: "/character3.jpg", managerName: "Arotile Rotimi Seyi", managerId: "MGR006", ratingTrend: undefined, designation: "Internal Control Manager", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },
   { id: "EMP029", name: "Queen Okonkwo", email: "queen.okonkwo@neweratransports.com", password: "12345678", role: "employee", department: "Finance 2 (Acc Receivable)", avatar: "/character4.jpg", managerName: "Arotile Rotimi Seyi", managerId: "MGR006", ratingTrend: undefined, designation: "Accountant (Receivables)", gradeLevel: undefined, employmentDate: undefined, company: "NETS", location: "Lagos" },

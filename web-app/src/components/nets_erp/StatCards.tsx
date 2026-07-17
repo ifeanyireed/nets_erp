@@ -7,12 +7,31 @@ import { useERPStore, User } from "@/lib/erp-store";
 export default function StatCards() {
   const { reviews, users, cycles } = useERPStore();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [finStats, setFinStats] = useState({ revenue: 2420000, expenses: 760000, payables: 310000, receivables: 4250000 });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("erp_current_user");
       if (stored) {
-        setCurrentUser(JSON.parse(stored));
+        const u = JSON.parse(stored);
+        setCurrentUser(u);
+
+        if (u.role === "accountant") {
+          fetch("http://localhost:8085/stats")
+            .then(res => {
+              if (res.ok) return res.json();
+              throw new Error();
+            })
+            .then(data => {
+              setFinStats({
+                revenue: data.totalRevenue,
+                expenses: data.totalExpenses,
+                payables: data.pendingPayables,
+                receivables: data.outstandingInvoice
+              });
+            })
+            .catch(() => {});
+        }
       }
     }
   }, []);
@@ -32,6 +51,84 @@ export default function StatCards() {
   const role = currentUser.role;
 
   // Render cards based on User Role
+  if (role === "accountant") {
+    const formatVal = (val: number) => {
+      return new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+        maximumFractionDigits: 0
+      }).format(val);
+    };
+
+    return (
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* CARD 1: Net cash position */}
+        <div className="bg-blue-600 rounded-[24px] p-5 shadow-sm border border-blue-500/10 flex flex-col justify-between min-h-[125px] transition-all hover:scale-[1.01]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                <IconClipboardCheck className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xs font-bold text-blue-100 tracking-wide">Net Operational Cash</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="text-md font-black text-white">{formatVal(finStats.revenue - finStats.expenses)}</h3>
+            <p className="text-[10px] text-blue-200/80 font-semibold mt-1">Operational bank cash reserves</p>
+          </div>
+        </div>
+
+        {/* CARD 2: Receivables */}
+        <div className="bg-[#E6F4EA] rounded-[24px] p-5 shadow-sm border border-emerald-100/30 flex flex-col justify-between min-h-[125px] transition-all hover:scale-[1.01]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-emerald-600/10 flex items-center justify-center">
+                <IconStar className="w-5 h-5 text-emerald-700" />
+              </div>
+              <span className="text-xs font-bold text-emerald-800 tracking-wide">Aged Receivables</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="text-md font-black text-emerald-900">{formatVal(finStats.receivables)}</h3>
+            <p className="text-[10px] text-emerald-700/60 font-semibold mt-1">Outstanding customer invoices</p>
+          </div>
+        </div>
+
+        {/* CARD 3: Payables */}
+        <div className="bg-[#FCE8E6] rounded-[24px] p-5 shadow-sm border border-red-100/30 flex flex-col justify-between min-h-[125px] transition-all hover:scale-[1.01]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-red-600/10 flex items-center justify-center">
+                <IconClock className="w-5 h-5 text-red-700" />
+              </div>
+              <span className="text-xs font-bold text-red-800 tracking-wide">Aged Payables</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="text-md font-black text-red-900">{formatVal(finStats.payables)}</h3>
+            <p className="text-[10px] text-red-700/60 font-semibold mt-1">Pending imprest & expense requests</p>
+          </div>
+        </div>
+
+        {/* CARD 4: Active accounts */}
+        <div className="bg-[#E8F0FE] rounded-[24px] p-5 shadow-sm border border-blue-100/30 flex flex-col justify-between min-h-[125px] transition-all hover:scale-[1.01]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-blue-600/10 flex items-center justify-center">
+                <IconUsers className="w-5 h-5 text-blue-700" />
+              </div>
+              <span className="text-xs font-bold text-blue-800 tracking-wide">Chart of Accounts</span>
+            </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="text-2xl font-black text-blue-900">14 Accounts</h3>
+            <p className="text-[10px] text-blue-700/60 font-semibold mt-1">Operational ledger account count</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (role === "employee") {
     const activeCycle = cycles.find(c => c.status === "Active");
     const myActiveReview = reviews.find(r => r.employeeId === currentUser.id && r.cycleId === activeCycle?.id);
