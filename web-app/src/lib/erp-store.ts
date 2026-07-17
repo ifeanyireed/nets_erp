@@ -28,13 +28,15 @@ export function getParentDept(deptName: string): string {
   if (name.startsWith("Fleet")) return "Fleet";
   if (name.startsWith("Marketing")) return "Marketing";
   if (name.startsWith("NOC")) return "NOC";
-  if (name.startsWith("Finance") || name.startsWith("ERP/IT")) return "Finance & Accounts";
+  if (name.startsWith("Finance")) return "Finance & Accounts";
+  if (name.startsWith("ERP/IT")) return "Systems and IT";
   if (name.startsWith("Admin/HR")) return "Admin/HR";
   if (name.startsWith("HR")) return "Human Resources";
   if (name.startsWith("Legal")) return "Legal";
   if (name.startsWith("Workshop")) return "Workshop";
   if (name.startsWith("Internal Control")) return "Internal Control";
-  if (name.startsWith("KHLC") || name.startsWith("SU ")) return "KHLC/Skillup";
+  if (name.startsWith("KHLC 6")) return "Systems and IT";
+  if (name.startsWith("KHLC") || name.startsWith("SU ")) return "KHLC - Skillup";
   return "Other";
 }
 

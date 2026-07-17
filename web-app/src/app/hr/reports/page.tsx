@@ -30,12 +30,13 @@ export default function HRReportsPage() {
     "Marketing",
     "NOC",
     "Finance & Accounts",
+    "Systems and IT",
     "Admin/HR",
     "Human Resources",
     "Legal",
     "Workshop",
     "Internal Control",
-    "KHLC/Skillup"
+    "KHLC - Skillup"
   ];
 
   // Calculate Roster Review Summary (RRS)

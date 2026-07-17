@@ -31,7 +31,7 @@ export default function DepartmentPerformancePage() {
   const deptReviews = reviews.filter(r => deptEmpIds.includes(r.employeeId));
 
   // Averages by Department
-  const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC/Skillup"];
+  const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Systems and IT", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC - Skillup"];
   const allDeptAverages = depts.map(d => {
     const deptRevs = reviews.filter(r => getParentDept(r.department) === d && r.status === "HR Approved" && r.finalScore !== undefined);
     const avg = deptRevs.length > 0

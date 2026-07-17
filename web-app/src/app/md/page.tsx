@@ -24,7 +24,7 @@ export default function MDDashboard() {
   const completedReviews = reviews.filter(r => r.status === "HR Approved");
 
   // Averages by Department
-  const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC/Skillup"];
+  const depts = ["Fleet", "Marketing", "NOC", "Finance & Accounts", "Systems and IT", "Admin/HR", "Human Resources", "Legal", "Workshop", "Internal Control", "KHLC - Skillup"];
   const deptAverages = depts.map(d => {
     const deptRevs = completedReviews.filter(r => getParentDept(r.department) === d && r.finalScore !== undefined);
     const avg = deptRevs.length > 0
@@ -92,7 +92,7 @@ export default function MDDashboard() {
               {deptAverages.map((dept) => (
                 <div
                   key={dept.name}
-                  onClick={() => router.push(`/md/department/detail?deptId=${dept.name}`)}
+                  onClick={() => router.push(`/md/department/detail?deptId=${encodeURIComponent(dept.name)}`)}
                   className="p-3 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200 cursor-pointer transition-all flex flex-col gap-2"
                 >
                   <div className="flex justify-between items-center text-xs">
