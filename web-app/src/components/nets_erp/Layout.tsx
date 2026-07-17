@@ -237,6 +237,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       case "hr":
         return [
           { name: "HR Dashboard", route: "/hr", icon: <DashboardIcon /> },
+          { name: "Reports", route: "/hr/reports", icon: <BarChartIcon /> },
           { name: "Cycles", route: "/hr/cycle", icon: <CycleIcon /> },
           { name: "Objectives", route: "/hr/objectives", icon: <FileTextIcon /> },
           { name: "Users & Roles", route: "/hr/users", icon: <UsersIcon /> },
