@@ -114,6 +114,36 @@ export default function AccountantDashboard() {
 		notes: ""
 	});
 
+	// Chart of Accounts (COA) state
+	const [accountsList, setAccountsList] = useState([
+		{ code: "1000", name: "Cash and Bank", type: "Assets", isDebit: true, baseVal: 12000000 },
+		{ code: "1001", name: "GTB Operating Account", type: "Assets", isDebit: true, baseVal: 3850000 },
+		{ code: "1100", name: "Accounts Receivable", type: "Assets", isDebit: true, useOutstandingInvoice: true },
+		{ code: "1300", name: "Fixed Assets (Fleet Vehicles)", type: "Assets", isDebit: true, baseVal: 45000000 },
+		{ code: "1390", name: "Accumulated Depreciation", type: "Assets", isDebit: false, baseVal: 15000000 },
+		{ code: "2000", name: "Accounts Payable", type: "Liabilities", isDebit: false, usePendingPayables: true },
+		{ code: "2100", name: "Tax Payable", type: "Liabilities", isDebit: false, baseVal: 3.75 },
+		{ code: "3000", name: "Owner Equity", type: "Equity", isDebit: false, useEquity: true },
+		{ code: "10010", name: "REVENUE - IHS OUTSOURCED DRIVERS", type: "Income", isDebit: false, revenueRatio: 0.4 },
+		{ code: "10020", name: "REVENUE - IHS STAFF BUS", type: "Income", isDebit: false, revenueRatio: 0.3 },
+		{ code: "10130", name: "REVENUE - SHUTTLE CONTRACTS", type: "Income", isDebit: false, revenueRatio: 0.3 },
+		{ code: "20010", name: "HIACE/STAFF BUS REPAIR & MAINTENANCE", type: "Expenses", isDebit: true, expenseRatio: 0.5 },
+		{ code: "20020", name: "FLEET REPAIR AND MAINTENANCE - IHS", type: "Expenses", isDebit: true, expenseRatio: 0.3 },
+		{ code: "30060", name: "SALARY AND WAGES", type: "Expenses", isDebit: true, expenseRatio: 0.2 }
+	]);
+	const [coaSearchQuery, setCoaSearchQuery] = useState("");
+	const [coaFilterType, setCoaFilterType] = useState("All");
+	const [showAddAccountModal, setShowAddAccountModal] = useState(false);
+	const [newAccount, setNewAccount] = useState({
+		code: "",
+		name: "",
+		type: "Assets",
+		isDebit: "true",
+		baseVal: ""
+	});
+
+	const [ledgerSearchQuery, setLedgerSearchQuery] = useState("");
+
 	// Fetch all data from the finance microservice
 	const fetchFinanceData = async () => {
 		setLoading(true);
@@ -500,22 +530,33 @@ export default function AccountantDashboard() {
 	const netPosition = stats.totalRevenue - stats.totalExpenses;
 
 	// Chart of accounts mock array based on the screenshot
-	const chartOfAccounts = [
-		{ code: "1000", name: "Cash and Bank", type: "Assets", debit: totalAssets - 4000000, credit: 0 },
-		{ code: "1001", name: "GTB Operating Account", type: "Assets", debit: 3850000, credit: 0 },
-		{ code: "1100", name: "Accounts Receivable", type: "Assets", debit: stats.outstandingInvoice, credit: 0 },
-		{ code: "1300", name: "Fixed Assets (Fleet Vehicles)", type: "Assets", debit: 45000000, credit: 0 },
-		{ code: "1390", name: "Accumulated Depreciation", type: "Assets", debit: 0, credit: 15000000 },
-		{ code: "2000", name: "Accounts Payable", type: "Liabilities", debit: 0, credit: stats.pendingPayables },
-		{ code: "2100", name: "Tax Payable", type: "Liabilities", debit: 0, credit: 3.75 },
-		{ code: "3000", name: "Owner Equity", type: "Equity", debit: 0, credit: equity },
-		{ code: "10010", name: "REVENUE - IHS OUTSOURCED DRIVERS", type: "Income", debit: 0, credit: stats.totalRevenue * 0.4 },
-		{ code: "10020", name: "REVENUE - IHS STAFF BUS", type: "Income", debit: 0, credit: stats.totalRevenue * 0.3 },
-		{ code: "10130", name: "REVENUE - SHUTTLE CONTRACTS", type: "Income", debit: 0, credit: stats.totalRevenue * 0.3 },
-		{ code: "20010", name: "HIACE/STAFF BUS REPAIR & MAINTENANCE", type: "Expenses", debit: stats.totalExpenses * 0.5, credit: 0 },
-		{ code: "20020", name: "FLEET REPAIR AND MAINTENANCE - IHS", type: "Expenses", debit: stats.totalExpenses * 0.3, credit: 0 },
-		{ code: "30060", name: "SALARY AND WAGES", type: "Expenses", debit: stats.totalExpenses * 0.2, credit: 0 }
-	];
+	const chartOfAccounts = accountsList.map(a => {
+		let val = 0;
+		if (a.useOutstandingInvoice) {
+			val = stats.outstandingInvoice;
+		} else if (a.usePendingPayables) {
+			val = stats.pendingPayables;
+		} else if (a.useEquity) {
+			val = equity;
+		} else if (a.revenueRatio !== undefined) {
+			val = stats.totalRevenue * a.revenueRatio;
+		} else if (a.expenseRatio !== undefined) {
+			val = stats.totalExpenses * a.expenseRatio;
+		} else if (a.code === "1000") {
+			val = totalAssets - 4000000;
+		} else {
+			val = a.baseVal || 0;
+		}
+
+		return {
+			code: a.code,
+			name: a.name,
+			type: a.type,
+			debit: a.isDebit ? val : 0,
+			credit: !a.isDebit ? val : 0,
+			status: "Active"
+		};
+	});
 
 	if (!currentUser) return null;
 
@@ -569,6 +610,7 @@ export default function AccountantDashboard() {
 				<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
 					{[
 						{ id: "overview", label: "Finance Hub" },
+						{ id: "coa", label: "Chart of Accounts" },
 						{ id: "invoices", label: "Invoices (Aged Receivables)" },
 						{ id: "expenses", label: "Imprest & Expenses (Payables)" },
 						{ id: "reconcile", label: "Bank Reconciliation" },
@@ -1003,13 +1045,154 @@ export default function AccountantDashboard() {
 							</div>
 						)}
 
+						{/* VIEW 6: CHART OF ACCOUNTS MANAGER */}
+						{activeTab === "coa" && (
+							<div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col gap-6 animate-fadeIn">
+								
+								{/* COA Header & Top Action row */}
+								<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-gray-100">
+									<div>
+										<h3 className="font-extrabold text-slate-800 text-sm">Chart of Accounts (COA)</h3>
+										<p className="text-[10px] text-slate-400 mt-0.5 font-semibold">Organize and manage your general ledger accounts</p>
+									</div>
+									<button
+										onClick={() => setShowAddAccountModal(true)}
+										className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs flex items-center gap-2 cursor-pointer shadow-sm shadow-blue-500/10 active:scale-95 transition-all"
+									>
+										+ Add Account
+									</button>
+								</div>
+
+								{/* Search & Category Filter toolbar */}
+								<div className="flex flex-col md:flex-row justify-between gap-4">
+									{/* Search input */}
+									<div className="relative w-full md:w-80">
+										<input
+											type="text"
+											placeholder="Search code or name..."
+											value={coaSearchQuery}
+											onChange={(e) => setCoaSearchQuery(e.target.value)}
+											className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-semibold outline-none"
+										/>
+										<div className="absolute left-3 top-2.5 text-slate-400">
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+											</svg>
+										</div>
+									</div>
+
+									{/* Category quick tabs */}
+									<div className="flex flex-wrap gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100/50">
+										{["All", "Assets", "Liabilities", "Equity", "Income", "Expenses"].map((cat) => (
+											<button
+												key={cat}
+												onClick={() => setCoaFilterType(cat)}
+												className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all cursor-pointer ${
+													coaFilterType === cat
+														? "bg-white text-blue-600 shadow-sm border border-slate-100"
+														: "text-slate-450 hover:text-slate-700"
+												}`}
+											>
+												{cat}
+											</button>
+										))}
+									</div>
+								</div>
+
+								{/* Accounts Listing table */}
+								<div className="overflow-x-auto">
+									<table className="w-full text-left border-collapse">
+										<thead>
+											<tr className="border-b border-gray-100">
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider">Account Code</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider">Account Name</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider">Type</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider">Status</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider text-right">Debit Balance</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider text-right">Credit Balance</th>
+												<th className="pb-3 text-xs font-bold text-slate-455 uppercase tracking-wider text-right">Actions</th>
+											</tr>
+										</thead>
+										<tbody className="divide-y divide-gray-100">
+											{chartOfAccounts
+												.filter(a => {
+													const matchesSearch = a.code.toLowerCase().includes(coaSearchQuery.toLowerCase()) ||
+														a.name.toLowerCase().includes(coaSearchQuery.toLowerCase());
+													const matchesCat = coaFilterType === "All" || a.type === coaFilterType;
+													return matchesSearch && matchesCat;
+												})
+												.map((acct, idx) => (
+													<tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+														<td className="py-3.5 text-xs font-mono font-bold text-slate-500">
+															<span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md text-[10px] border border-slate-200">
+																{acct.code}
+															</span>
+														</td>
+														<td className="py-3.5 text-xs font-black text-slate-800">{acct.name}</td>
+														<td className="py-3.5 text-[10px] font-semibold">
+															<span className={`px-2 py-0.5 rounded-full ${
+																acct.type === "Assets" ? "bg-blue-50 text-blue-700 border border-blue-100" :
+																acct.type === "Liabilities" ? "bg-amber-50 text-amber-700 border border-amber-100" :
+																acct.type === "Equity" ? "bg-purple-50 text-purple-700 border border-purple-100" :
+																acct.type === "Income" ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
+																"bg-red-50 text-red-700 border border-red-100"
+															}`}>
+																{acct.type}
+															</span>
+														</td>
+														<td className="py-3.5 text-[10px]">
+															<span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+																<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
+																Active
+															</span>
+														</td>
+														<td className="py-3.5 text-xs font-semibold text-slate-700 text-right">
+															{acct.debit > 0 ? formatNaira(acct.debit) : "—"}
+														</td>
+														<td className="py-3.5 text-xs font-semibold text-slate-700 text-right">
+															{acct.credit > 0 ? formatNaira(acct.credit) : "—"}
+														</td>
+														<td className="py-3.5 text-right">
+															<button
+																onClick={() => {
+																	setLedgerSearchQuery(acct.name);
+																	setActiveTab("ledger");
+																}}
+																className="text-[10px] bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-800 px-2 py-1 rounded-lg transition-colors font-bold cursor-pointer"
+															>
+																Ledger logs
+															</button>
+														</td>
+													</tr>
+												))}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						)}
+
 						{/* VIEW 5: GENERAL JOURNAL LEDGER */}
 						{activeTab === "ledger" && (
 							<div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col gap-4 animate-fadeIn">
-								<div className="flex justify-between items-center pb-3 border-b border-gray-100">
+								<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-3 border-b border-gray-100">
 									<div>
 										<h3 className="font-bold text-slate-800 text-sm">General Journal Cashbook Ledger</h3>
 										<p className="text-[10px] text-slate-400 font-semibold">Historically recorded operational transactions</p>
+									</div>
+									{/* Search Ledger */}
+									<div className="relative w-full sm:w-64">
+										<input
+											type="text"
+											placeholder="Search description/category..."
+											value={ledgerSearchQuery}
+											onChange={(e) => setLedgerSearchQuery(e.target.value)}
+											className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-semibold outline-none"
+										/>
+										<div className="absolute left-3 top-2.5 text-slate-400">
+											<svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+											</svg>
+										</div>
 									</div>
 								</div>
 
@@ -1025,7 +1208,14 @@ export default function AccountantDashboard() {
 											</tr>
 										</thead>
 										<tbody className="divide-y divide-gray-100">
-											{transactions.map((txn) => (
+											{transactions
+												.filter(txn => {
+													if (!ledgerSearchQuery) return true;
+													const q = ledgerSearchQuery.toLowerCase();
+													return txn.category.toLowerCase().includes(q) ||
+														(txn.description && txn.description.toLowerCase().includes(q));
+												})
+												.map((txn) => (
 												<tr key={txn.id} className="hover:bg-slate-50/50 transition-colors">
 													<td className="py-4 text-xs font-semibold text-slate-500">
 														{new Date(txn.date).toLocaleDateString()}
@@ -1052,6 +1242,137 @@ export default function AccountantDashboard() {
 				)}
 
 			</div>
+
+			{/* MODAL 5: ADD ACCOUNT FORM */}
+			{showAddAccountModal && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fadeIn">
+					<div className="bg-white rounded-3xl w-full max-w-md shadow-2xl border border-gray-100 flex flex-col overflow-hidden animate-slideUp">
+						{/* Header */}
+						<div className="flex justify-between items-center p-6 border-b border-gray-100 bg-slate-50/50">
+							<div>
+								<h3 className="font-extrabold text-slate-800 text-sm">Add New Ledger Account</h3>
+								<p className="text-[10px] text-slate-400 mt-0.5 font-semibold">Integrate a new code into the Chart of Accounts</p>
+							</div>
+							<button
+								onClick={() => setShowAddAccountModal(false)}
+								className="w-7 h-7 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-sm font-bold border-none bg-transparent"
+							>
+								✕
+							</button>
+						</div>
+
+						{/* Form Body */}
+						<form
+							onSubmit={(e) => {
+								e.preventDefault();
+								if (!newAccount.code || !newAccount.name) {
+									alert("Please fill in Code and Name fields.");
+									return;
+								}
+								const baseNum = parseFloat(newAccount.baseVal) || 0;
+								setAccountsList(prev => [
+									...prev,
+									{
+										code: newAccount.code,
+										name: newAccount.name,
+										type: newAccount.type,
+										isDebit: newAccount.isDebit === "true",
+										baseVal: baseNum
+									}
+								]);
+								setShowAddAccountModal(false);
+								setNewAccount({ code: "", name: "", type: "Assets", isDebit: "true", baseVal: "" });
+							}}
+							className="p-6 flex flex-col gap-4 text-left"
+						>
+							{/* Account Code */}
+							<div className="flex flex-col gap-1">
+								<label className="text-[10px] font-bold text-slate-450 uppercase">Account Code</label>
+								<input
+									type="text"
+									placeholder="e.g. 1005"
+									required
+									value={newAccount.code}
+									onChange={(e) => setNewAccount(prev => ({ ...prev, code: e.target.value }))}
+									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+								/>
+							</div>
+
+							{/* Account Name */}
+							<div className="flex flex-col gap-1">
+								<label className="text-[10px] font-bold text-slate-450 uppercase">Account Name</label>
+								<input
+									type="text"
+									placeholder="e.g. Apex Bank Account"
+									required
+									value={newAccount.name}
+									onChange={(e) => setNewAccount(prev => ({ ...prev, name: e.target.value }))}
+									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+								/>
+							</div>
+
+							{/* Account Type */}
+							<div className="flex flex-col gap-1">
+								<label className="text-[10px] font-bold text-slate-450 uppercase">Account Type</label>
+								<select
+									value={newAccount.type}
+									onChange={(e) => setNewAccount(prev => ({ ...prev, type: e.target.value }))}
+									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+								>
+									<option value="Assets">Assets</option>
+									<option value="Liabilities">Liabilities</option>
+									<option value="Equity">Equity</option>
+									<option value="Income">Income (Revenue)</option>
+									<option value="Expenses">Expenses</option>
+								</select>
+							</div>
+
+							{/* Balance Type (Debit / Credit) */}
+							<div className="flex flex-col gap-1">
+								<label className="text-[10px] font-bold text-slate-450 uppercase">Normal Balance side</label>
+								<select
+									value={newAccount.isDebit}
+									onChange={(e) => setNewAccount(prev => ({ ...prev, isDebit: e.target.value }))}
+									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+								>
+									<option value="true">Debit Side (Asset / Expense)</option>
+									<option value="false">Credit Side (Liability / Equity / Revenue)</option>
+								</select>
+							</div>
+
+							{/* Base Balance */}
+							<div className="flex flex-col gap-1">
+								<label className="text-[10px] font-bold text-slate-450 uppercase">Initial Balance (NGN)</label>
+								<input
+									type="number"
+									step="0.01"
+									placeholder="e.g. 500000"
+									value={newAccount.baseVal}
+									onChange={(e) => setNewAccount(prev => ({ ...prev, baseVal: e.target.value }))}
+									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+								/>
+							</div>
+
+							{/* Actions */}
+							<div className="flex justify-end gap-2.5 mt-2 pt-4 border-t border-gray-100">
+								<button
+									type="button"
+									onClick={() => setShowAddAccountModal(false)}
+									className="px-4 py-2 border border-gray-200 hover:bg-slate-50 text-slate-500 rounded-xl text-xs font-bold transition-all cursor-pointer bg-white"
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-extrabold transition-all cursor-pointer shadow-sm shadow-blue-500/10 border-none"
+								>
+									Register Account
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
 
 			{/* MODAL 1: CREATE INVOICE */}
 			{showInvoiceModal && (
