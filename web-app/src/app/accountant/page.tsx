@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useERPStore, User } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
+import { IconClipboardList, IconCalendarClock, IconReceipt, IconReportMoney } from "@tabler/icons-react";
 
 // Microservice backend base URL
 const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
@@ -478,6 +479,20 @@ export default function AccountantDashboard() {
 		}).format(amount);
 	};
 
+	const formatNairaShort = (val: number) => {
+		const isNegative = val < 0;
+		const absVal = Math.abs(val);
+		let formatted = "";
+		if (absVal >= 1000000) {
+			formatted = `₦${(absVal / 1000000).toFixed(2)}M`;
+		} else if (absVal >= 1000) {
+			formatted = `₦${(absVal / 1000).toFixed(1)}k`;
+		} else {
+			formatted = `₦${absVal.toFixed(2)}`;
+		}
+		return isNegative ? `-${formatted}` : formatted;
+	};
+
 	// Computed figures for the overview page
 	const totalAssets = stats.totalRevenue - stats.totalExpenses + 12000000; // Mock base assets + net revenue
 	const totalLiabilities = stats.pendingPayables + 50000; // Mock accounts payable + minor base
@@ -597,7 +612,7 @@ export default function AccountantDashboard() {
 										<div key={idx} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex flex-col justify-between min-h-24">
 											<span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{card.label}</span>
 											<h3 className={`text-sm font-black mt-2 ${card.neg ? "text-red-600" : "text-slate-800"}`}>
-												{formatNaira(card.val)}
+												{formatNairaShort(card.val)}
 											</h3>
 										</div>
 									))}
@@ -636,17 +651,17 @@ export default function AccountantDashboard() {
 										<h3 className="font-bold text-slate-800 text-sm pb-3 border-b border-gray-100">Finance Workspace</h3>
 										<div className="flex flex-col gap-2">
 											{[
-												{ title: "Chart of Accounts", desc: "Account structure and classifications.", icon: "📋", action: () => {} },
-												{ title: "Aged Receivables", desc: "Who owes us and how old it is.", icon: "⌛", action: () => setActiveTab("invoices") },
-												{ title: "Aged Payables", desc: "What we owe vendors and when.", icon: "💸", action: () => setActiveTab("expenses") },
-												{ title: "Bank Reconciliation", desc: "Match statements with transaction logs.", icon: "🔍", action: () => setActiveTab("reconcile") }
+												{ title: "Chart of Accounts", desc: "Account structure and classifications.", icon: <IconClipboardList className="w-5 h-5 text-blue-600" />, action: () => {} },
+												{ title: "Aged Receivables", desc: "Who owes us and how old it is.", icon: <IconCalendarClock className="w-5 h-5 text-emerald-600" />, action: () => setActiveTab("invoices") },
+												{ title: "Aged Payables", desc: "What we owe vendors and when.", icon: <IconReceipt className="w-5 h-5 text-red-500" />, action: () => setActiveTab("expenses") },
+												{ title: "Bank Reconciliation", desc: "Match statements with transaction logs.", icon: <IconReportMoney className="w-5 h-5 text-purple-600" />, action: () => setActiveTab("reconcile") }
 											].map((wItem, index) => (
 												<button
 													key={index}
 													onClick={wItem.action}
 													className="flex items-center gap-3.5 p-3 hover:bg-slate-50 transition-all rounded-xl text-left border border-gray-50"
 												>
-													<span className="text-lg">{wItem.icon}</span>
+													<div className="w-8 h-8 rounded-xl bg-gray-50 flex items-center justify-center shrink-0">{wItem.icon}</div>
 													<div>
 														<h4 className="text-xs font-bold text-slate-800">{wItem.title}</h4>
 														<p className="text-[10px] text-slate-400 font-semibold">{wItem.desc}</p>

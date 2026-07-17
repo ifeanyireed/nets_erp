@@ -54,11 +54,17 @@ export default function StatCards() {
   // Render cards based on User Role
   if (role === "accountant") {
     const formatVal = (val: number) => {
-      return new Intl.NumberFormat("en-NG", {
-        style: "currency",
-        currency: "NGN",
-        maximumFractionDigits: 0
-      }).format(val);
+      const isNegative = val < 0;
+      const absVal = Math.abs(val);
+      let formatted = "";
+      if (absVal >= 1000000) {
+        formatted = `₦${(absVal / 1000000).toFixed(2)}M`;
+      } else if (absVal >= 1000) {
+        formatted = `₦${(absVal / 1000).toFixed(1)}k`;
+      } else {
+        formatted = `₦${absVal.toFixed(2)}`;
+      }
+      return isNegative ? `-${formatted}` : formatted;
     };
 
     return (
