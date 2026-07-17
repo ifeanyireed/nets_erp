@@ -80,7 +80,7 @@ type Objective struct {
 }
 
 func main() {
-	loadEnv("/Users/user/Downloads/nets_erp/backend/.env")
+	loadEnv("/Users/user/Downloads/nets_erp/hr-service/.env")
 	dsn := getDSN()
 
 	db, err := sql.Open("mysql", dsn)

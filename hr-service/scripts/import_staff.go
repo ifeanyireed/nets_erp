@@ -86,7 +86,7 @@ func getDSN() string {
 }
 
 func main() {
-	loadEnv("/Users/user/Downloads/nets_erp/backend/.env")
+	loadEnv("/Users/user/Downloads/nets_erp/hr-service/.env")
 
 	// Read CSV
 	csvFile, err := os.Open("/Users/user/Downloads/nets_erp/nets_staff.csv")
@@ -339,7 +339,7 @@ func toTitleCase(s string) string {
 }
 
 func updateSeedData(users []User) {
-	filePath := "/Users/user/Downloads/nets_erp/backend/seed_data.json"
+	filePath := "/Users/user/Downloads/nets_erp/hr-service/seed_data.json"
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatalf("Error reading seed_data.json: %v", err)

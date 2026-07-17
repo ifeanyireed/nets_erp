@@ -63,7 +63,7 @@ func getDSN() string {
 }
 
 func main() {
-	loadEnv("/Users/user/Downloads/nets_erp/backend/.env")
+	loadEnv("/Users/user/Downloads/nets_erp/hr-service/.env")
 	dsn := getDSN()
 
 	db, err := sql.Open("mysql", dsn)
@@ -72,22 +72,42 @@ func main() {
 	}
 	defer db.Close()
 
-	rows, err := db.Query("SELECT id, employeeId, employeeName, department, cycleId, status, objectivesJson FROM PerformanceReview WHERE employeeId IN ('MGR011', 'EMP035', 'EMP030')")
+	// 1. Check all users in KHLC 6
+	fmt.Println("--- USERS IN KHLC 6 ---")
+	rows, err := db.Query("SELECT id, name, department, role FROM User WHERE department LIKE '%KHLC 6%'")
+	if err != nil {
+		log.Fatalf("Error querying users: %v", err)
+	}
+	for rows.Next() {
+		var id, name, dept, role string
+		rows.Scan(&id, &name, &dept, &role)
+		fmt.Printf("User: ID=%s, Name=%s, Dept='%s', Role=%s\n", id, name, dept, role)
+	}
+	rows.Close()
+
+	// 2. Check all reviews with KHLC 6
+	fmt.Println("\n--- REVIEWS WITH KHLC 6 ---")
+	rows, err = db.Query("SELECT id, employeeId, employeeName, department, status FROM PerformanceReview WHERE department LIKE '%KHLC 6%'")
 	if err != nil {
 		log.Fatalf("Error querying reviews: %v", err)
 	}
-	defer rows.Close()
-
 	for rows.Next() {
-		var id, empId, empName, dept, cycleId, status, objJson string
-		if err := rows.Scan(&id, &empId, &empName, &dept, &cycleId, &status, &objJson); err != nil {
-			log.Fatalf("Error scanning review row: %v", err)
-		}
-		fmt.Printf("Review ID: %s | Emp ID: %s | Name: %s | Dept: %s | Cycle: %s | Status: %s\n", id, empId, empName, dept, cycleId, status)
-		if len(objJson) > 100 {
-			fmt.Printf("  Objectives snippet: %s...\n", objJson[:100])
-		} else {
-			fmt.Printf("  Objectives: %s\n", objJson)
-		}
+		var id, empId, name, dept, status string
+		rows.Scan(&id, &empId, &name, &dept, &status)
+		fmt.Printf("Review: ID=%s, EmpID=%s, Name=%s, Dept='%s', Status=%s\n", id, empId, name, dept, status)
 	}
+	rows.Close()
+
+	// 3. Print all reviews in the database to see if there is any mismatched user
+	fmt.Println("\n--- ALL REVIEWS (FIRST 15) ---")
+	rows, err = db.Query("SELECT id, employeeId, employeeName, department, status FROM PerformanceReview LIMIT 15")
+	if err != nil {
+		log.Fatalf("Error querying all reviews: %v", err)
+	}
+	for rows.Next() {
+		var id, empId, name, dept, status string
+		rows.Scan(&id, &empId, &name, &dept, &status)
+		fmt.Printf("Review: ID=%s, EmpID=%s, Name=%s, Dept='%s', Status=%s\n", id, empId, name, dept, status)
+	}
+	rows.Close()
 }
