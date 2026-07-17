@@ -34,13 +34,13 @@ export default function MDDashboard() {
   });
 
   // Top and Bottom Performers
-  // We can sort completed reviews to find top and bottom performers
-  const sortedReviews = [...completedReviews].sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
-  const topPerformers = sortedReviews.slice(0, 3);
-  const bottomPerformers = [...completedReviews]
-    .filter(r => r.finalScore !== undefined)
-    .sort((a, b) => (a.finalScore || 0) - (b.finalScore || 0))
-    .slice(0, 3);
+  // Filter by thresholds: Top Rated > 9.0, Needs Development < 5.0
+  const topPerformers = completedReviews
+    .filter(r => r.finalScore !== undefined && r.finalScore > 9.0)
+    .sort((a, b) => (b.finalScore || 0) - (a.finalScore || 0));
+  const bottomPerformers = completedReviews
+    .filter(r => r.finalScore !== undefined && r.finalScore < 5.0)
+    .sort((a, b) => (a.finalScore || 0) - (b.finalScore || 0));
 
   // Overall Company stats
   const totalReviewsCount = reviews.length;
@@ -122,14 +122,18 @@ export default function MDDashboard() {
               <div>
                 <span className="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wide">Top Rated Performers</span>
                 <div className="space-y-2 mt-2">
-                  {topPerformers.map(r => (
-                    <div key={r.id} className="flex items-center justify-between p-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-xl">
-                      <span className="font-bold text-slate-700 text-xs">{r.employeeName}</span>
-                      <span className="bg-emerald-100 text-emerald-700 font-black px-2 py-0.5 rounded text-[11px]">
-                        {r.finalScore?.toFixed(1)}
-                      </span>
-                    </div>
-                  ))}
+                  {topPerformers.length > 0 ? (
+                    topPerformers.map(r => (
+                      <div key={r.id} className="flex items-center justify-between p-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-xl">
+                        <span className="font-bold text-slate-700 text-xs">{r.employeeName}</span>
+                        <span className="bg-emerald-100 text-emerald-700 font-black px-2 py-0.5 rounded text-[11px]">
+                          {r.finalScore?.toFixed(1)}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-[10px] text-slate-400 font-semibold py-1">No performers with score &gt; 9.0</div>
+                  )}
                 </div>
               </div>
 
@@ -137,14 +141,18 @@ export default function MDDashboard() {
               <div>
                 <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-wide text-red-600">Needs Development</span>
                 <div className="space-y-2 mt-2">
-                  {bottomPerformers.map(r => (
-                    <div key={r.id} className="flex items-center justify-between p-2.5 bg-red-50/20 border border-red-100/35 rounded-xl">
-                      <span className="font-bold text-slate-700 text-xs">{r.employeeName}</span>
-                      <span className="bg-red-100 text-red-700 font-black px-2 py-0.5 rounded text-[11px]">
-                        {r.finalScore?.toFixed(1)}
-                      </span>
-                    </div>
-                  ))}
+                  {bottomPerformers.length > 0 ? (
+                    bottomPerformers.map(r => (
+                      <div key={r.id} className="flex items-center justify-between p-2.5 bg-red-50/20 border border-red-100/35 rounded-xl">
+                        <span className="font-bold text-slate-700 text-xs">{r.employeeName}</span>
+                        <span className="bg-red-100 text-red-700 font-black px-2 py-0.5 rounded text-[11px]">
+                          {r.finalScore?.toFixed(1)}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-[10px] text-slate-400 font-semibold py-1">No performers with score &lt; 5.0</div>
+                  )}
                 </div>
               </div>
             </div>
