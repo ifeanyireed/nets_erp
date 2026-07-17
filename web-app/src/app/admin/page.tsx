@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useERPStore, User, DEPARTMENTS } from "@/lib/erp-store";
 import ERPLayout from "@/components/nets_erp/Layout";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8086";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
 
 export default function AdminDashboard() {
   const { users, updateUsers } = useERPStore();

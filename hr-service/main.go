@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/handlers"
+	"bufio"
 	"database/sql"
 	"fmt"
 	"log"
@@ -16,6 +17,7 @@ import (
 var db *sql.DB
 
 func main() {
+	loadEnv(".env")
 	dsn := getDSN()
 	var err error
 	db, err = sql.Open("mysql", dsn)
@@ -100,5 +102,27 @@ func enableCORS(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 		next(w, r)
+	}
+}
+
+func loadEnv(filepath string) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "#") || strings.TrimSpace(line) == "" {
+			continue
+		}
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			key := strings.TrimSpace(parts[0])
+			value := strings.Trim(strings.TrimSpace(parts[1]), "\"")
+			os.Setenv(key, value)
+		}
 	}
 }
