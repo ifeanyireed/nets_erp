@@ -91,45 +91,99 @@ export default function ManagerReviewClient() {
     setObjectives(updated);
   };
 
-  // Normalized overall self score out of 10
+  // Normalized overall self score out of 10 (70% work-related, 30% core-compliance competencies)
   const calculateSelfAverage = () => {
-    let weightedSum = 0;
-    let totalWeight = 0;
+    let workWeightedSum = 0;
+    let workTotalWeight = 0;
+    let compWeightedSum = 0;
+    let compTotalWeight = 0;
+
     objectives.forEach(o => {
       if (o.selfScore !== undefined) {
         const normalized = o.type === "objective" ? (o.selfScore / 10) : (o.selfScore * 2);
-        weightedSum += normalized * o.weight;
-        totalWeight += o.weight;
+        if (o.type === "objective") {
+          workWeightedSum += normalized * o.weight;
+          workTotalWeight += o.weight;
+        } else {
+          compWeightedSum += normalized * o.weight;
+          compTotalWeight += o.weight;
+        }
       }
     });
-    if (totalWeight === 0) return 0;
-    return (weightedSum / totalWeight);
+
+    const workAvg = workTotalWeight > 0 ? (workWeightedSum / workTotalWeight) : 0;
+    const compAvg = compTotalWeight > 0 ? (compWeightedSum / compTotalWeight) : 0;
+
+    if (workTotalWeight > 0 && compTotalWeight > 0) {
+      return (workAvg * 0.7) + (compAvg * 0.3);
+    } else if (workTotalWeight > 0) {
+      return workAvg;
+    } else if (compTotalWeight > 0) {
+      return compAvg;
+    }
+    return 0;
   };
 
-  // Normalized composite score out of 10 (40% self-score, 60% manager-score)
+  // Normalized composite score out of 10 (30% self-score, 70% manager-score)
   const calculateFinalAverage = () => {
-    let selfWeightedSum = 0;
-    let selfTotalWeight = 0;
-    let mgrWeightedSum = 0;
-    let mgrTotalWeight = 0;
+    let selfWorkWeightedSum = 0;
+    let selfWorkTotalWeight = 0;
+    let selfCompWeightedSum = 0;
+    let selfCompTotalWeight = 0;
+
+    let mgrWorkWeightedSum = 0;
+    let mgrWorkTotalWeight = 0;
+    let mgrCompWeightedSum = 0;
+    let mgrCompTotalWeight = 0;
 
     objectives.forEach(o => {
       if (o.selfScore !== undefined) {
         const normalized = o.type === "objective" ? (o.selfScore / 10) : (o.selfScore * 2);
-        selfWeightedSum += normalized * o.weight;
-        selfTotalWeight += o.weight;
+        if (o.type === "objective") {
+          selfWorkWeightedSum += normalized * o.weight;
+          selfWorkTotalWeight += o.weight;
+        } else {
+          selfCompWeightedSum += normalized * o.weight;
+          selfCompTotalWeight += o.weight;
+        }
       }
       if (o.managerScore !== undefined) {
         const normalized = o.type === "objective" ? (o.managerScore / 10) : (o.managerScore * 2);
-        mgrWeightedSum += normalized * o.weight;
-        mgrTotalWeight += o.weight;
+        if (o.type === "objective") {
+          mgrWorkWeightedSum += normalized * o.weight;
+          mgrWorkTotalWeight += o.weight;
+        } else {
+          mgrCompWeightedSum += normalized * o.weight;
+          mgrCompTotalWeight += o.weight;
+        }
       }
     });
 
-    const selfAvg = selfTotalWeight > 0 ? (selfWeightedSum / selfTotalWeight) : 0;
-    const mgrAvg = mgrTotalWeight > 0 ? (mgrWeightedSum / mgrTotalWeight) : 0;
+    const selfWorkAvg = selfWorkTotalWeight > 0 ? (selfWorkWeightedSum / selfWorkTotalWeight) : 0;
+    const selfCompAvg = selfCompTotalWeight > 0 ? (selfCompWeightedSum / selfCompTotalWeight) : 0;
 
-    return (selfAvg * 0.4) + (mgrAvg * 0.6);
+    let selfAvg = 0;
+    if (selfWorkTotalWeight > 0 && selfCompTotalWeight > 0) {
+      selfAvg = (selfWorkAvg * 0.7) + (selfCompAvg * 0.3);
+    } else if (selfWorkTotalWeight > 0) {
+      selfAvg = selfWorkAvg;
+    } else if (selfCompTotalWeight > 0) {
+      selfAvg = selfCompAvg;
+    }
+
+    const mgrWorkAvg = mgrWorkTotalWeight > 0 ? (mgrWorkWeightedSum / mgrWorkTotalWeight) : 0;
+    const mgrCompAvg = mgrCompTotalWeight > 0 ? (mgrCompWeightedSum / mgrCompTotalWeight) : 0;
+
+    let mgrAvg = 0;
+    if (mgrWorkTotalWeight > 0 && mgrCompTotalWeight > 0) {
+      mgrAvg = (mgrWorkAvg * 0.7) + (mgrCompAvg * 0.3);
+    } else if (mgrWorkTotalWeight > 0) {
+      mgrAvg = mgrWorkAvg;
+    } else if (mgrCompTotalWeight > 0) {
+      mgrAvg = mgrCompAvg;
+    }
+
+    return (selfAvg * 0.3) + (mgrAvg * 0.7);
   };
 
   const handleApprove = () => {

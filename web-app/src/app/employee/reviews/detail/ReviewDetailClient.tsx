@@ -84,21 +84,39 @@ export default function ReviewDetailClient() {
     setObjectives(updated);
   };
 
-  // Normalized overall self score out of 10
+  // Normalized overall self score out of 10 (70% work-related, 30% core-compliance competencies)
   const calculateSelfAverage = () => {
-    let weightedSum = 0;
-    let totalWeight = 0;
+    let workWeightedSum = 0;
+    let workTotalWeight = 0;
+    let compWeightedSum = 0;
+    let compTotalWeight = 0;
+
     objectives.forEach(o => {
       if (o.selfScore !== undefined) {
         // Work objectives (0-100) -> normalized to 10 is score/10
         // Competencies (1-5) -> normalized to 10 is score*2
         const normalized = o.type === "objective" ? (o.selfScore / 10) : (o.selfScore * 2);
-        weightedSum += normalized * o.weight;
-        totalWeight += o.weight;
+        if (o.type === "objective") {
+          workWeightedSum += normalized * o.weight;
+          workTotalWeight += o.weight;
+        } else {
+          compWeightedSum += normalized * o.weight;
+          compTotalWeight += o.weight;
+        }
       }
     });
-    if (totalWeight === 0) return 0;
-    return (weightedSum / totalWeight);
+
+    const workAvg = workTotalWeight > 0 ? (workWeightedSum / workTotalWeight) : 0;
+    const compAvg = compTotalWeight > 0 ? (compWeightedSum / compTotalWeight) : 0;
+
+    if (workTotalWeight > 0 && compTotalWeight > 0) {
+      return (workAvg * 0.7) + (compAvg * 0.3);
+    } else if (workTotalWeight > 0) {
+      return workAvg;
+    } else if (compTotalWeight > 0) {
+      return compAvg;
+    }
+    return 0;
   };
 
   const workObjectives = objectives.filter(o => o.type === "objective");
