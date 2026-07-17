@@ -564,35 +564,30 @@ export default function AccountantDashboard() {
 		<ERPLayout>
 			<div className="flex flex-col gap-6">
 				
-				{/* Top Command Banner */}
-				<div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-150 flex flex-col md:flex-row md:items-center justify-between gap-4">
-					<div className="flex items-center gap-4">
-						<div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-black text-lg">
-							₦
-						</div>
-						<div>
-							<h2 className="text-lg font-black text-slate-800">Finance Hub Overview</h2>
-							<p className="text-xs text-slate-400 font-semibold">
-								Manage corporate accounts, invoice approvals, cashbook reconciliations, and imprest distributions.
-							</p>
-						</div>
-					</div>
-					<div className="flex items-center gap-2 flex-wrap">
+				{/* Top Command Banner - Title & Subtitle block */}
+				<div>
+					<h2 className="text-[20px] font-black text-slate-800 tracking-tight">Finance Hub Overview</h2>
+					<p className="text-xs text-slate-450 font-semibold mt-1">
+						Manage corporate accounts, invoice approvals, cashbook reconciliations, and imprest distributions.
+					</p>
+
+					{/* Action Buttons Row */}
+					<div className="flex items-center gap-2 flex-wrap mt-3">
 						<button
 							onClick={() => setShowInvoiceModal(true)}
-							className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer"
+							className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer border-none"
 						>
 							Create Invoice
 						</button>
 						<button
 							onClick={() => setShowExpenseModal(true)}
-							className="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer"
+							className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
 						>
 							Request Imprest
 						</button>
 						<button
 							onClick={() => setShowReconcileModal(true)}
-							className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-gray-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
+							className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
 						>
 							New Reconciliation
 						</button>
