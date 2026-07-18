@@ -35,6 +35,7 @@ export default function RetainersPage() {
 	const router = useRouter();
 
 	const [retainers, setRetainers] = useState<Retainer[]>([]);
+	const [clients, setClients] = useState<any[]>([]);
 	const [selectedCustomer, setSelectedCustomer] = useState("All");
 	const [selectedStatus, setSelectedStatus] = useState("All");
 	
@@ -49,6 +50,46 @@ export default function RetainersPage() {
 		total: ""
 	});
 
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchRetainers = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/retainers`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.retainerNumber,
+					customerName: item.clientName || "Unknown Client",
+					issueDate: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					dueDate: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					status: item.status,
+					total: item.amount,
+					due: item.status === "Paid" ? 0 : item.amount
+				}));
+				setRetainers(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching retainers:", err);
+		}
+	};
+
+	const fetchClients = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`);
+			if (res.ok) {
+				const data = await res.json();
+				setClients(data);
+			}
+		} catch (err) {
+			console.error("Error fetching clients:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchRetainers();
+		fetchClients();
+	}, []);
+
 	const handleApplyFilters = () => {
 		setActiveCustomerFilter(selectedCustomer);
 		setActiveStatusFilter(selectedStatus);
@@ -60,20 +101,38 @@ export default function RetainersPage() {
 		return matchesCustomer && matchesStatus;
 	});
 
-	const handleAddRetainerSubmit = (e: React.FormEvent) => {
+	const handleAddRetainerSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const total = parseFloat(newRetainer.total) || 0;
+		if (!newRetainer.customerName || total <= 0) {
+			alert("Please fill in required fields.");
+			return;
+		}
+
+		const matchedClient = clients.find(c => c.name.toLowerCase() === newRetainer.customerName.toLowerCase());
+		const clientId = matchedClient ? matchedClient.id : (clients[0]?.id || "cli-1");
+
 		const padNum = String(retainers.length + 1).padStart(5, "0");
-		const rData: Retainer = {
-			id: `RET${padNum}`,
-			customerName: newRetainer.customerName,
-			issueDate: newRetainer.issueDate.split("-").reverse().join("-"),
-			dueDate: newRetainer.dueDate.split("-").reverse().join("-"),
-			status: "Unpaid",
-			total: total,
-			due: total
+		const rData = {
+			retainerNumber: `RET${padNum}`,
+			clientId: clientId,
+			amount: total,
+			status: "Pending"
 		};
-		setRetainers(prev => [rData, ...prev]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/retainers`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(rData)
+			});
+			if (res.ok) {
+				fetchRetainers();
+			}
+		} catch (err) {
+			console.error("Error creating retainer:", err);
+		}
+
 		setShowAddModal(false);
 		setNewRetainer({ customerName: "Dulux PLC", issueDate: "", dueDate: "", total: "" });
 	};

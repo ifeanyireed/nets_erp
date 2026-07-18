@@ -54,6 +54,50 @@ export default function PaymentsPage() {
 		gateway: "Bank Transfer"
 	});
 
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchPayments = async () => {
+		try {
+			// Fetch all credit transactions (revenue collections)
+			const res = await fetch(`${FINANCE_API_URL}/transactions`);
+			if (res.ok) {
+				const data = await res.json();
+				// Filter for type == "Credit" (Revenue)
+				const credits = data.filter((item: any) => item.type === "Credit");
+				const mapped = credits.map((item: any, index: number) => {
+					// Extract client name from description if format is "Payment received from [Client]"
+					let clientName = "Unknown Client";
+					if (item.description && item.description.includes("received from ")) {
+						clientName = item.description.split("received from ")[1].split(" for")[0];
+					} else if (item.description) {
+						clientName = item.description;
+					}
+					return {
+						id: item.id,
+						dtRowIndex: index + 1,
+						code: "--",
+						project: "--",
+						invoiceNumber: item.referenceId || "N/A",
+						clientName: clientName,
+						orderNumber: "ORD-000",
+						amount: item.amount,
+						paidOn: item.date ? item.date.split("-").reverse().join("-") : "",
+						gateway: item.category || "Bank Transfer",
+						status: "Complete"
+					};
+				});
+				setPayments(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching payments:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchPayments();
+		setNewPayment(prev => ({ ...prev, paidOn: new Date().toISOString().split("T")[0] }));
+	}, []);
+
 	const filteredPayments = payments.filter(p => {
 		const matchesSearch = p.clientName.toLowerCase().includes(searchQuery.toLowerCase()) || 
 			p.invoiceNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -76,25 +120,37 @@ export default function PaymentsPage() {
 		);
 	};
 
-	const handleAddPaymentSubmit = (e: React.FormEvent) => {
+	const handleAddPaymentSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const padNum = String(payments.length + 1).padStart(5, "0");
-		const pData: Payment = {
-			id: `PMT-${Date.now()}`,
-			dtRowIndex: payments.length + 1,
-			code: `--`,
-			project: `--`,
-			invoiceNumber: newPayment.invoiceNumber,
-			clientName: newPayment.clientName,
-			orderNumber: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+		if (!newPayment.clientName || !newPayment.amount || !newPayment.paidOn) {
+			alert("Please fill in required fields.");
+			return;
+		}
+
+		const txData = {
+			referenceId: newPayment.invoiceNumber,
+			type: "Credit",
+			category: newPayment.gateway,
 			amount: parseFloat(newPayment.amount) || 0,
-			paidOn: newPayment.paidOn.split("-").reverse().join("-"),
-			gateway: newPayment.gateway,
-			status: "Complete"
+			date: newPayment.paidOn,
+			description: `Payment received from ${newPayment.clientName} for invoice ${newPayment.invoiceNumber}`
 		};
-		setPayments(prev => [pData, ...prev]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/transactions`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(txData)
+			});
+			if (res.ok) {
+				fetchPayments();
+			}
+		} catch (err) {
+			console.error("Error creating transaction:", err);
+		}
+
 		setShowAddModal(false);
-		setNewPayment({ clientName: "7UP Bottling Company", invoiceNumber: "INV-109", amount: "", paidOn: "", gateway: "Bank Transfer" });
+		setNewPayment({ clientName: "7UP Bottling Company", invoiceNumber: "INV-109", amount: "", paidOn: new Date().toISOString().split("T")[0], gateway: "Bank Transfer" });
 	};
 
 	const handleDeleteBatch = () => {

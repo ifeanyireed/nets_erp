@@ -35,6 +35,8 @@ export default function CreditNotesPage() {
 	const router = useRouter();
 
 	const [creditNotes, setCreditNotes] = useState<CreditNote[]>([]);
+	const [paidInvoicesMock, setPaidInvoicesMock] = useState<any[]>([]);
+	const [clients, setClients] = useState<any[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedClientFilter, setSelectedClientFilter] = useState("All");
 
@@ -43,16 +45,62 @@ export default function CreditNotesPage() {
 	
 	const [newCreditNote, setNewCreditNote] = useState({
 		amount: "",
-		dateText: "18-07-2026"
+		dateText: ""
 	});
 
-	// Mock paid or partial invoices list for the selector
-	const paidInvoicesMock = [
-		{ invoiceNumber: "NET-ECO-11", clientName: "Ecologique Transport Solution", total: 6000 },
-		{ invoiceNumber: "NET-IHS-10", clientName: "IHS - Holding Limited", total: 500000 },
-		{ invoiceNumber: "NET-NBC-10", clientName: "Nigerian Bottling Company (NBC)", total: 120000 },
-		{ invoiceNumber: "NET-007", clientName: "7UP Bottling Company", total: 6375 }
-	];
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchCreditNotes = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/credit-notes`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.creditNoteNumber,
+					invoiceNumber: item.invoiceId || "N/A",
+					clientName: item.clientName || "Unknown Client",
+					total: item.amount,
+					date: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					status: item.status
+				}));
+				setCreditNotes(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching credit notes:", err);
+		}
+	};
+
+	const fetchInvoices = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/invoices`);
+			if (res.ok) {
+				const data = await res.json();
+				// Filter paid/partial or simply allow all for mock
+				setPaidInvoicesMock(data);
+			}
+		} catch (err) {
+			console.error("Error fetching invoices:", err);
+		}
+	};
+
+	const fetchClients = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`);
+			if (res.ok) {
+				const data = await res.json();
+				setClients(data);
+			}
+		} catch (err) {
+			console.error("Error fetching clients:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchCreditNotes();
+		fetchInvoices();
+		fetchClients();
+		setNewCreditNote({ amount: "", dateText: new Date().toISOString().split("T")[0] });
+	}, []);
 
 	const filteredCreditNotes = creditNotes.filter(cn => {
 		const matchesSearch = cn.clientName.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -70,7 +118,7 @@ export default function CreditNotesPage() {
 		setShowAddModal(true);
 	};
 
-	const handleAddCreditNoteSubmit = (e: React.FormEvent) => {
+	const handleAddCreditNoteSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		const amount = parseFloat(newCreditNote.amount);
 		if (isNaN(amount) || amount <= 0) {
@@ -78,23 +126,39 @@ export default function CreditNotesPage() {
 			return;
 		}
 
-		const selectedInv = paidInvoicesMock.find(i => i.invoiceNumber === selectedInvoiceForNote);
-		if (!selectedInv) return;
+		const selectedInvoice = paidInvoicesMock.find(inv => inv.invoiceNumber === selectedInvoiceForNote);
+		if (!selectedInvoice) return;
+
+		// Map client name to client ID
+		const matchedClient = clients.find(c => c.name.toLowerCase() === selectedInvoice.customerName.toLowerCase());
+		const clientId = matchedClient ? matchedClient.id : (clients[0]?.id || "cli-1");
 
 		const padNum = String(creditNotes.length + 1).padStart(5, "0");
-		const cnData: CreditNote = {
-			id: `CN${padNum}`,
-			invoiceNumber: selectedInv.invoiceNumber,
-			clientName: selectedInv.clientName,
-			total: amount,
-			date: newCreditNote.dateText,
-			status: "Open"
+		const cnData = {
+			creditNoteNumber: `CN${padNum}`,
+			clientId: clientId,
+			invoiceId: selectedInvoice.invoiceNumber, // in front-end it uses invoiceNumber
+			amount: amount,
+			reason: "Credit note applied",
+			status: "Unused"
 		};
 
-		setCreditNotes(prev => [cnData, ...prev]);
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/credit-notes`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(cnData)
+			});
+			if (res.ok) {
+				fetchCreditNotes();
+			}
+		} catch (err) {
+			console.error("Error creating credit note:", err);
+		}
+
 		setShowAddModal(false);
 		setSelectedInvoiceForNote("");
-		setNewCreditNote({ amount: "", dateText: "18-07-2026" });
+		setNewCreditNote({ amount: "", dateText: new Date().toISOString().split("T")[0] });
 	};
 
 	const handleDeleteCreditNote = (id: string) => {
@@ -182,7 +246,7 @@ export default function CreditNotesPage() {
 						<option value="">Select paid or partial invoice</option>
 						{paidInvoicesMock.map(i => (
 							<option key={i.invoiceNumber} value={i.invoiceNumber}>
-								{`${i.invoiceNumber} (${i.clientName} - ${formatNaira(i.total)})`}
+								{`${i.invoiceNumber} (${i.customerName || "Unknown Client"} - ${formatNaira(i.amount)})`}
 							</option>
 						))}
 					</select>
