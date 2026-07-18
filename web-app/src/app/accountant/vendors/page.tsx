@@ -34,36 +34,7 @@ interface Vendor {
 export default function AccountantVendors() {
 	const router = useRouter();
 
-	const [vendors, setVendors] = useState<Vendor[]>([
-		{
-			id: "VEND00002",
-			name: "Mr. David",
-			email: "david@yahoo.com",
-			phone: "09000000000",
-			billsCount: 1,
-			billTotal: 49000,
-			status: "Active"
-		},
-		{
-			id: "VEND00003",
-			name: "Mr. Salam",
-			email: "salam@gmail.com",
-			phone: "90100000000",
-			billsCount: 1,
-			billTotal: 48500,
-			status: "Active"
-		},
-		{
-			id: "VEND00001",
-			name: "Mr. Samuel",
-			email: "samuel@gmail.com",
-			phone: "08000000000",
-			billsCount: 0,
-			billTotal: 0,
-			status: "Active"
-		}
-	]);
-
+	const [vendors, setVendors] = useState<Vendor[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [showAddModal, setShowAddModal] = useState(false);
@@ -75,6 +46,33 @@ export default function AccountantVendors() {
 		email: "",
 		phone: ""
 	});
+
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchVendors = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/vendors`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.id,
+					name: item.name,
+					email: item.email,
+					phone: item.phone,
+					billsCount: 0,
+					billTotal: 0,
+					status: item.status
+				}));
+				setVendors(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching vendors:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchVendors();
+	}, []);
 
 	const filteredVendors = vendors.filter(v => {
 		const query = searchQuery.toLowerCase();
@@ -100,19 +98,36 @@ export default function AccountantVendors() {
 		);
 	};
 
-	const handleAddVendorSubmit = (e: React.FormEvent) => {
+	const handleAddVendorSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (!newVendor.name || !newVendor.email) {
+			alert("Please fill in name and email.");
+			return;
+		}
+
 		const padNum = String(vendors.length + 1).padStart(5, "0");
-		const vendorData: Vendor = {
+		const vendorData = {
 			id: `VEND${padNum}`,
 			name: newVendor.name,
 			email: newVendor.email,
 			phone: newVendor.phone,
-			billsCount: 0,
-			billTotal: 0,
+			companyName: newVendor.name,
 			status: "Active"
 		};
-		setVendors(prev => [...prev, vendorData]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/vendors`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(vendorData)
+			});
+			if (res.ok) {
+				fetchVendors();
+			}
+		} catch (err) {
+			console.error("Error creating vendor:", err);
+		}
+
 		setShowAddModal(false);
 		setNewVendor({ name: "", email: "", phone: "" });
 	};

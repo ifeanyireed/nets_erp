@@ -29,17 +29,54 @@ export default function AccountantDebitNotes() {
 	const router = useRouter();
 
 	const [debitNotes, setDebitNotes] = useState<DebitNote[]>([]);
+	const [billsOptions, setBillsOptions] = useState<any[]>([]);
 	const [selectedBillId, setSelectedBillId] = useState("");
-	const [dateText, setDateText] = useState("18-07-2026");
+	const [dateText, setDateText] = useState("");
 	const [amountText, setAmountText] = useState("");
 	const [description, setDescription] = useState("");
 
-	const billsOptions = [
-		{ id: "BILL00001", vendorName: "Mr. David", amount: 49000 },
-		{ id: "BILL00002", vendorName: "Mr. Salam", amount: 48500 }
-	];
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
 
-	const handleSaveDebitNote = (e: React.FormEvent) => {
+	const fetchDebitNotes = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/debit-notes`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.debitNoteNumber,
+					billId: item.billId || "N/A",
+					vendorName: item.vendorName || "Unknown Vendor",
+					date: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					amount: item.amount,
+					description: item.reason || ""
+				}));
+				setDebitNotes(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching debit notes:", err);
+		}
+	};
+
+	const fetchBills = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/bills`);
+			if (res.ok) {
+				const data = await res.json();
+				setBillsOptions(data);
+			}
+		} catch (err) {
+			console.error("Error fetching bills:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchDebitNotes();
+		fetchBills();
+		const today = new Date().toISOString().split("T")[0];
+		setDateText(today);
+	}, []);
+
+	const handleSaveDebitNote = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!selectedBillId) {
 			alert("Please select a bill");
@@ -51,24 +88,39 @@ export default function AccountantDebitNotes() {
 			return;
 		}
 
-		const selectedBill = billsOptions.find(b => b.id === selectedBillId);
-		if (!selectedBill) return;
+		// billsOptions uses billNumber as id in mapping
+		const selectedBill = billsOptions.find(b => b.billNumber === selectedBillId);
+		if (!selectedBill) {
+			alert("Could not locate bill " + selectedBillId);
+			return;
+		}
 
 		const padNum = String(debitNotes.length + 1).padStart(5, "0");
-		const newNote: DebitNote = {
-			id: `DN${padNum}`,
-			billId: selectedBill.id,
-			vendorName: selectedBill.vendorName,
-			date: dateText,
+		const dnData = {
+			debitNoteNumber: `DN${padNum}`,
+			vendorId: selectedBill.vendorId,
+			billId: selectedBill.billNumber,
 			amount: amount,
-			description: description
+			reason: description
 		};
 
-		setDebitNotes(prev => [newNote, ...prev]);
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/debit-notes`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(dnData)
+			});
+			if (res.ok) {
+				fetchDebitNotes();
+			}
+		} catch (err) {
+			console.error("Error creating debit note:", err);
+		}
+
 		setSelectedBillId("");
 		setAmountText("");
 		setDescription("");
-		setDateText("18-07-2026");
+		setDateText(new Date().toISOString().split("T")[0]);
 	};
 
 	const handleDeleteNote = (id: string) => {
@@ -138,8 +190,8 @@ export default function AccountantDebitNotes() {
 							>
 								<option value="">Nothing selected</option>
 								{billsOptions.map(b => (
-									<option key={b.id} value={b.id}>
-										{`#${b.id} (${b.vendorName} - ${formatNaira(b.amount)})`}
+									<option key={b.billNumber} value={b.billNumber}>
+										{`#${b.billNumber} (${b.vendorName || "Unknown Vendor"} - ${formatNaira(b.amount)})`}
 									</option>
 								))}
 							</select>

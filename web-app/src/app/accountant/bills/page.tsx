@@ -31,38 +31,8 @@ interface Bill {
 export default function AccountantBills() {
 	const router = useRouter();
 
-	const [bills, setBills] = useState<Bill[]>([]);
-	const [initialSeed, setInitialSeed] = useState(true);
-
-	// Seed matching the screenshot if state is uninitialized
-	const getSeededBills = () => {
-		return [
-			{
-				id: "BILL00002",
-				vendorName: "Mr. Salam",
-				date: "05-06-2026",
-				dueDate: "05-07-2026",
-				location: "New Era Transports Services",
-				paymentStatus: "Paid" as const,
-				receivingStatus: "Received" as const,
-				amount: 48500,
-				dueAmount: 0
-			},
-			{
-				id: "BILL00001",
-				vendorName: "Mr. David",
-				date: "03-06-2026",
-				dueDate: "03-07-2026",
-				location: "New Era Transports Services",
-				paymentStatus: "Paid" as const,
-				receivingStatus: "Received" as const,
-				amount: 49000,
-				dueAmount: 0
-			}
-		];
-	};
-
-	const [billsList, setBillsList] = useState<Bill[]>(getSeededBills());
+	const [billsList, setBillsList] = useState<Bill[]>([]);
+	const [vendors, setVendors] = useState<any[]>([]);
 
 	// Filter states
 	const [selectedVendor, setSelectedVendor] = useState("All");
@@ -79,10 +49,52 @@ export default function AccountantBills() {
 		date: "",
 		dueDate: "",
 		location: "New Era Transports Services",
-		paymentStatus: "Paid" as const,
-		receivingStatus: "Received" as const,
+		paymentStatus: "Paid" as "Paid" | "Unpaid",
+		receivingStatus: "Received" as "Received" | "Pending",
 		amount: ""
 	});
+
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchBills = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/bills`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.billNumber,
+					vendorName: item.vendorName || "Unknown Vendor",
+					date: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					dueDate: item.dueDate ? item.dueDate.split("-").reverse().join("-") : "",
+					location: "New Era Transports Services",
+					paymentStatus: item.status === "Paid" ? "Paid" : "Unpaid",
+					receivingStatus: "Received",
+					amount: item.amount,
+					dueAmount: item.status === "Paid" ? 0 : item.amount
+				}));
+				setBillsList(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching bills:", err);
+		}
+	};
+
+	const fetchVendors = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/vendors`);
+			if (res.ok) {
+				const data = await res.json();
+				setVendors(data);
+			}
+		} catch (err) {
+			console.error("Error fetching vendors:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchBills();
+		fetchVendors();
+	}, []);
 
 	const handleApplyFilters = () => {
 		setActiveVendorFilter(selectedVendor);
@@ -97,21 +109,39 @@ export default function AccountantBills() {
 		return matchesVendor && matchesStatus;
 	});
 
-	const handleCreateBillSubmit = (e: React.FormEvent) => {
+	const handleCreateBillSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (!newBill.vendorName || !newBill.dueDate || !newBill.amount) {
+			alert("Please fill in required fields.");
+			return;
+		}
+
+		const matchedVendor = vendors.find(v => v.name.toLowerCase() === newBill.vendorName.toLowerCase());
+		const vendorId = matchedVendor ? matchedVendor.id : (vendors[0]?.id || "vend-1");
+
 		const padNum = String(billsList.length + 1).padStart(5, "0");
-		const billData: Bill = {
-			id: `BILL${padNum}`,
-			vendorName: newBill.vendorName,
-			date: newBill.date.split("-").reverse().join("-"),
-			dueDate: newBill.dueDate.split("-").reverse().join("-"),
-			location: newBill.location,
-			paymentStatus: newBill.paymentStatus,
-			receivingStatus: newBill.receivingStatus,
+		const billData = {
+			billNumber: `BILL${padNum}`,
+			vendorId: vendorId,
 			amount: parseFloat(newBill.amount) || 0,
-			dueAmount: newBill.paymentStatus === "Paid" ? 0 : (parseFloat(newBill.amount) || 0)
+			dueDate: newBill.dueDate,
+			status: newBill.paymentStatus,
+			description: "Logged via dashboard"
 		};
-		setBillsList(prev => [billData, ...prev]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/bills`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(billData)
+			});
+			if (res.ok) {
+				fetchBills();
+			}
+		} catch (err) {
+			console.error("Error creating bill:", err);
+		}
+
 		setShowCreateModal(false);
 		setNewBill({
 			vendorName: "Mr. David",
