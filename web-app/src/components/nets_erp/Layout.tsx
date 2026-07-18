@@ -269,6 +269,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       case "accountant":
         return [
           { name: "Finance Dashboard", route: "/accountant", icon: <FinanceIcon /> },
+          { name: "Clients", route: "/accountant/clients", icon: <UsersIcon /> },
           { name: "My Reviews", route: "/employee/reviews", icon: <FileTextIcon /> },
           { name: "My Profile", route: "/employee/profile", icon: <UserIcon /> },
         ];

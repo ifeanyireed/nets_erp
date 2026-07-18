@@ -497,6 +497,7 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 	};
 
 	const activeTab = getActiveTab();
+	const isClientsPage = pathname.includes("/clients");
 
 	const getHeaderContent = () => {
 		switch (activeTab) {
@@ -584,66 +585,77 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 			}}
 		>
 			<ERPLayout>
-				<div className="flex flex-col gap-6">
-					
-					{/* Top Command Banner - Title & Subtitle block */}
-					<div>
-						<h2 className="text-[20px] font-black text-slate-800 tracking-tight">{headerContent.title}</h2>
-						<p className="text-xs text-slate-455 font-semibold mt-1">
-							{headerContent.desc}
-						</p>
-
-						{/* Action Buttons Row */}
-						<div className="flex items-center gap-2 flex-wrap mt-3">
-							<button
-								onClick={() => setShowInvoiceModal(true)}
-								className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer border-none"
-							>
-								Create Invoice
-							</button>
-							<button
-								onClick={() => setShowExpenseModal(true)}
-								className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
-							>
-								Request Imprest
-							</button>
-							<button
-								onClick={() => setShowReconcileModal(true)}
-								className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
-							>
-								New Reconciliation
-							</button>
-						</div>
-					</div>
-
-					{/* Nav Tabs */}
-					<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-						{navTabs.map((tab) => (
-							<button
-								key={tab.id}
-								onClick={() => router.push(tab.slug)}
-								className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-									activeTab === tab.id
-										? "border-blue-600 text-blue-600"
-										: "border-transparent text-slate-400 hover:text-slate-700"
-								}`}
-							>
-								{tab.label}
-							</button>
-						))}
-					</div>
-
-					{loading ? (
+				{isClientsPage ? (
+					loading ? (
 						<div className="py-20 flex justify-center items-center">
 							<div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
 						</div>
 					) : (
-						<div className="flex flex-col gap-6">
-							{children}
-						</div>
-					)}
+						children
+					)
+				) : (
+					<div className="flex flex-col gap-6">
+						
+						{/* Top Command Banner - Title & Subtitle block */}
+						<div>
+							<h2 className="text-[20px] font-black text-slate-800 tracking-tight">{headerContent.title}</h2>
+							<p className="text-xs text-slate-455 font-semibold mt-1">
+								{headerContent.desc}
+							</p>
 
-				</div>
+							{/* Action Buttons Row */}
+							<div className="flex items-center gap-2 flex-wrap mt-3">
+								<button
+									onClick={() => setShowInvoiceModal(true)}
+									className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer border-none"
+								>
+									Create Invoice
+								</button>
+								<button
+									onClick={() => setShowExpenseModal(true)}
+									className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
+								>
+									Request Imprest
+								</button>
+								<button
+									onClick={() => setShowReconcileModal(true)}
+									className="px-4 py-2 bg-white border border-gray-200 text-slate-700 hover:bg-slate-50 font-bold rounded-xl text-xs transition-all cursor-pointer"
+								>
+									New Reconciliation
+								</button>
+							</div>
+						</div>
+
+						{/* Nav Tabs */}
+						<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
+							{navTabs.map((tab) => (
+								<button
+									key={tab.id}
+									onClick={() => router.push(tab.slug)}
+									className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
+										activeTab === tab.id
+											? "border-blue-600 text-blue-600"
+											: "border-transparent text-slate-400 hover:text-slate-700"
+									}`}
+								>
+									{tab.label}
+								</button>
+							))}
+						</div>
+
+						{loading ? (
+							<div className="py-20 flex justify-center items-center">
+								<div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+							</div>
+						) : (
+							<div className="flex flex-col gap-6">
+								{children}
+							</div>
+						)}
+
+					</div>
+				)}
+			</ERPLayout>
 
 				{/* MODAL 5: ADD ACCOUNT FORM */}
 				{showAddAccountModal && (

@@ -133,7 +133,7 @@ export default function AccountantCOA() {
 										<div className="inline-block text-left">
 											<button
 												onClick={() => setActiveDropdown(activeDropdown === idx ? null : idx)}
-												className="text-[11px] bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 hover:text-slate-800 px-3 py-1.5 rounded-xl transition-all font-extrabold cursor-pointer inline-flex items-center gap-1.5 select-none"
+												className="text-[11px] bg-slate-50 hover:bg-slate-100 border border-slate-200/50 text-slate-600 hover:text-slate-800 px-3 py-1.5 rounded-xl transition-all font-extrabold cursor-pointer inline-flex items-center gap-1.5 select-none"
 											>
 												Actions
 												<svg className={`w-3.5 h-3.5 transition-transform duration-200 ${activeDropdown === idx ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,7 @@ export default function AccountantCOA() {
 											{activeDropdown === idx && (
 												<>
 													<div className="fixed inset-0 z-10" onClick={() => setActiveDropdown(null)} />
-													<div className="absolute right-0 mt-1.5 w-36 bg-white rounded-xl shadow-lg border border-slate-150 py-1.5 z-20 animate-fadeIn text-left">
+													<div className="absolute right-0 mt-1.5 w-36 bg-white rounded-xl shadow-lg border border-slate-100/80 py-1.5 z-20 animate-fadeIn text-left">
 														<button
 															onClick={() => {
 																setActiveDropdown(null);
