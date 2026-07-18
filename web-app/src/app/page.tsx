@@ -44,7 +44,7 @@ export default function LandingLoginPage() {
       <div className="hidden md:flex absolute left-12 lg:left-20 top-1/2 -translate-y-1/2 z-10 max-w-md flex-col gap-6 text-white">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center border border-white/20">
-            <img src="/nets.webp" alt="Nets Logo" className="w-6 h-6 object-contain" />
+            <img src="/favicon.png" alt="Nets Logo" className="w-6 h-6 object-contain" />
           </div>
           <span className="font-extrabold text-xs tracking-widest uppercase text-blue-200">New Era Transport Services</span>
         </div>
@@ -54,7 +54,7 @@ export default function LandingLoginPage() {
             <span className="text-blue-300">Driving Excellence.</span>
           </h1>
           <p className="text-xs text-blue-100/80 mt-4 leading-relaxed font-semibold">
-            Welcome to the Performance Review & Competency Assessment Portal. Log in to define performance objectives, align competency targets, and evaluate progress.
+            Welcome to the NETS ERP Worksuite. Log in to manage human resources, track operations, access financial workflows, and evaluate performance in one unified platform.
           </p>
         </div>
         <div className="text-[10px] text-blue-200/40 font-bold uppercase tracking-wider mt-4">
@@ -68,7 +68,7 @@ export default function LandingLoginPage() {
         {/* Header */}
         <div className="text-center md:text-left">
           <img src="/nets.webp" alt="Nets Logo" className="w-32 h-32 object-contain mx-auto md:mx-0 -mt-6 -mb-12" />
-          <h2 className="text-xl font-black text-white md:text-slate-800 tracking-tight">Performance Portal</h2>
+          <h2 className="text-xl font-black text-white md:text-slate-800 tracking-tight">ERP Worksuite</h2>
           <p className="text-[9px] text-slate-400 md:text-slate-550 font-bold uppercase tracking-wide mt-0.5">Sign in to your account</p>
         </div>
 

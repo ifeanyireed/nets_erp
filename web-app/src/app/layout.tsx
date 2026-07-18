@@ -10,8 +10,8 @@ const dmSans = DM_Sans({ subsets: ["latin"], variable: "--font-dm-sans" });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: "NETS ERP - Performance Review & Objective Management",
-  description: "Performance review, employee evaluation, and objective management platform for New Era Transport Services (NETS).",
+  title: "NETS ERP - Unified Enterprise Resource Planning",
+  description: "Comprehensive ERP Worksuite for New Era Transport Services (NETS) - managing finance, operations, human resources, performance reviews, and objective alignments in one unified platform.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
