@@ -34,7 +34,7 @@ export default function BankAccountsPage() {
 		{
 			id: "acc-1",
 			bankName: "Globus Bank",
-			logo: "🔴",
+			logo: "/globus.png",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: "1050 - Globus Bank - New Era Transports",
@@ -45,7 +45,7 @@ export default function BankAccountsPage() {
 		{
 			id: "acc-2",
 			bankName: "Keystone Bank",
-			logo: "🔵",
+			logo: "/keystone.jpg",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: "1020 - Key Stone Bank - New Era Transports",
@@ -56,7 +56,7 @@ export default function BankAccountsPage() {
 		{
 			id: "acc-3",
 			bankName: "GT Bank",
-			logo: "🟠",
+			logo: "/gtbank.webp",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: "1010 - GT Bank - New Era Transports",
@@ -67,7 +67,7 @@ export default function BankAccountsPage() {
 		{
 			id: "acc-4",
 			bankName: "Providus Bank",
-			logo: "🟡",
+			logo: "/providus.webp",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: "1030 - Providus Bank - New Era Transports",
@@ -78,7 +78,7 @@ export default function BankAccountsPage() {
 		{
 			id: "acc-5",
 			bankName: "Monie Point",
-			logo: "🔵",
+			logo: "/moniepoint.webp",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: "1040 - Monie Point - New Era Transports",
@@ -128,7 +128,7 @@ export default function BankAccountsPage() {
 		const accData: BankAccount = {
 			id: `acc-${Date.now()}`,
 			bankName: newAccount.bankName,
-			logo: "🏦",
+			logo: "generic",
 			holderName: "New Era Transports Services",
 			accountType: "Bank",
 			chartAccount: newAccount.chartAccount,
@@ -260,7 +260,13 @@ export default function BankAccountsPage() {
 									</td>
 									<td className="py-4">
 										<div className="flex items-center gap-2">
-											<span className="text-lg">{acc.logo}</span>
+											{acc.logo && acc.logo.includes(".") ? (
+												<img src={acc.logo} alt={acc.bankName} className="w-5 h-5 rounded-full object-cover shrink-0" />
+											) : (
+												<span className="w-5 h-5 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[9px] font-black shrink-0">
+													{acc.bankName.slice(0, 2).toUpperCase()}
+												</span>
+											)}
 											<span className="font-extrabold text-slate-800">{acc.bankName}</span>
 										</div>
 									</td>
@@ -278,8 +284,8 @@ export default function BankAccountsPage() {
 											}}
 											className="px-2 py-1 bg-emerald-55/10 text-emerald-800 border border-emerald-200 text-[10px] font-bold rounded-lg focus:outline-none"
 										>
-											<option value="Active">🟢 Active</option>
-											<option value="Inactive">🔴 Inactive</option>
+											<option value="Active">Active</option>
+											<option value="Inactive">Inactive</option>
 										</select>
 									</td>
 									<td className="py-4 text-right">
