@@ -487,7 +487,54 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		{ id: "ledger", label: "General Journal Ledger", slug: "/accountant/ledger" }
 	];
 
-	const activeTab = navTabs.find(tab => pathname === tab.slug)?.id || "overview";
+	const getActiveTab = () => {
+		if (pathname.includes("/coa")) return "coa";
+		if (pathname.includes("/invoices")) return "invoices";
+		if (pathname.includes("/expenses")) return "expenses";
+		if (pathname.includes("/reconcile")) return "reconcile";
+		if (pathname.includes("/ledger")) return "ledger";
+		return "overview";
+	};
+
+	const activeTab = getActiveTab();
+
+	const getHeaderContent = () => {
+		switch (activeTab) {
+			case "coa":
+				return {
+					title: "Chart of Accounts (COA)",
+					desc: "Organize and manage your general ledger accounts, codes, classifications, and balance sides."
+				};
+			case "invoices":
+				return {
+					title: "Invoices (Aged Receivables)",
+					desc: "Track customer invoices, payment statuses, due dates, and outstanding collections."
+				};
+			case "expenses":
+				return {
+					title: "Imprest & Expenses (Payables)",
+					desc: "Monitor operating expenses, petty cash disbursements, and vendor payable accounts."
+				};
+			case "reconcile":
+				return {
+					title: "Bank Reconciliation",
+					desc: "Reconcile corporate cashbook accounts with statement logs to verify ledger alignment."
+				};
+			case "ledger":
+				return {
+					title: "General Journal Ledger",
+					desc: "Review chronological double-entry journal transactions, debit/credit details, and ledger logs."
+				};
+			case "overview":
+			default:
+				return {
+					title: "Finance Hub Overview",
+					desc: "Manage corporate accounts, invoice approvals, cashbook reconciliations, and imprest distributions."
+				};
+		}
+	};
+
+	const headerContent = getHeaderContent();
 
 	return (
 		<FinanceContext.Provider
@@ -541,9 +588,9 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 					
 					{/* Top Command Banner - Title & Subtitle block */}
 					<div>
-						<h2 className="text-[20px] font-black text-slate-800 tracking-tight">Finance Hub Overview</h2>
+						<h2 className="text-[20px] font-black text-slate-800 tracking-tight">{headerContent.title}</h2>
 						<p className="text-xs text-slate-455 font-semibold mt-1">
-							Manage corporate accounts, invoice approvals, cashbook reconciliations, and imprest distributions.
+							{headerContent.desc}
 						</p>
 
 						{/* Action Buttons Row */}
