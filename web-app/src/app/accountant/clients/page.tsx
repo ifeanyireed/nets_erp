@@ -20,7 +20,8 @@ const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://local
 const RELATIONS_TABS = [
 	{ id: "clients", label: "Clients", slug: "/accountant/clients" },
 	{ id: "vendors", label: "Vendors", slug: "/accountant/vendors" },
-	{ id: "bills", label: "Bills", slug: "/accountant/bills" }
+	{ id: "bills", label: "Bills", slug: "/accountant/bills" },
+	{ id: "debit-notes", label: "Debit Notes", slug: "/accountant/debit-notes" }
 ];
 
 interface Client {

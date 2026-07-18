@@ -369,7 +369,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
                 : (pathname === item.route.split("?")[0] || 
                    pathname.startsWith(item.route.split("?")[0] + "/") ||
-                   (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills"))));
+                   (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills") || pathname.startsWith("/accountant/debit-notes"))));
               return (
                 <button
                   key={item.name}
@@ -483,7 +483,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
             ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
             : (pathname === item.route.split("?")[0] || 
                pathname.startsWith(item.route.split("?")[0] + "/") ||
-               (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills"))));
+               (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills") || pathname.startsWith("/accountant/debit-notes"))));
           return (
             <button
               key={item.name}
