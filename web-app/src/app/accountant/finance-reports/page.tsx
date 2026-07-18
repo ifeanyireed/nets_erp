@@ -10,7 +10,16 @@ import {
 	IconTrendingDown,
 	IconArrowUpRight,
 	IconArrowDownRight,
-	IconCheck
+	IconCheck,
+	IconRefresh,
+	IconScale,
+	IconChartBar,
+	IconFileText,
+	IconReceiptTax,
+	IconReportMoney,
+	IconFileInvoice,
+	IconReceipt,
+	IconBox
 } from "@tabler/icons-react";
 
 const REPORTS_TABS = [
@@ -64,17 +73,17 @@ export default function FinanceReportsPage() {
 	const [searchQuery, setSearchQuery] = useState("");
 
 	const reportViews: ReportViewCard[] = [
-		{ id: "transactions", title: "Transactions", desc: "Ledger activity", icon: "🔄" },
-		{ id: "income-vs-expense", title: "Income vs Expense", desc: "Profit picture", icon: "⚖️" },
-		{ id: "sales", title: "Sales Report", desc: "Customer sales metrics", icon: "📊" },
-		{ id: "statement", title: "Account Statement", desc: "Account movement", icon: "📑" },
-		{ id: "income", title: "Income", desc: "Revenue trend", icon: "📈" },
-		{ id: "expense", title: "Expense", desc: "Spend trend", icon: "📉" },
-		{ id: "tax", title: "Tax", desc: "Tax exposure", icon: "💼" },
-		{ id: "income-statement", title: "Income Statement", desc: "Financial Performance", icon: "📋" },
-		{ id: "invoice", title: "Invoice", desc: "Receivables", icon: "📄" },
-		{ id: "bill", title: "Bill", desc: "Payables", icon: "📝" },
-		{ id: "product-stock", title: "Product Stock", desc: "Inventory movement", icon: "📦" }
+		{ id: "transactions", title: "Transactions", desc: "Ledger activity", icon: <IconRefresh className="w-5 h-5" /> },
+		{ id: "income-vs-expense", title: "Income vs Expense", desc: "Profit picture", icon: <IconScale className="w-5 h-5" /> },
+		{ id: "sales", title: "Sales Report", desc: "Customer sales metrics", icon: <IconChartBar className="w-5 h-5" /> },
+		{ id: "statement", title: "Account Statement", desc: "Account movement", icon: <IconFileText className="w-5 h-5" /> },
+		{ id: "income", title: "Income", desc: "Revenue trend", icon: <IconTrendingUp className="w-5 h-5" /> },
+		{ id: "expense", title: "Expense", desc: "Spend trend", icon: <IconTrendingDown className="w-5 h-5" /> },
+		{ id: "tax", title: "Tax", desc: "Tax exposure", icon: <IconReceiptTax className="w-5 h-5" /> },
+		{ id: "income-statement", title: "Income Statement", desc: "Financial Performance", icon: <IconReportMoney className="w-5 h-5" /> },
+		{ id: "invoice", title: "Invoice", desc: "Receivables", icon: <IconFileInvoice className="w-5 h-5" /> },
+		{ id: "bill", title: "Bill", desc: "Payables", icon: <IconReceipt className="w-5 h-5" /> },
+		{ id: "product-stock", title: "Product Stock", desc: "Inventory movement", icon: <IconBox className="w-5 h-5" /> }
 	];
 
 	// Data for Transactions View (Finance Report)
@@ -192,16 +201,22 @@ export default function FinanceReportsPage() {
 								setActiveReportView(view.id);
 								setSearchQuery("");
 							}}
-							className={`p-3.5 rounded-2xl border text-left flex flex-col gap-2 transition-all cursor-pointer ${
+							className={`p-4 rounded-3xl border text-left flex flex-col gap-3.5 transition-all cursor-pointer select-none active:scale-[0.98] ${
 								activeReportView === view.id
-									? "bg-red-50 border-red-55 text-red-650 shadow-sm"
-									: "bg-white border-gray-150 text-slate-600 hover:bg-slate-50"
+									? "bg-red-50/70 border-red-200 text-red-650 shadow-[0_4px_12px_rgba(239,68,68,0.04)]"
+									: "bg-white border-gray-100 text-slate-605 hover:bg-slate-50 hover:border-gray-200"
 							}`}
 						>
-							<div className="text-xl">{view.icon}</div>
+							<div className={`w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
+								activeReportView === view.id
+									? "bg-red-500 text-white animate-pulse"
+									: "bg-slate-50 text-slate-500"
+							}`}>
+								{view.icon}
+							</div>
 							<div>
 								<p className="text-[11px] font-black leading-tight">{view.title}</p>
-								<p className="text-[9px] text-slate-455 font-semibold mt-0.5">{view.desc}</p>
+								<p className="text-[9px] text-slate-455 font-semibold mt-1 leading-normal">{view.desc}</p>
 							</div>
 						</button>
 					))}
