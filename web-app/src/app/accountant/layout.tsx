@@ -482,14 +482,12 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		{ id: "overview", label: "Finance Hub", slug: "/accountant/overview" },
 		{ id: "coa", label: "Chart of Accounts", slug: "/accountant/coa" },
 		{ id: "expenses", label: "Imprest & Expenses (Payables)", slug: "/accountant/expenses" },
-		{ id: "reconcile", label: "Bank Reconciliation", slug: "/accountant/reconcile" },
 		{ id: "ledger", label: "General Journal Ledger", slug: "/accountant/ledger" }
 	];
 
 	const getActiveTab = () => {
 		if (pathname.includes("/coa")) return "coa";
 		if (pathname.includes("/expenses")) return "expenses";
-		if (pathname.includes("/reconcile")) return "reconcile";
 		if (pathname.includes("/ledger")) return "ledger";
 		return "overview";
 	};
@@ -508,7 +506,13 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		pathname.includes("/estimates") ||
 		pathname.includes("/invoices") ||
 		pathname.includes("/payments") ||
-		pathname.includes("/credit-notes");
+		pathname.includes("/credit-notes") ||
+		pathname.includes("/journal-entries") ||
+		pathname.includes("/recurring-journals") ||
+		pathname.includes("/reconcile") ||
+		pathname.includes("/budget-planner") ||
+		pathname.includes("/period-close") ||
+		pathname.includes("/audit-trail");
 
 	const getHeaderContent = () => {
 		switch (activeTab) {
@@ -521,11 +525,6 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 				return {
 					title: "Imprest & Expenses (Payables)",
 					desc: "Monitor operating expenses, petty cash disbursements, and vendor payable accounts."
-				};
-			case "reconcile":
-				return {
-					title: "Bank Reconciliation",
-					desc: "Reconcile corporate cashbook accounts with statement logs to verify ledger alignment."
 				};
 			case "ledger":
 				return {

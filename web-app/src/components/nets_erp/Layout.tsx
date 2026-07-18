@@ -114,6 +114,15 @@ const BoxIcon = () => (
   </svg>
 );
 
+const TransactionsIcon = () => (
+  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+    <line x1="2" y1="10" x2="22" y2="10" />
+    <path d="M6 21h12" />
+    <path d="M12 17v4" />
+  </svg>
+);
+
 const CollapseIcon = () => (
   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <polyline points="15 18 9 12 15 6" />
@@ -287,6 +296,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
       case "accountant":
         return [
           { name: "Finance Dashboard", route: "/accountant", icon: <FinanceIcon /> },
+          { name: "Transactions", route: "/accountant/journal-entries", icon: <TransactionsIcon /> },
           { name: "Clients", route: "/accountant/clients", icon: <UsersIcon /> },
           { name: "Banking", route: "/accountant/bank-accounts", icon: <BankIcon /> },
           { name: "Inventory", route: "/accountant/products", icon: <BoxIcon /> },
@@ -399,6 +409,13 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                      pathname.startsWith("/accountant/invoices") ||
                      pathname.startsWith("/accountant/payments") ||
                      pathname.startsWith("/accountant/credit-notes")
+                   )) ||
+                   (item.route === "/accountant/journal-entries" && (
+                     pathname.startsWith("/accountant/recurring-journals") ||
+                     pathname.startsWith("/accountant/reconcile") ||
+                     pathname.startsWith("/accountant/budget-planner") ||
+                     pathname.startsWith("/accountant/period-close") ||
+                     pathname.startsWith("/accountant/audit-trail")
                    )) ||
                    (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                    (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));
@@ -525,6 +542,13 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                  pathname.startsWith("/accountant/invoices") ||
                  pathname.startsWith("/accountant/payments") ||
                  pathname.startsWith("/accountant/credit-notes")
+               )) ||
+               (item.route === "/accountant/journal-entries" && (
+                 pathname.startsWith("/accountant/recurring-journals") ||
+                 pathname.startsWith("/accountant/reconcile") ||
+                 pathname.startsWith("/accountant/budget-planner") ||
+                 pathname.startsWith("/accountant/period-close") ||
+                 pathname.startsWith("/accountant/audit-trail")
                )) ||
                (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));
