@@ -314,12 +314,12 @@ export default function AdminDashboard() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-gray-150 text-[10px] uppercase tracking-wider text-slate-400 font-extrabold">
-                  <th className="py-3 px-2 w-10">
+                  <th className="py-3 px-2 w-12">
                     <input
                       type="checkbox"
                       checked={filteredUsers.length > 0 && selectedUserIds.length === filteredUsers.length}
                       onChange={() => handleSelectAll(filteredUsers)}
-                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer mr-3"
                     />
                   </th>
                   <th className="py-3 px-3">Employee</th>
@@ -346,7 +346,7 @@ export default function AdminDashboard() {
                           type="checkbox"
                           checked={isChecked}
                           onChange={() => handleSelectUser(u.id)}
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer mr-3"
                         />
                       </td>
                       <td className="py-3 px-3">

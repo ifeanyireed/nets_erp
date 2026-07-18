@@ -477,7 +477,7 @@ export function PatientConsultWorkspace({ workspaceType }: PatientConsultWorkspa
                         type="checkbox"
                         checked={task.checked}
                         onChange={() => handleToggleTask(task.id)}
-                        className="w-4.5 h-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900"
+                        className="w-4.5 h-4.5 rounded border-slate-300 text-slate-900 focus:ring-slate-900 mr-2"
                       />
                       <span className={`text-xs font-semibold ${task.checked ? "line-through text-slate-400" : "text-slate-700"}`}>
                         {task.text}

@@ -250,6 +250,12 @@ export default function AccountantClients() {
 	return (
 		<div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col gap-6 animate-fadeIn text-[#1e293b]">
 			
+			{/* Header */}
+			<div>
+				<h2 className="text-[20px] font-black text-slate-800 tracking-tight">Clients</h2>
+				<p className="text-xs text-slate-450 font-semibold mt-1">Manage corporate clients, contacts, and account statuses</p>
+			</div>
+			
 			{/* Top Toolbars & Buttons */}
 			<div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
 				
@@ -340,12 +346,12 @@ export default function AccountantClients() {
 					<table className="w-full text-left border-collapse select-none">
 						<thead>
 							<tr className="border-b border-gray-100 text-slate-455 text-[11px] font-bold uppercase tracking-wider">
-								<th className="pb-3 w-8">
+								<th className="pb-3 w-12 pr-3">
 									<input
 										type="checkbox"
 										onChange={handleSelectAll}
 										checked={filteredClients.length > 0 && selectedIds.length === filteredClients.length}
-										className="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-red-500 cursor-pointer accent-red-500"
+										className="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-red-500 cursor-pointer accent-red-500 mr-3"
 									/>
 								</th>
 								<th className="pb-3 w-8">#</th>
@@ -365,12 +371,12 @@ export default function AccountantClients() {
 							{filteredClients.length > 0 ? (
 								filteredClients.map((client, idx) => (
 									<tr key={client.id} className="hover:bg-slate-50/50 transition-colors text-xs font-semibold">
-										<td className="py-4">
+										<td className="py-4 pr-3">
 											<input
 												type="checkbox"
 												checked={selectedIds.includes(client.id)}
 												onChange={() => handleSelectRow(client.id)}
-												className="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-red-500 cursor-pointer accent-red-500"
+												className="w-4 h-4 rounded border-gray-300 text-red-500 focus:ring-red-500 cursor-pointer accent-red-500 mr-3"
 											/>
 										</td>
 										<td className="py-4 text-slate-400 font-mono">{idx + 1}</td>
