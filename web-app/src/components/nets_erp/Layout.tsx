@@ -300,6 +300,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           { name: "Clients", route: "/accountant/clients", icon: <UsersIcon /> },
           { name: "Banking", route: "/accountant/bank-accounts", icon: <BankIcon /> },
           { name: "Inventory", route: "/accountant/products", icon: <BoxIcon /> },
+          { name: "Reports", route: "/accountant/finance-reports", icon: <BarChartIcon /> },
           { name: "My Reviews", route: "/employee/reviews", icon: <FileTextIcon /> },
           { name: "My Profile", route: "/employee/profile", icon: <UserIcon /> },
         ];
@@ -416,6 +417,13 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                      pathname.startsWith("/accountant/budget-planner") ||
                      pathname.startsWith("/accountant/period-close") ||
                      pathname.startsWith("/accountant/audit-trail")
+                   )) ||
+                   (item.route === "/accountant/finance-reports" && (
+                     pathname.startsWith("/accountant/ledger-summary") ||
+                     pathname.startsWith("/accountant/trial-balance") ||
+                     pathname.startsWith("/accountant/financial-position") ||
+                     pathname.startsWith("/accountant/aged-receivables") ||
+                     pathname.startsWith("/accountant/aged-payables")
                    )) ||
                    (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                    (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));
@@ -549,6 +557,13 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                  pathname.startsWith("/accountant/budget-planner") ||
                  pathname.startsWith("/accountant/period-close") ||
                  pathname.startsWith("/accountant/audit-trail")
+               )) ||
+               (item.route === "/accountant/finance-reports" && (
+                 pathname.startsWith("/accountant/ledger-summary") ||
+                 pathname.startsWith("/accountant/trial-balance") ||
+                 pathname.startsWith("/accountant/financial-position") ||
+                 pathname.startsWith("/accountant/aged-receivables") ||
+                 pathname.startsWith("/accountant/aged-payables")
                )) ||
                (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));

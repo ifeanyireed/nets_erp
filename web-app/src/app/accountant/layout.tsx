@@ -512,7 +512,13 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		pathname.includes("/reconcile") ||
 		pathname.includes("/budget-planner") ||
 		pathname.includes("/period-close") ||
-		pathname.includes("/audit-trail");
+		pathname.includes("/audit-trail") ||
+		pathname.includes("/finance-reports") ||
+		pathname.includes("/ledger-summary") ||
+		pathname.includes("/trial-balance") ||
+		pathname.includes("/financial-position") ||
+		pathname.includes("/aged-receivables") ||
+		pathname.includes("/aged-payables");
 
 	const getHeaderContent = () => {
 		switch (activeTab) {
