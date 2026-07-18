@@ -9,6 +9,7 @@ import {
 	IconDotsVertical,
 	IconTrash
 } from "@tabler/icons-react";
+import SubNavTabs from "@/components/nets_erp/SubNavTabs";
 
 const INVENTORY_TABS = [
 	{ id: "products", label: "Products", slug: "/accountant/products" },
@@ -31,16 +32,16 @@ export default function ProductsPage() {
 	const router = useRouter();
 
 	const [products, setProducts] = useState<Product[]>([
-		{ id: "p1", name: "GAIO - Leasing Services", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p2", name: "Cooperate Bus Services", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p3", name: "Bus Rentals", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p4", name: "Shuttle", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p5", name: "NBC - Recovery & Intervention", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p6", name: "NBC - Outsourcing Drivers", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p7", name: "Bus Rentals - OLAM", image: "📦", sku: "", type: "Product", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p8", name: "Haulage - DULUX", image: "📦", sku: "", type: "Product", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p9", name: "Haulage - 7UP", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
-		{ id: "p10", name: "IHS - Fleet Management Service", image: "📄", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false }
+		{ id: "p1", name: "GAIO - Leasing Services", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p2", name: "Cooperate Bus Services", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p3", name: "Bus Rentals", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p4", name: "Shuttle", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p5", name: "NBC - Recovery & Intervention", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p6", name: "NBC - Outsourcing Drivers", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p7", name: "Bus Rentals - OLAM", image: "/favicon.png", sku: "", type: "Product", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p8", name: "Haulage - DULUX", image: "/favicon.png", sku: "", type: "Product", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p9", name: "Haulage - 7UP", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false },
+		{ id: "p10", name: "IHS - Fleet Management Service", image: "/favicon.png", sku: "", type: "Service", salePrice: 0, purchasePrice: 0, quantity: 0, canPurchase: false }
 	]);
 
 	const [searchQuery, setSearchQuery] = useState("");
@@ -84,7 +85,7 @@ export default function ProductsPage() {
 		const pData: Product = {
 			id: `p-${Date.now()}`,
 			name: newProduct.name,
-			image: newProduct.type === "Product" ? "📦" : "📄",
+			image: "/favicon.png",
 			sku: newProduct.sku,
 			type: newProduct.type,
 			salePrice: parseFloat(newProduct.salePrice) || 0,
@@ -124,19 +125,7 @@ export default function ProductsPage() {
 
 			{/* Sub-menu Tabs */}
 			<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-				{INVENTORY_TABS.map((tab) => (
-					<button
-						key={tab.id}
-						onClick={() => router.push(tab.slug)}
-						className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-							tab.id === "products"
-								? "border-red-500 text-red-500 font-bold"
-								: "border-transparent text-slate-400 hover:text-slate-700"
-						}`}
-					>
-						{tab.label}
-					</button>
-				))}
+				<SubNavTabs tabs={INVENTORY_TABS} activeTabId="products" colorTheme="red" />
 			</div>
 
 			{/* Actions row */}
@@ -216,8 +205,8 @@ export default function ProductsPage() {
 										/>
 									</td>
 									<td className="py-4 text-center">
-										<div className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center font-mono">
-											{p.image}
+										<div className="w-8 h-8 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center overflow-hidden">
+											<img src={p.image} alt={p.name} className="w-6 h-6 object-contain" />
 										</div>
 									</td>
 									<td className="py-4">
