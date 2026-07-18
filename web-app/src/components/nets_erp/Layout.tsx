@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useERPStore, Role, User } from "@/lib/erp-store";
 import { motion } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
+import { IconBuildingBank } from "@tabler/icons-react";
 
 // Custom SVG Icons
 const DashboardIcon = () => (
@@ -97,13 +98,7 @@ const FinanceIcon = () => (
 );
 
 const BankIcon = () => (
-  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="10" width="20" height="2" />
-    <rect x="4" y="14" width="4" height="7" />
-    <rect x="10" y="14" width="4" height="7" />
-    <rect x="16" y="14" width="4" height="7" />
-    <path d="M12 2L2 9h20L12 2z" />
-  </svg>
+  <IconBuildingBank className="w-5 h-5" />
 );
 
 const BoxIcon = () => (
