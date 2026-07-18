@@ -36,6 +36,7 @@ export default function EstimatesPage() {
 	const router = useRouter();
 
 	const [estimates, setEstimates] = useState<Estimate[]>([]);
+	const [clients, setClients] = useState<any[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedStatusFilter, setSelectedStatusFilter] = useState("All");
 	const [showAddModal, setShowAddModal] = useState(false);
@@ -47,24 +48,82 @@ export default function EstimatesPage() {
 		createdDate: ""
 	});
 
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchEstimates = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/estimates`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.estimateNumber,
+					clientName: item.clientName || "Unknown Client",
+					total: item.amount,
+					validTill: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "", // estimates do not have explicit valid till, we fallback
+					createdDate: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					status: item.status
+				}));
+				setEstimates(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching estimates:", err);
+		}
+	};
+
+	const fetchClients = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`);
+			if (res.ok) {
+				const data = await res.json();
+				setClients(data);
+			}
+		} catch (err) {
+			console.error("Error fetching clients:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchEstimates();
+		fetchClients();
+	}, []);
+
 	const filteredEstimates = estimates.filter(est => {
 		const matchesSearch = est.clientName.toLowerCase().includes(searchQuery.toLowerCase()) || est.id.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchesStatus = selectedStatusFilter === "All" || est.status === selectedStatusFilter;
 		return matchesSearch && matchesStatus;
 	});
 
-	const handleAddEstimateSubmit = (e: React.FormEvent) => {
+	const handleAddEstimateSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (!newEstimate.clientName || !newEstimate.total) {
+			alert("Please fill in all required fields.");
+			return;
+		}
+
+		const matchedClient = clients.find(c => c.name.toLowerCase() === newEstimate.clientName.toLowerCase());
+		const clientId = matchedClient ? matchedClient.id : (clients[0]?.id || "cli-1");
+
 		const padNum = String(estimates.length + 1).padStart(5, "0");
-		const estData: Estimate = {
-			id: `EST${padNum}`,
-			clientName: newEstimate.clientName,
-			total: parseFloat(newEstimate.total) || 0,
-			validTill: newEstimate.validTill.split("-").reverse().join("-"),
-			createdDate: newEstimate.createdDate.split("-").reverse().join("-"),
+		const estData = {
+			estimateNumber: `EST${padNum}`,
+			clientId: clientId,
+			amount: parseFloat(newEstimate.total) || 0,
 			status: "Waiting"
 		};
-		setEstimates(prev => [estData, ...prev]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/estimates`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(estData)
+			});
+			if (res.ok) {
+				fetchEstimates();
+			}
+		} catch (err) {
+			console.error("Error creating estimate:", err);
+		}
+
 		setShowAddModal(false);
 		setNewEstimate({ clientName: "", total: "", validTill: "", createdDate: "" });
 	};

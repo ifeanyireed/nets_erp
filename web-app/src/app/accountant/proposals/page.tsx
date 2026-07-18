@@ -37,6 +37,7 @@ export default function ProposalsPage() {
 	const router = useRouter();
 
 	const [proposals, setProposals] = useState<Proposal[]>([]);
+	const [clients, setClients] = useState<any[]>([]);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [selectedLeadFilter, setSelectedLeadFilter] = useState("All");
 	const [showAddModal, setShowAddModal] = useState(false);
@@ -48,24 +49,83 @@ export default function ProposalsPage() {
 		validTill: ""
 	});
 
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchProposals = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/proposals`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.proposalNumber,
+					name: item.clientName || "Unknown Client",
+					total: item.amount,
+					date: item.createdAt ? item.createdAt.split("T")[0].split("-").reverse().join("-") : "",
+					validTill: item.validUntil ? item.validUntil.split("-").reverse().join("-") : "",
+					status: item.status
+				}));
+				setProposals(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching proposals:", err);
+		}
+	};
+
+	const fetchClients = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`);
+			if (res.ok) {
+				const data = await res.json();
+				setClients(data);
+			}
+		} catch (err) {
+			console.error("Error fetching clients:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchProposals();
+		fetchClients();
+	}, []);
+
 	const filteredProposals = proposals.filter(p => {
 		const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.id.toLowerCase().includes(searchQuery.toLowerCase());
 		const matchesLead = selectedLeadFilter === "All" || p.name === selectedLeadFilter;
 		return matchesSearch && matchesLead;
 	});
 
-	const handleAddProposalSubmit = (e: React.FormEvent) => {
+	const handleAddProposalSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		if (!newProposal.name || !newProposal.total || !newProposal.validTill) {
+			alert("Please fill in all required fields.");
+			return;
+		}
+
+		const matchedClient = clients.find(c => c.name.toLowerCase() === newProposal.name.toLowerCase());
+		const clientId = matchedClient ? matchedClient.id : (clients[0]?.id || "cli-1");
+
 		const padNum = String(proposals.length + 1).padStart(5, "0");
-		const pData: Proposal = {
-			id: `PROP${padNum}`,
-			name: newProposal.name,
-			total: parseFloat(newProposal.total) || 0,
-			date: newProposal.date.split("-").reverse().join("-"),
-			validTill: newProposal.validTill.split("-").reverse().join("-"),
+		const pData = {
+			proposalNumber: `PROP${padNum}`,
+			clientId: clientId,
+			amount: parseFloat(newProposal.total) || 0,
+			validUntil: newProposal.validTill,
 			status: "Sent"
 		};
-		setProposals(prev => [pData, ...prev]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/proposals`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(pData)
+			});
+			if (res.ok) {
+				fetchProposals();
+			}
+		} catch (err) {
+			console.error("Error creating proposal:", err);
+		}
+
 		setShowAddModal(false);
 		setNewProposal({ name: "", total: "", date: "", validTill: "" });
 	};

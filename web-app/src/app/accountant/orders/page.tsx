@@ -49,6 +49,32 @@ export default function OrdersPage() {
 		status: "Pending" as "Pending" | "Completed" | "Cancelled"
 	});
 
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
+	const fetchOrders = async () => {
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/orders`);
+			if (res.ok) {
+				const data = await res.json();
+				const mapped = data.map((item: any) => ({
+					id: item.id,
+					client: item.client,
+					total: item.total,
+					orderDate: item.orderDate ? item.orderDate.split("-").reverse().join("-") : "",
+					note: item.note || "No note",
+					status: item.status
+				}));
+				setOrders(mapped);
+			}
+		} catch (err) {
+			console.error("Error fetching orders:", err);
+		}
+	};
+
+	React.useEffect(() => {
+		fetchOrders();
+	}, []);
+
 	const filteredOrders = orders.filter(o => {
 		const matchesSearch = o.client.toLowerCase().includes(searchQuery.toLowerCase()) || 
 			o.note.toLowerCase().includes(searchQuery.toLowerCase());
@@ -56,31 +82,50 @@ export default function OrdersPage() {
 		return matchesSearch && matchesClient;
 	});
 
-	const handleAddOrderSubmit = (e: React.FormEvent) => {
+	const handleAddOrderSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!newOrder.client || !newOrder.total || !newOrder.orderDate) {
 			alert("Please fill in all required fields.");
 			return;
 		}
 
-		const formattedDate = newOrder.orderDate.split("-").reverse().join("-");
-		const orderData: Order = {
-			id: `ORD-${Date.now()}`,
+		const orderData = {
 			client: newOrder.client,
 			total: parseFloat(newOrder.total) || 0,
-			orderDate: formattedDate,
+			orderDate: newOrder.orderDate,
 			note: newOrder.note || "No note",
 			status: newOrder.status
 		};
 
-		setOrders(prev => [orderData, ...prev]);
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/orders`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(orderData)
+			});
+			if (res.ok) {
+				fetchOrders();
+			}
+		} catch (err) {
+			console.error("Error creating order:", err);
+		}
+
 		setShowAddModal(false);
 		setNewOrder({ client: "", total: "", orderDate: "", note: "", status: "Pending" });
 	};
 
-	const handleDeleteOrder = (id: string) => {
+	const handleDeleteOrder = async (id: string) => {
 		if (confirm(`Are you sure you want to delete order ${id}?`)) {
-			setOrders(prev => prev.filter(o => o.id !== id));
+			try {
+				const res = await fetch(`${FINANCE_API_URL}/orders?id=${id}`, {
+					method: "DELETE"
+				});
+				if (res.ok) {
+					fetchOrders();
+				}
+			} catch (err) {
+				console.error("Error deleting order:", err);
+			}
 		}
 	};
 
