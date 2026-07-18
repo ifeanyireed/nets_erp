@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -10,7 +11,7 @@ import (
 func HandleProposals(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT p.id, p.proposal_number, p.client_id, c.name, p.amount, p.status, p.valid_until, p.created_at " +
-			"FROM proposals p JOIN clients c ON p.client_id = c.id ORDER BY p.created_at DESC")
+			"FROM proposals p LEFT JOIN clients c ON p.client_id = c.id ORDER BY p.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -20,10 +21,15 @@ func HandleProposals(w http.ResponseWriter, r *http.Request) {
 		proposals := []Proposal{}
 		for rows.Next() {
 			var p Proposal
+			var clientName sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&p.ID, &p.ProposalNumber, &p.ClientID, &p.ClientName, &p.Amount, &p.Status, &p.ValidUntil, &createdAt); err != nil {
+			if err := rows.Scan(&p.ID, &p.ProposalNumber, &p.ClientID, &clientName, &p.Amount, &p.Status, &p.ValidUntil, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
+			}
+			p.ClientName = "Unknown Client"
+			if clientName.Valid {
+				p.ClientName = clientName.String
 			}
 			p.CreatedAt = createdAt
 			proposals = append(proposals, p)
@@ -65,7 +71,7 @@ func HandleProposals(w http.ResponseWriter, r *http.Request) {
 func HandleEstimates(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT e.id, e.estimate_number, e.client_id, c.name, e.amount, e.status, e.created_at " +
-			"FROM estimates e JOIN clients c ON e.client_id = c.id ORDER BY e.created_at DESC")
+			"FROM estimates e LEFT JOIN clients c ON e.client_id = c.id ORDER BY e.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -75,10 +81,15 @@ func HandleEstimates(w http.ResponseWriter, r *http.Request) {
 		estimates := []Estimate{}
 		for rows.Next() {
 			var e Estimate
+			var clientName sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&e.ID, &e.EstimateNumber, &e.ClientID, &e.ClientName, &e.Amount, &e.Status, &createdAt); err != nil {
+			if err := rows.Scan(&e.ID, &e.EstimateNumber, &e.ClientID, &clientName, &e.Amount, &e.Status, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
+			}
+			e.ClientName = "Unknown Client"
+			if clientName.Valid {
+				e.ClientName = clientName.String
 			}
 			e.CreatedAt = createdAt
 			estimates = append(estimates, e)
@@ -120,7 +131,7 @@ func HandleEstimates(w http.ResponseWriter, r *http.Request) {
 func HandleRetainers(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT re.id, re.retainer_number, re.client_id, c.name, re.amount, re.status, re.created_at " +
-			"FROM retainers re JOIN clients c ON re.client_id = c.id ORDER BY re.created_at DESC")
+			"FROM retainers re LEFT JOIN clients c ON re.client_id = c.id ORDER BY re.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -130,10 +141,15 @@ func HandleRetainers(w http.ResponseWriter, r *http.Request) {
 		retainers := []Retainer{}
 		for rows.Next() {
 			var re Retainer
+			var clientName sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&re.ID, &re.RetainerNumber, &re.ClientID, &re.ClientName, &re.Amount, &re.Status, &createdAt); err != nil {
+			if err := rows.Scan(&re.ID, &re.RetainerNumber, &re.ClientID, &clientName, &re.Amount, &re.Status, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
+			}
+			re.ClientName = "Unknown Client"
+			if clientName.Valid {
+				re.ClientName = clientName.String
 			}
 			re.CreatedAt = createdAt
 			retainers = append(retainers, re)
@@ -175,7 +191,7 @@ func HandleRetainers(w http.ResponseWriter, r *http.Request) {
 func HandleCreditNotes(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT cn.id, cn.credit_note_number, cn.client_id, c.name, cn.invoice_id, cn.amount, cn.reason, cn.status, cn.created_at " +
-			"FROM credit_notes cn JOIN clients c ON cn.client_id = c.id ORDER BY cn.created_at DESC")
+			"FROM credit_notes cn LEFT JOIN clients c ON cn.client_id = c.id ORDER BY cn.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -185,14 +201,23 @@ func HandleCreditNotes(w http.ResponseWriter, r *http.Request) {
 		creditNotes := []CreditNote{}
 		for rows.Next() {
 			var cn CreditNote
-			var invId, reason string
+			var clientName sql.NullString
+			var invId, reason sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&cn.ID, &cn.CreditNoteNumber, &cn.ClientID, &cn.ClientName, &invId, &cn.Amount, &reason, &cn.Status, &createdAt); err != nil {
+			if err := rows.Scan(&cn.ID, &cn.CreditNoteNumber, &cn.ClientID, &clientName, &invId, &cn.Amount, &reason, &cn.Status, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			cn.InvoiceID = &invId
-			cn.Reason = &reason
+			cn.ClientName = "Unknown Client"
+			if clientName.Valid {
+				cn.ClientName = clientName.String
+			}
+			if invId.Valid {
+				cn.InvoiceID = &invId.String
+			}
+			if reason.Valid {
+				cn.Reason = &reason.String
+			}
 			cn.CreatedAt = createdAt
 			creditNotes = append(creditNotes, cn)
 		}

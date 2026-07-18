@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -64,7 +65,7 @@ func HandleVendors(w http.ResponseWriter, r *http.Request) {
 func HandleBills(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT b.id, b.bill_number, b.vendor_id, v.name, b.amount, b.due_date, b.status, b.description, b.created_at " +
-			"FROM bills b JOIN vendors v ON b.vendor_id = v.id ORDER BY b.created_at DESC")
+			"FROM bills b LEFT JOIN vendors v ON b.vendor_id = v.id ORDER BY b.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -74,13 +75,20 @@ func HandleBills(w http.ResponseWriter, r *http.Request) {
 		bills := []Bill{}
 		for rows.Next() {
 			var b Bill
-			var desc string
+			var vendorName sql.NullString
+			var desc sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&b.ID, &b.BillNumber, &b.VendorID, &b.VendorName, &b.Amount, &b.DueDate, &b.Status, &desc, &createdAt); err != nil {
+			if err := rows.Scan(&b.ID, &b.BillNumber, &b.VendorID, &vendorName, &b.Amount, &b.DueDate, &b.Status, &desc, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			b.Description = &desc
+			b.VendorName = "Unknown Vendor"
+			if vendorName.Valid {
+				b.VendorName = vendorName.String
+			}
+			if desc.Valid {
+				b.Description = &desc.String
+			}
 			b.CreatedAt = createdAt
 			bills = append(bills, b)
 		}
@@ -126,7 +134,7 @@ func HandleBills(w http.ResponseWriter, r *http.Request) {
 func HandleDebitNotes(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT dn.id, dn.debit_note_number, dn.vendor_id, v.name, dn.bill_id, dn.amount, dn.reason, dn.status, dn.created_at " +
-			"FROM debit_notes dn JOIN vendors v ON dn.vendor_id = v.id ORDER BY dn.created_at DESC")
+			"FROM debit_notes dn LEFT JOIN vendors v ON dn.vendor_id = v.id ORDER BY dn.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -136,14 +144,23 @@ func HandleDebitNotes(w http.ResponseWriter, r *http.Request) {
 		debitNotes := []DebitNote{}
 		for rows.Next() {
 			var dn DebitNote
-			var billId, reason string
+			var vendorName sql.NullString
+			var billId, reason sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&dn.ID, &dn.DebitNoteNumber, &dn.VendorID, &dn.VendorName, &billId, &dn.Amount, &reason, &dn.Status, &createdAt); err != nil {
+			if err := rows.Scan(&dn.ID, &dn.DebitNoteNumber, &dn.VendorID, &vendorName, &billId, &dn.Amount, &reason, &dn.Status, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			dn.BillID = &billId
-			dn.Reason = &reason
+			dn.VendorName = "Unknown Vendor"
+			if vendorName.Valid {
+				dn.VendorName = vendorName.String
+			}
+			if billId.Valid {
+				dn.BillID = &billId.String
+			}
+			if reason.Valid {
+				dn.Reason = &reason.String
+			}
 			dn.CreatedAt = createdAt
 			debitNotes = append(debitNotes, dn)
 		}

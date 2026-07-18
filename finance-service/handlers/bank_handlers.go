@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -67,7 +68,7 @@ func HandleBankAccounts(w http.ResponseWriter, r *http.Request) {
 func HandleBankReconciliations(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		rows, err := db.Query("SELECT br.id, br.bank_account_id, ba.name, br.statement_date, br.ending_balance, br.reconciled_balance, br.difference, br.status, br.prepared_by, br.notes, br.created_at " +
-			"FROM bank_reconciliations br JOIN bank_accounts ba ON br.bank_account_id = ba.id ORDER BY br.created_at DESC")
+			"FROM bank_reconciliations br LEFT JOIN bank_accounts ba ON br.bank_account_id = ba.id ORDER BY br.created_at DESC")
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -77,13 +78,20 @@ func HandleBankReconciliations(w http.ResponseWriter, r *http.Request) {
 		reconciles := []BankReconciliation{}
 		for rows.Next() {
 			var br BankReconciliation
-			var notes string
+			var bankAccountName sql.NullString
+			var notes sql.NullString
 			var createdAt time.Time
-			if err := rows.Scan(&br.ID, &br.BankAccountID, &br.BankAccountName, &br.StatementDate, &br.EndingBalance, &br.ReconciledBalance, &br.Difference, &br.Status, &br.PreparedBy, &notes, &createdAt); err != nil {
+			if err := rows.Scan(&br.ID, &br.BankAccountID, &bankAccountName, &br.StatementDate, &br.EndingBalance, &br.ReconciledBalance, &br.Difference, &br.Status, &br.PreparedBy, &notes, &createdAt); err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
 			}
-			br.Notes = &notes
+			br.BankAccountName = "Unknown Account"
+			if bankAccountName.Valid {
+				br.BankAccountName = bankAccountName.String
+			}
+			if notes.Valid {
+				br.Notes = &notes.String
+			}
 			br.CreatedAt = createdAt
 			reconciles = append(reconciles, br)
 		}
