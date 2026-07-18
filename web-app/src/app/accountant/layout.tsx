@@ -655,7 +655,6 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 
 					</div>
 				)}
-			</ERPLayout>
 
 				{/* MODAL 5: ADD ACCOUNT FORM */}
 				{showAddAccountModal && (
