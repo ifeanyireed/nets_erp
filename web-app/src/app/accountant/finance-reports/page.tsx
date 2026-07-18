@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+
 import { 
 	IconDownload, 
 	IconSearch,
@@ -188,38 +190,48 @@ export default function FinanceReportsPage() {
 				</div>
 			</div>
 
-			{/* Choose a report view cards */}
+			{/* Choose a report view cards as a toggle slider */}
 			<div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/40 flex flex-col gap-4 text-left">
 				<span className="text-[10px] font-bold text-red-500 uppercase tracking-wider">Finance Reports</span>
 				<h3 className="font-extrabold text-slate-800 text-sm -mt-2">Choose a report view</h3>
 				
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mt-1">
-					{reportViews.map(view => (
-						<button
-							key={view.id}
-							onClick={() => {
-								setActiveReportView(view.id);
-								setSearchQuery("");
-							}}
-							className={`p-4 rounded-3xl border text-left flex flex-col gap-3.5 transition-all cursor-pointer select-none active:scale-[0.98] ${
-								activeReportView === view.id
-									? "bg-red-50/70 border-red-200 text-red-650 shadow-[0_4px_12px_rgba(239,68,68,0.04)]"
-									: "bg-white border-gray-100 text-slate-605 hover:bg-slate-50 hover:border-gray-200"
-							}`}
-						>
-							<div className={`w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
-								activeReportView === view.id
-									? "bg-red-500 text-white animate-pulse"
-									: "bg-slate-50 text-slate-500"
-							}`}>
-								{view.icon}
-							</div>
-							<div>
-								<p className="text-[11px] font-black leading-tight">{view.title}</p>
-								<p className="text-[9px] text-slate-455 font-semibold mt-1 leading-normal">{view.desc}</p>
-							</div>
-						</button>
-					))}
+				<div className="bg-slate-50/60 border border-slate-100/80 rounded-[28px] p-2 flex items-center gap-3 overflow-x-auto scrollbar-hide">
+					{reportViews.map(view => {
+						const isActive = activeReportView === view.id;
+						return (
+							<button
+								key={view.id}
+								onClick={() => {
+									setActiveReportView(view.id);
+									setSearchQuery("");
+								}}
+								className={`relative p-4 rounded-3xl border text-left flex flex-col gap-3.5 transition-all cursor-pointer select-none active:scale-[0.98] shrink-0 w-44 ${
+									isActive
+										? "border-transparent text-red-650 shadow-[0_4px_12px_rgba(239,68,68,0.04)]"
+										: "bg-white border-gray-100 text-slate-605 hover:bg-slate-50 hover:border-gray-200"
+								}`}
+							>
+								{isActive && (
+									<motion.div
+										layoutId="activeReportViewPill"
+										className="absolute inset-0 bg-red-50/70 border border-red-200 rounded-3xl z-0"
+										transition={{ type: "spring", stiffness: 380, damping: 30 }}
+									/>
+								)}
+								<div className={`relative z-10 w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
+									isActive
+										? "bg-red-500 text-white animate-pulse"
+										: "bg-slate-50 text-slate-500"
+								}`}>
+									{view.icon}
+								</div>
+								<div className="relative z-10">
+									<p className="text-[11px] font-black leading-tight">{view.title}</p>
+									<p className="text-[9px] text-slate-455 font-semibold mt-1 leading-normal">{view.desc}</p>
+								</div>
+							</button>
+						);
+					})}
 				</div>
 			</div>
 
