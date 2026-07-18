@@ -404,6 +404,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                      pathname.startsWith("/accountant/proposals") ||
                      pathname.startsWith("/accountant/retainers") ||
                      pathname.startsWith("/accountant/estimates") ||
+                     pathname.startsWith("/accountant/orders") ||
                      pathname.startsWith("/accountant/invoices") ||
                      pathname.startsWith("/accountant/payments") ||
                      pathname.startsWith("/accountant/credit-notes")
@@ -573,6 +574,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                  pathname.startsWith("/accountant/proposals") ||
                  pathname.startsWith("/accountant/retainers") ||
                  pathname.startsWith("/accountant/estimates") ||
+                 pathname.startsWith("/accountant/orders") ||
                  pathname.startsWith("/accountant/invoices") ||
                  pathname.startsWith("/accountant/payments") ||
                  pathname.startsWith("/accountant/credit-notes")

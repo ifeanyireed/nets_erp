@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import SubNavTabs from "@/components/nets_erp/SubNavTabs";
 import { 
 	IconPlus, 
 	IconDownload, 
@@ -15,11 +16,12 @@ import {
 const CLIENTS_TABS = [
 	{ id: "clients", label: "Clients", slug: "/accountant/clients" },
 	{ id: "proposals", label: "Proposals", slug: "/accountant/proposals" },
-	{ id: "retainers", label: "Retainers", slug: "/accountant/retainers" },
 	{ id: "estimates", label: "Estimates", slug: "/accountant/estimates" },
+	{ id: "orders", label: "Orders", slug: "/accountant/orders" },
 	{ id: "invoices", label: "Invoices", slug: "/accountant/invoices" },
 	{ id: "payments", label: "Payments", slug: "/accountant/payments" },
-	{ id: "credit-notes", label: "Credit Notes", slug: "/accountant/credit-notes" }
+	{ id: "credit-notes", label: "Credit Notes", slug: "/accountant/credit-notes" },
+	{ id: "retainers", label: "Retainers", slug: "/accountant/retainers" }
 ];
 
 interface Proposal {
@@ -136,19 +138,7 @@ export default function ProposalsPage() {
 
 			{/* Sub-menu Tabs */}
 			<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-				{CLIENTS_TABS.map((tab) => (
-					<button
-						key={tab.id}
-						onClick={() => router.push(tab.slug)}
-						className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-							tab.id === "proposals"
-								? "border-red-500 text-red-500 font-bold"
-								: "border-transparent text-slate-400 hover:text-slate-700"
-						}`}
-					>
-						{tab.label}
-					</button>
-				))}
+				<SubNavTabs tabs={CLIENTS_TABS} activeTabId="proposals" colorTheme="red" />
 			</div>
 
 			{/* Info Banner */}
