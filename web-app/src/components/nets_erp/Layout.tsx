@@ -392,9 +392,9 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           {/* Menu Items */}
           <nav className="space-y-1.5">
             {sidebarItems.map((item) => {
-              const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
+              const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin", "/accountant"].includes(item.route);
               const otherItemMatches = sidebarItems
-                .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin"].includes(sibling.route))
+                .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin", "/accountant"].includes(sibling.route))
                 .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route.split("?")[0] + "/"));
 
               const isActive = isDashboard 
@@ -538,11 +538,11 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
         }}
       >
         {sidebarItems.map((item) => {
-          const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin"].includes(item.route);
+          const isDashboard = ["/employee", "/manager", "/hr", "/md", "/admin", "/accountant"].includes(item.route);
           
           // Check if any other sibling tab matches the current path to avoid overlapping activation
           const otherItemMatches = sidebarItems
-            .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin"].includes(sibling.route))
+            .filter(sibling => sibling.route !== item.route && !["/employee", "/manager", "/hr", "/md", "/admin", "/accountant"].includes(sibling.route))
             .some(sibling => pathname === sibling.route || pathname.startsWith(sibling.route.split("?")[0] + "/"));
 
           const isActive = isDashboard 
