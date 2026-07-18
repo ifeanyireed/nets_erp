@@ -190,12 +190,12 @@ export default function FinanceReportsPage() {
 				</div>
 			</div>
 
-			{/* Choose a report view cards as a toggle slider */}
+			{/* Choose a report view toggle slider */}
 			<div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/40 flex flex-col gap-4 text-left">
 				<span className="text-[10px] font-bold text-red-500 uppercase tracking-wider">Finance Reports</span>
 				<h3 className="font-extrabold text-slate-800 text-sm -mt-2">Choose a report view</h3>
 				
-				<div className="bg-slate-50/60 border border-slate-100/80 rounded-[28px] p-2 flex items-center gap-3 overflow-x-auto scrollbar-hide">
+				<div className="bg-red-50/40 border border-red-100/50 rounded-full p-1.5 flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-max">
 					{reportViews.map(view => {
 						const isActive = activeReportView === view.id;
 						return (
@@ -205,30 +205,23 @@ export default function FinanceReportsPage() {
 									setActiveReportView(view.id);
 									setSearchQuery("");
 								}}
-								className={`relative p-4 rounded-3xl border text-left flex flex-col gap-3.5 transition-all cursor-pointer select-none active:scale-[0.98] shrink-0 w-44 ${
+								title={view.title}
+								className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer select-none active:scale-90 shrink-0 ${
 									isActive
-										? "border-transparent text-red-650 shadow-[0_4px_12px_rgba(239,68,68,0.04)]"
-										: "bg-white border-gray-100 text-slate-605 hover:bg-slate-50 hover:border-gray-200"
+										? "text-white shadow-md shadow-red-500/25"
+										: "bg-white/80 border border-red-100/30 text-slate-500 hover:bg-white hover:text-slate-700"
 								}`}
 							>
 								{isActive && (
 									<motion.div
-										layoutId="activeReportViewPill"
-										className="absolute inset-0 bg-red-50/70 border border-red-200 rounded-3xl z-0"
+										layoutId="activeReportCircleBg"
+										className="absolute inset-0 bg-red-500 rounded-full z-0"
 										transition={{ type: "spring", stiffness: 380, damping: 30 }}
 									/>
 								)}
-								<div className={`relative z-10 w-9 h-9 rounded-2xl flex items-center justify-center transition-all ${
-									isActive
-										? "bg-red-500 text-white animate-pulse"
-										: "bg-slate-50 text-slate-500"
-								}`}>
+								<span className="relative z-10">
 									{view.icon}
-								</div>
-								<div className="relative z-10">
-									<p className="text-[11px] font-black leading-tight">{view.title}</p>
-									<p className="text-[9px] text-slate-455 font-semibold mt-1 leading-normal">{view.desc}</p>
-								</div>
+								</span>
 							</button>
 						);
 					})}
