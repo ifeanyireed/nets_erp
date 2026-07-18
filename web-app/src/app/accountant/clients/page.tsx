@@ -17,6 +17,12 @@ import {
 
 const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
 
+const RELATIONS_TABS = [
+	{ id: "clients", label: "Clients", slug: "/accountant/clients" },
+	{ id: "vendors", label: "Vendors", slug: "/accountant/vendors" },
+	{ id: "bills", label: "Bills", slug: "/accountant/bills" }
+];
+
 interface Client {
 	id: string | number;
 	name: string;
@@ -346,6 +352,23 @@ export default function AccountantClients() {
 			<div>
 				<h2 className="text-[20px] font-black text-slate-800 tracking-tight">Clients</h2>
 				<p className="text-xs text-slate-450 font-semibold mt-1">Manage corporate clients, contacts, and account statuses</p>
+			</div>
+
+			{/* Sub-menu Tabs */}
+			<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
+				{RELATIONS_TABS.map((tab) => (
+					<button
+						key={tab.id}
+						onClick={() => router.push(tab.slug)}
+						className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
+							tab.id === "clients"
+								? "border-red-500 text-red-500 font-bold"
+								: "border-transparent text-slate-400 hover:text-slate-700"
+						}`}
+					>
+						{tab.label}
+					</button>
+				))}
 			</div>
 			
 			{/* Top Toolbars & Buttons */}

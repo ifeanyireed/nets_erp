@@ -497,7 +497,7 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 	};
 
 	const activeTab = getActiveTab();
-	const isClientsPage = pathname.includes("/clients");
+	const isClientsPage = pathname.includes("/clients") || pathname.includes("/vendors") || pathname.includes("/bills");
 
 	const getHeaderContent = () => {
 		switch (activeTab) {
