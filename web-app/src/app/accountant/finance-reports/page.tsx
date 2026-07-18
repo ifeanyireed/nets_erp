@@ -195,7 +195,7 @@ export default function FinanceReportsPage() {
 				<span className="text-[10px] font-bold text-red-500 uppercase tracking-wider">Finance Reports</span>
 				<h3 className="font-extrabold text-slate-800 text-sm -mt-2">Choose a report view</h3>
 				
-				<div className="bg-red-50/40 border border-red-100/50 rounded-full p-1.5 flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-max">
+				<div className="bg-red-50/40 border border-red-100/50 rounded-3xl p-3 flex items-start gap-4 overflow-x-auto scrollbar-hide max-w-max">
 					{reportViews.map(view => {
 						const isActive = activeReportView === view.id;
 						return (
@@ -205,22 +205,28 @@ export default function FinanceReportsPage() {
 									setActiveReportView(view.id);
 									setSearchQuery("");
 								}}
-								title={view.title}
-								className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer select-none active:scale-90 shrink-0 ${
+								className="relative flex flex-col items-center gap-1.5 cursor-pointer select-none active:scale-95 shrink-0 group"
+							>
+								<div className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
 									isActive
 										? "text-white shadow-md shadow-red-500/25"
-										: "bg-white/80 border border-red-100/30 text-slate-500 hover:bg-white hover:text-slate-700"
-								}`}
-							>
-								{isActive && (
-									<motion.div
-										layoutId="activeReportCircleBg"
-										className="absolute inset-0 bg-red-500 rounded-full z-0"
-										transition={{ type: "spring", stiffness: 380, damping: 30 }}
-									/>
-								)}
-								<span className="relative z-10">
-									{view.icon}
+										: "bg-white/80 border border-red-100/30 text-slate-500 group-hover:bg-white group-hover:text-slate-700"
+								}`}>
+									{isActive && (
+										<motion.div
+											layoutId="activeReportCircleBg"
+											className="absolute inset-0 bg-red-500 rounded-full z-0"
+											transition={{ type: "spring", stiffness: 380, damping: 30 }}
+										/>
+									)}
+									<span className="relative z-10">
+										{view.icon}
+									</span>
+								</div>
+								<span className={`text-[10px] font-extrabold tracking-tight transition-colors duration-300 ${
+									isActive ? "text-red-600" : "text-slate-500 group-hover:text-slate-700"
+								}`}>
+									{view.title}
 								</span>
 							</button>
 						);
