@@ -17,11 +17,14 @@ import {
 
 const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
 
-const RELATIONS_TABS = [
+const CLIENTS_TABS = [
 	{ id: "clients", label: "Clients", slug: "/accountant/clients" },
-	{ id: "vendors", label: "Vendors", slug: "/accountant/vendors" },
-	{ id: "bills", label: "Bills", slug: "/accountant/bills" },
-	{ id: "debit-notes", label: "Debit Notes", slug: "/accountant/debit-notes" }
+	{ id: "proposals", label: "Proposals", slug: "/accountant/proposals" },
+	{ id: "retainers", label: "Retainers", slug: "/accountant/retainers" },
+	{ id: "estimates", label: "Estimates", slug: "/accountant/estimates" },
+	{ id: "invoices", label: "Invoices", slug: "/accountant/invoices" },
+	{ id: "payments", label: "Payments", slug: "/accountant/payments" },
+	{ id: "credit-notes", label: "Credit Notes", slug: "/accountant/credit-notes" }
 ];
 
 interface Client {
@@ -357,7 +360,7 @@ export default function AccountantClients() {
 
 			{/* Sub-menu Tabs */}
 			<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-				{RELATIONS_TABS.map((tab) => (
+				{CLIENTS_TABS.map((tab) => (
 					<button
 						key={tab.id}
 						onClick={() => router.push(tab.slug)}

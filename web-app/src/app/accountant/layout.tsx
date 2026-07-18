@@ -481,7 +481,6 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 	const navTabs = [
 		{ id: "overview", label: "Finance Hub", slug: "/accountant/overview" },
 		{ id: "coa", label: "Chart of Accounts", slug: "/accountant/coa" },
-		{ id: "invoices", label: "Invoices (Aged Receivables)", slug: "/accountant/invoices" },
 		{ id: "expenses", label: "Imprest & Expenses (Payables)", slug: "/accountant/expenses" },
 		{ id: "reconcile", label: "Bank Reconciliation", slug: "/accountant/reconcile" },
 		{ id: "ledger", label: "General Journal Ledger", slug: "/accountant/ledger" }
@@ -489,7 +488,6 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 
 	const getActiveTab = () => {
 		if (pathname.includes("/coa")) return "coa";
-		if (pathname.includes("/invoices")) return "invoices";
 		if (pathname.includes("/expenses")) return "expenses";
 		if (pathname.includes("/reconcile")) return "reconcile";
 		if (pathname.includes("/ledger")) return "ledger";
@@ -497,7 +495,20 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 	};
 
 	const activeTab = getActiveTab();
-	const isClientsPage = pathname.includes("/clients") || pathname.includes("/vendors") || pathname.includes("/bills") || pathname.includes("/debit-notes") || pathname.includes("/bank-accounts") || pathname.includes("/banking") || pathname.includes("/products") || pathname.includes("/product-stock");
+	const isClientsPage = pathname.includes("/clients") || 
+		pathname.includes("/vendors") || 
+		pathname.includes("/bills") || 
+		pathname.includes("/debit-notes") || 
+		pathname.includes("/bank-accounts") || 
+		pathname.includes("/banking") || 
+		pathname.includes("/products") || 
+		pathname.includes("/product-stock") ||
+		pathname.includes("/proposals") ||
+		pathname.includes("/retainers") ||
+		pathname.includes("/estimates") ||
+		pathname.includes("/invoices") ||
+		pathname.includes("/payments") ||
+		pathname.includes("/credit-notes");
 
 	const getHeaderContent = () => {
 		switch (activeTab) {
@@ -505,11 +516,6 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 				return {
 					title: "Chart of Accounts (COA)",
 					desc: "Organize and manage your general ledger accounts, codes, classifications, and balance sides."
-				};
-			case "invoices":
-				return {
-					title: "Invoices (Aged Receivables)",
-					desc: "Track customer invoices, payment statuses, due dates, and outstanding collections."
 				};
 			case "expenses":
 				return {

@@ -389,7 +389,17 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
                 : (pathname === item.route.split("?")[0] || 
                    pathname.startsWith(item.route.split("?")[0] + "/") ||
-                   (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills") || pathname.startsWith("/accountant/debit-notes"))) ||
+                   (item.route === "/accountant/clients" && (
+                     pathname.startsWith("/accountant/vendors") || 
+                     pathname.startsWith("/accountant/bills") || 
+                     pathname.startsWith("/accountant/debit-notes") ||
+                     pathname.startsWith("/accountant/proposals") ||
+                     pathname.startsWith("/accountant/retainers") ||
+                     pathname.startsWith("/accountant/estimates") ||
+                     pathname.startsWith("/accountant/invoices") ||
+                     pathname.startsWith("/accountant/payments") ||
+                     pathname.startsWith("/accountant/credit-notes")
+                   )) ||
                    (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                    (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));
               return (
@@ -505,7 +515,17 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
             ? (pathname === item.route || (!otherItemMatches && pathname.startsWith(item.route)))
             : (pathname === item.route.split("?")[0] || 
                pathname.startsWith(item.route.split("?")[0] + "/") ||
-               (item.route === "/accountant/clients" && (pathname.startsWith("/accountant/vendors") || pathname.startsWith("/accountant/bills") || pathname.startsWith("/accountant/debit-notes"))) ||
+               (item.route === "/accountant/clients" && (
+                 pathname.startsWith("/accountant/vendors") || 
+                 pathname.startsWith("/accountant/bills") || 
+                 pathname.startsWith("/accountant/debit-notes") ||
+                 pathname.startsWith("/accountant/proposals") ||
+                 pathname.startsWith("/accountant/retainers") ||
+                 pathname.startsWith("/accountant/estimates") ||
+                 pathname.startsWith("/accountant/invoices") ||
+                 pathname.startsWith("/accountant/payments") ||
+                 pathname.startsWith("/accountant/credit-notes")
+               )) ||
                (item.route === "/accountant/bank-accounts" && pathname.startsWith("/accountant/banking")) ||
                (item.route === "/accountant/products" && pathname.startsWith("/accountant/product-stock")));
           return (
