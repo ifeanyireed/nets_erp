@@ -309,8 +309,6 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
           { name: "Inventory", route: "/accountant/products", icon: <BoxIcon /> },
           { name: "Reports", route: "/accountant/finance-reports", icon: <BarChartIcon /> },
           { name: "Payment", route: "/accountant/payment-processing", icon: <PaymentIcon /> },
-          { name: "My Reviews", route: "/employee/reviews", icon: <FileTextIcon /> },
-          { name: "My Profile", route: "/employee/profile", icon: <UserIcon /> },
         ];
       default:
         return [];
