@@ -12,7 +12,6 @@ export default function LoadingScreen({ message = "Synchronizing performance dat
           <div className="absolute inset-0 bg-red-500/20 rounded-full blur-xl animate-pulse" />
           
           {/* Inner Spinning Ring */}
-          <div className="absolute inset-0 rounded-full border-4 border-slate-100/80" />
           <div className="absolute inset-0 rounded-full border-4 border-t-red-500 border-l-red-500 animate-spin" />
 
           {/* Core Logo Dot - replaced with favicon */}
