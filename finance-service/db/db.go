@@ -142,6 +142,220 @@ func setupSchema() error {
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS accounts (
+			id VARCHAR(36) PRIMARY KEY,
+			code VARCHAR(50) UNIQUE NOT NULL,
+			name VARCHAR(255) NOT NULL,
+			category VARCHAR(50) NOT NULL,
+			normal_balance VARCHAR(50) NOT NULL,
+			opening_balance DECIMAL(15, 2) DEFAULT 0.00,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS journal_entries (
+			id VARCHAR(36) PRIMARY KEY,
+			entry_date DATE NOT NULL,
+			reference_no VARCHAR(100) UNIQUE NULL,
+			description TEXT NULL,
+			status VARCHAR(50) DEFAULT 'Draft',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS journal_items (
+			id VARCHAR(36) PRIMARY KEY,
+			journal_entry_id VARCHAR(36) NOT NULL,
+			account_id VARCHAR(36) NOT NULL,
+			description TEXT NULL,
+			debit DECIMAL(15, 2) DEFAULT 0.00,
+			credit DECIMAL(15, 2) DEFAULT 0.00,
+			FOREIGN KEY (journal_entry_id) REFERENCES journal_entries(id) ON DELETE CASCADE,
+			FOREIGN KEY (account_id) REFERENCES accounts(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS recurring_journals (
+			id VARCHAR(36) PRIMARY KEY,
+			profile_name VARCHAR(255) NOT NULL,
+			frequency VARCHAR(50) NOT NULL,
+			start_date DATE NOT NULL,
+			end_date DATE NULL,
+			next_run_date DATE NOT NULL,
+			status VARCHAR(50) DEFAULT 'Active',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS proposals (
+			id VARCHAR(36) PRIMARY KEY,
+			proposal_number VARCHAR(100) UNIQUE NOT NULL,
+			client_id VARCHAR(36) NOT NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Draft',
+			valid_until DATE NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (client_id) REFERENCES clients(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS estimates (
+			id VARCHAR(36) PRIMARY KEY,
+			estimate_number VARCHAR(100) UNIQUE NOT NULL,
+			client_id VARCHAR(36) NOT NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Draft',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (client_id) REFERENCES clients(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS retainers (
+			id VARCHAR(36) PRIMARY KEY,
+			retainer_number VARCHAR(100) UNIQUE NOT NULL,
+			client_id VARCHAR(36) NOT NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Pending',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (client_id) REFERENCES clients(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS credit_notes (
+			id VARCHAR(36) PRIMARY KEY,
+			credit_note_number VARCHAR(100) UNIQUE NOT NULL,
+			client_id VARCHAR(36) NOT NULL,
+			invoice_id VARCHAR(36) NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			reason TEXT NULL,
+			status VARCHAR(50) DEFAULT 'Unused',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (client_id) REFERENCES clients(id),
+			FOREIGN KEY (invoice_id) REFERENCES invoices(id) ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS vendors (
+			id VARCHAR(36) PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			email VARCHAR(255) NOT NULL,
+			phone VARCHAR(100) NOT NULL,
+			company_name VARCHAR(255) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Active',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS bills (
+			id VARCHAR(36) PRIMARY KEY,
+			bill_number VARCHAR(100) UNIQUE NOT NULL,
+			vendor_id VARCHAR(36) NOT NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			due_date DATE NOT NULL,
+			status VARCHAR(50) DEFAULT 'Unpaid',
+			description TEXT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (vendor_id) REFERENCES vendors(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS debit_notes (
+			id VARCHAR(36) PRIMARY KEY,
+			debit_note_number VARCHAR(100) UNIQUE NOT NULL,
+			vendor_id VARCHAR(36) NOT NULL,
+			bill_id VARCHAR(36) NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			reason TEXT NULL,
+			status VARCHAR(50) DEFAULT 'Unused',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (vendor_id) REFERENCES vendors(id),
+			FOREIGN KEY (bill_id) REFERENCES bills(id) ON DELETE SET NULL
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS bank_accounts (
+			id VARCHAR(36) PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			account_no VARCHAR(100) NOT NULL,
+			bank_name VARCHAR(255) NOT NULL,
+			currency VARCHAR(10) DEFAULT 'NGN',
+			status VARCHAR(50) DEFAULT 'Active',
+			balance DECIMAL(15, 2) DEFAULT 0.00,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS bank_reconciliations (
+			id VARCHAR(36) PRIMARY KEY,
+			bank_account_id VARCHAR(36) NOT NULL,
+			statement_date DATE NOT NULL,
+			ending_balance DECIMAL(15, 2) NOT NULL,
+			reconciled_balance DECIMAL(15, 2) NOT NULL,
+			difference DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'In Progress',
+			prepared_by VARCHAR(255) NOT NULL,
+			notes TEXT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (bank_account_id) REFERENCES bank_accounts(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS products (
+			id VARCHAR(36) PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			sku VARCHAR(100) UNIQUE NOT NULL,
+			type VARCHAR(50) NOT NULL,
+			sale_price DECIMAL(15, 2) NOT NULL,
+			purchase_price DECIMAL(15, 2) NOT NULL,
+			quantity DECIMAL(15, 6) DEFAULT 0.00,
+			can_purchase BOOLEAN DEFAULT TRUE,
+			image VARCHAR(255) DEFAULT '/favicon.png',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS inventory_transactions (
+			id VARCHAR(36) PRIMARY KEY,
+			product_id VARCHAR(36) NOT NULL,
+			transaction_type VARCHAR(50) NOT NULL,
+			quantity DECIMAL(15, 6) NOT NULL,
+			reference VARCHAR(255) NULL,
+			date DATE NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			FOREIGN KEY (product_id) REFERENCES products(id)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS payrolls (
+			id VARCHAR(36) PRIMARY KEY,
+			period_month INT NOT NULL,
+			period_year INT NOT NULL,
+			total_amount DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Draft',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS employee_salaries (
+			id VARCHAR(36) PRIMARY KEY,
+			payroll_id VARCHAR(36) NOT NULL,
+			employee_name VARCHAR(255) NOT NULL,
+			basic_salary DECIMAL(15, 2) NOT NULL,
+			allowances DECIMAL(15, 2) DEFAULT 0.00,
+			deductions DECIMAL(15, 2) DEFAULT 0.00,
+			net_salary DECIMAL(15, 2) NOT NULL,
+			status VARCHAR(50) DEFAULT 'Pending',
+			FOREIGN KEY (payroll_id) REFERENCES payrolls(id) ON DELETE CASCADE
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS statutory_remittances (
+			id VARCHAR(36) PRIMARY KEY,
+			type VARCHAR(50) NOT NULL,
+			amount DECIMAL(15, 2) NOT NULL,
+			period_month INT NOT NULL,
+			period_year INT NOT NULL,
+			due_date DATE NOT NULL,
+			status VARCHAR(50) DEFAULT 'Pending',
+			payment_date DATE NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS orders (
+			id VARCHAR(36) PRIMARY KEY,
+			client VARCHAR(255) NOT NULL,
+			total DECIMAL(15, 2) NOT NULL,
+			order_date DATE NOT NULL,
+			note TEXT NULL,
+			status VARCHAR(50) DEFAULT 'Pending',
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 	}
 
 	for i, q := range queries {
