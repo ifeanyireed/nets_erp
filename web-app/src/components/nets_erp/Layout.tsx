@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useERPStore, Role, User } from "@/lib/erp-store";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "./LoadingScreen";
 import { IconBuildingBank } from "@tabler/icons-react";
 
@@ -313,11 +313,7 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
   const sidebarItems = getSidebarItems();
 
   if (!currentUser) {
-    return (
-      <div className="min-h-screen bg-[#E2E5E9] flex items-center justify-center">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen message="Authenticating session..." />;
   }
 
   return (
@@ -440,17 +436,28 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
                 <button
                   key={item.name}
                   onClick={() => router.push(item.route)}
-                  className={`w-full flex items-center ${isCollapsed ? "justify-center px-1" : "gap-3.5 px-3.5"} py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
+                  className={`relative w-full flex items-center ${isCollapsed ? "justify-center px-1" : "gap-3.5 px-3.5"} py-2.5 rounded-xl text-[14px] font-semibold tracking-wide transition-all duration-300 ${
                     isActive
-                      ? "bg-white text-blue-600 font-bold shadow-[0_4px_12px_rgba(0,0,0,0.03)] border border-transparent"
+                      ? "text-blue-600 font-bold"
                       : "text-slate-500 hover:text-slate-800 hover:bg-white/40"
                   }`}
                   title={isCollapsed ? item.name : undefined}
                 >
-                  <span className={isActive ? "text-blue-600" : "text-slate-450"}>
+                  {isActive && (
+                    <motion.div
+                      layoutId="sidebarActiveBg"
+                      className="absolute inset-0 bg-white rounded-xl z-0 border border-slate-100/50 shadow-[0_4px_12px_rgba(0,0,0,0.02)]"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  <span className={`relative z-10 ${isActive ? "text-blue-600" : "text-slate-450"}`}>
                     {item.icon}
                   </span>
-                  {!isCollapsed && item.name}
+                  {!isCollapsed && (
+                    <span className="relative z-10">
+                      {item.name}
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -523,7 +530,17 @@ export default function ERPLayout({ children }: { children: React.ReactNode }) {
 
         {/* MAIN PAGE CONTENT WRAPPER */}
         <div className="flex-1">
-          {children}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
       </main>

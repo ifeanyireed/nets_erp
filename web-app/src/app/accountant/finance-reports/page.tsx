@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import SubNavTabs from "@/components/nets_erp/SubNavTabs";
 
 import { 
 	IconDownload, 
@@ -173,21 +174,7 @@ export default function FinanceReportsPage() {
 
 			{/* Sub-menu Tabs */}
 			<div className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100/40">
-				<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-					{REPORTS_TABS.map((tab) => (
-						<button
-							key={tab.id}
-							onClick={() => router.push(tab.slug)}
-							className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-								tab.id === "finance-reports"
-									? "border-red-500 text-red-500 font-bold"
-									: "border-transparent text-slate-400 hover:text-slate-700"
-							}`}
-						>
-							{tab.label}
-						</button>
-					))}
-				</div>
+				<SubNavTabs tabs={REPORTS_TABS} activeTabId="finance-reports" colorTheme="red" />
 			</div>
 
 			{/* Choose a report view toggle slider */}

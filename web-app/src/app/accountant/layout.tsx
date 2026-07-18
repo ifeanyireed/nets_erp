@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useERPStore, User } from "@/lib/erp-store";
+import { motion } from "framer-motion";
 import ERPLayout from "@/components/nets_erp/Layout";
 import { FinanceContext, Stats, Expense, Invoice, Reconciliation, Transaction } from "./FinanceContext";
 
@@ -639,19 +640,29 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 
 						{/* Nav Tabs */}
 						<div className="flex border-b border-gray-200 overflow-x-auto scrollbar-hide gap-1">
-							{navTabs.map((tab) => (
-								<button
-									key={tab.id}
-									onClick={() => router.push(tab.slug)}
-									className={`px-5 py-3 font-extrabold text-xs whitespace-nowrap border-b-2 transition-all cursor-pointer ${
-										activeTab === tab.id
-											? "border-blue-600 text-blue-600"
-											: "border-transparent text-slate-400 hover:text-slate-700"
-									}`}
-								>
-									{tab.label}
-								</button>
-							))}
+							{navTabs.map((tab) => {
+								const isActive = activeTab === tab.id;
+								return (
+									<button
+										key={tab.id}
+										onClick={() => router.push(tab.slug)}
+										className={`relative px-5 py-3 font-extrabold text-xs whitespace-nowrap transition-all cursor-pointer ${
+											isActive
+												? "text-blue-600 font-bold"
+												: "text-slate-400 hover:text-slate-700"
+										}`}
+									>
+										{isActive && (
+											<motion.div
+												layoutId="activeAccountantSubmenuUnderline"
+												className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 z-10"
+												transition={{ type: "spring", stiffness: 380, damping: 30 }}
+											/>
+										)}
+										{tab.label}
+									</button>
+								);
+							})}
 						</div>
 
 						{loading ? (
