@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
 	IconUserPlus, 
@@ -15,135 +15,141 @@ import {
 	IconChevronRight
 } from "@tabler/icons-react";
 
+const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+
 interface Client {
-	id: number;
+	id: string | number;
 	name: string;
 	subName: string;
 	email: string;
 	category: string;
 	status: string;
-	created: string;
+	created?: string;
+	createdAt?: string;
 	companyName: string;
 	phone: string;
 	website: string;
 	vat: string;
 }
 
+const INITIAL_CLIENTS: Client[] = [
+	{
+		id: "cli-1",
+		name: "Ecologique Transport Solution",
+		subName: "Ecologique Transport Solution",
+		email: "semiu.abolade@ecologiqueltd.com",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "Ecologique Transport Solution",
+		phone: "08164473371",
+		website: "https://www.ecologiqueltd.com",
+		vat: ""
+	},
+	{
+		id: "cli-2",
+		name: "Dulux - Chemical & Allied Product PLC",
+		subName: "Dulux - Chemical & Allied Product Plc",
+		email: "careline@capplc.com",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "Dulux - Chemical & Allied Product PLC",
+		phone: "08159492865",
+		website: "https://duluxnigeria.com.ng",
+		vat: ""
+	},
+	{
+		id: "cli-3",
+		name: "7UP Bottling Company",
+		subName: "7Up Bottling Company",
+		email: "info@sevenup.org",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "7UP Bottling Company",
+		phone: "0805 6900 900",
+		website: "https://www.sevenup.org",
+		vat: ""
+	},
+	{
+		id: "cli-4",
+		name: "YNV - Teknowledge Operations Nigeria Ltd",
+		subName: "Ymv - Teknowledge Operations Nigeria Ltd",
+		email: "voke.dabonur@teknowledge.com",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "YMV - Teknowledge Operations Nigeria Ltd",
+		phone: "08135771574",
+		website: "https://teknowledge.com",
+		vat: ""
+	},
+	{
+		id: "cli-5",
+		name: "GAIO System Nigeria ltd",
+		subName: "Gaio System Nigeria Ltd",
+		email: "esalomo@gaiosystem.com.ng",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "GAIO System Nigeria ltd",
+		phone: "08028416180",
+		website: "https://www.en.gaio.co.jp/company",
+		vat: ""
+	},
+	{
+		id: "cli-6",
+		name: "IHS - Holding Limited",
+		subName: "Ihs - Holding Limited",
+		email: "hauwa.ohize@ihstowers.com",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "IHS - Holding Limited",
+		phone: "+234 700 0777777",
+		website: "https://www.ihstowers.com",
+		vat: ""
+	},
+	{
+		id: "cli-7",
+		name: "Nigerian Bottling Company (NBC)",
+		subName: "Nigerian Bottling Company (Nbc)",
+		email: "reace.odimba@cchellenic.com",
+		category: "COOPERATE CLIENT",
+		status: "Active",
+		created: "08-06-2026",
+		companyName: "Nigerian Bottling Company (NBC)",
+		phone: "08150594417",
+		website: "https://www.coca-colahellenic.com",
+		vat: ""
+	},
+	{
+		id: "cli-8",
+		name: "Yikodeen COMPANY LIMITED",
+		subName: "Yikodeen Company Limited",
+		email: "",
+		category: "",
+		status: "Active",
+		created: "29-07-2025",
+		companyName: "YIKODEEN COMPANY LIMITED",
+		phone: "",
+		website: "",
+		vat: "19853071-0001"
+	}
+];
+
 export default function AccountantClients() {
 	const router = useRouter();
 
-	// 8 Initial clients matching the screenshot
-	const [clients, setClients] = useState<Client[]>([
-		{
-			id: 1,
-			name: "Ecologique Transport Solution",
-			subName: "Ecologique Transport Solution",
-			email: "semiu.abolade@ecologiqueltd.com",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "Ecologique Transport Solution",
-			phone: "08164473371",
-			website: "https://www.ecologiqueltd.com",
-			vat: ""
-		},
-		{
-			id: 2,
-			name: "Dulux - Chemical & Allied Product PLC",
-			subName: "Dulux - Chemical & Allied Product Plc",
-			email: "careline@capplc.com",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "Dulux - Chemical & Allied Product PLC",
-			phone: "08159492865",
-			website: "https://duluxnigeria.com.ng",
-			vat: ""
-		},
-		{
-			id: 3,
-			name: "7UP Bottling Company",
-			subName: "7Up Bottling Company",
-			email: "info@sevenup.org",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "7UP Bottling Company",
-			phone: "0805 6900 900",
-			website: "https://www.sevenup.org",
-			vat: ""
-		},
-		{
-			id: 4,
-			name: "YNV - Teknowledge Operations Nigeria Ltd",
-			subName: "Ymv - Teknowledge Operations Nigeria Ltd",
-			email: "voke.dabonur@teknowledge.com",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "YMV - Teknowledge Operations Nigeria Ltd",
-			phone: "08135771574",
-			website: "https://teknowledge.com",
-			vat: ""
-		},
-		{
-			id: 5,
-			name: "GAIO System Nigeria ltd",
-			subName: "Gaio System Nigeria Ltd",
-			email: "esalomo@gaiosystem.com.ng",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "GAIO System Nigeria ltd",
-			phone: "08028416180",
-			website: "https://www.en.gaio.co.jp/company",
-			vat: ""
-		},
-		{
-			id: 6,
-			name: "IHS - Holding Limited",
-			subName: "Ihs - Holding Limited",
-			email: "hauwa.ohize@ihstowers.com",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "IHS - Holding Limited",
-			phone: "+234 700 0777777",
-			website: "https://www.ihstowers.com",
-			vat: ""
-		},
-		{
-			id: 7,
-			name: "Nigerian Bottling Company (NBC)",
-			subName: "Nigerian Bottling Company (Nbc)",
-			email: "reace.odimba@cchellenic.com",
-			category: "COOPERATE CLIENT",
-			status: "Active",
-			created: "08-06-2026",
-			companyName: "Nigerian Bottling Company (NBC)",
-			phone: "08150594417",
-			website: "https://www.coca-colahellenic.com",
-			vat: ""
-		},
-		{
-			id: 8,
-			name: "Yikodeen COMPANY LIMITED",
-			subName: "Yikodeen Company Limited",
-			email: "",
-			category: "",
-			status: "Active",
-			created: "29-07-2025",
-			companyName: "YIKODEEN COMPANY LIMITED",
-			phone: "",
-			website: "",
-			vat: "19853071-0001"
-		}
-	]);
+	const [clients, setClients] = useState<Client[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
 
 	// UI State management
 	const [searchQuery, setSearchQuery] = useState("");
-	const [selectedIds, setSelectedIds] = useState<number[]>([]);
-	const [activeDropdown, setActiveDropdown] = useState<number | null>(null);
+	const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
+	const [activeDropdown, setActiveDropdown] = useState<string | number | null>(null);
 	const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 	const [pageSize, setPageSize] = useState(10);
 
@@ -153,7 +159,7 @@ export default function AccountantClients() {
 	const [editingClient, setEditingClient] = useState<Client | null>(null);
 
 	// Form States
-	const [newClient, setNewClient] = useState<Omit<Client, "id" | "status" | "created">>({
+	const [newClient, setNewClient] = useState<Omit<Client, "id" | "status" | "created" | "createdAt" | "updatedAt">>({
 		name: "",
 		subName: "",
 		email: "",
@@ -163,6 +169,31 @@ export default function AccountantClients() {
 		website: "",
 		vat: ""
 	});
+
+	// Fetch all data from the finance microservice
+	const fetchClients = async () => {
+		setLoading(true);
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`);
+			if (res.ok) {
+				const data = await res.json();
+				setClients(data);
+				setError(null);
+			} else {
+				throw new Error("Failed to fetch clients from server");
+			}
+		} catch (err) {
+			console.warn("Unable to load clients from API, using local mock fallback.", err);
+			setClients(prev => prev.length > 0 ? prev : INITIAL_CLIENTS);
+			setError("Offline fallback data in use");
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchClients();
+	}, []);
 
 	// Filter clients list
 	const filteredClients = clients.filter(c => {
@@ -186,29 +217,44 @@ export default function AccountantClients() {
 		}
 	};
 
-	const handleSelectRow = (id: number) => {
+	const handleSelectRow = (id: string | number) => {
 		setSelectedIds(prev =>
 			prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
 		);
 	};
 
 	// Actions
-	const handleAddClientSubmit = (e: React.FormEvent) => {
+	const handleAddClientSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		const clientData: Client = {
-			id: Date.now(),
+		const clientData = {
 			name: newClient.name,
 			subName: newClient.subName || newClient.name,
 			email: newClient.email,
 			category: newClient.category,
 			status: "Active",
-			created: new Date().toLocaleDateString("en-GB").replace(/\//g, "-"),
 			companyName: newClient.companyName || newClient.name,
 			phone: newClient.phone,
 			website: newClient.website,
 			vat: newClient.vat
 		};
-		setClients(prev => [...prev, clientData]);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(clientData)
+			});
+			if (res.ok) {
+				fetchClients();
+			} else {
+				alert("Failed to save client to live database");
+			}
+		} catch (err) {
+			console.error("API Error: ", err);
+			// offline fallback
+			setClients(prev => [...prev, { ...clientData, id: Date.now(), created: new Date().toLocaleDateString("en-GB").replace(/\//g, "-") }]);
+		}
+
 		setShowAddModal(false);
 		setNewClient({
 			name: "",
@@ -222,28 +268,74 @@ export default function AccountantClients() {
 		});
 	};
 
-	const handleEditClientSubmit = (e: React.FormEvent) => {
+	const handleEditClientSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!editingClient) return;
-		setClients(prev =>
-			prev.map(c => (c.id === editingClient.id ? editingClient : c))
-		);
+
+		try {
+			const res = await fetch(`${FINANCE_API_URL}/clients`, {
+				method: "PUT",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(editingClient)
+			});
+			if (res.ok) {
+				fetchClients();
+			} else {
+				alert("Failed to update client on live database");
+			}
+		} catch (err) {
+			console.error("API Error: ", err);
+			// offline fallback
+			setClients(prev =>
+				prev.map(c => (c.id === editingClient.id ? editingClient : c))
+			);
+		}
+
 		setShowEditModal(false);
 		setEditingClient(null);
 	};
 
-	const handleDeleteClient = (id: number, name: string) => {
+	const handleDeleteClient = async (id: string | number, name: string) => {
 		if (confirm(`Are you sure you want to remove client "${name}"?`)) {
-			setClients(prev => prev.filter(c => c.id !== id));
-			setSelectedIds(prev => prev.filter(x => x !== id));
+			try {
+				const res = await fetch(`${FINANCE_API_URL}/clients?id=${id}`, {
+					method: "DELETE"
+				});
+				if (res.ok) {
+					fetchClients();
+					setSelectedIds(prev => prev.filter(x => x !== id));
+				} else {
+					alert("Failed to delete client from database");
+				}
+			} catch (err) {
+				console.error("API Error: ", err);
+				// offline fallback
+				setClients(prev => prev.filter(c => c.id !== id));
+				setSelectedIds(prev => prev.filter(x => x !== id));
+			}
 		}
 	};
 
-	const handleDeleteBatch = () => {
+	const handleDeleteBatch = async () => {
 		if (selectedIds.length === 0) return;
 		if (confirm(`Are you sure you want to delete the ${selectedIds.length} selected client(s)?`)) {
-			setClients(prev => prev.filter(c => !selectedIds.includes(c.id)));
-			setSelectedIds([]);
+			try {
+				const idsParam = selectedIds.join(",");
+				const res = await fetch(`${FINANCE_API_URL}/clients?id=${idsParam}`, {
+					method: "DELETE"
+				});
+				if (res.ok) {
+					fetchClients();
+					setSelectedIds([]);
+				} else {
+					alert("Failed to delete clients from database");
+				}
+			} catch (err) {
+				console.error("API Error: ", err);
+				// offline fallback
+				setClients(prev => prev.filter(c => !selectedIds.includes(c.id)));
+				setSelectedIds([]);
+			}
 		}
 	};
 
@@ -392,7 +484,11 @@ export default function AccountantClients() {
 												{client.status}
 											</span>
 										</td>
-										<td className="py-4 text-slate-500">{client.created}</td>
+										<td className="py-4 text-slate-500">
+											{client.createdAt 
+												? new Date(client.createdAt).toLocaleDateString("en-GB").replace(/\//g, "-")
+												: client.created || "--"}
+										</td>
 										<td className="py-4 text-slate-700">{client.companyName}</td>
 										<td className="py-4 text-slate-600">{client.phone || "--"}</td>
 										<td className="py-4">

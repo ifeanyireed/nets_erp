@@ -62,3 +62,18 @@ type DashboardStats struct {
 	PendingPayables   float64 `json:"pendingPayables"`
 	OutstandingInvoice float64 `json:"outstandingInvoice"`
 }
+
+type Client struct {
+	ID          string    `json:"id"`
+	Name        string    `json:"name"`
+	SubName     string    `json:"subName"`
+	Email       string    `json:"email"`
+	Category    string    `json:"category"`
+	Status      string    `json:"status"`
+	CompanyName string    `json:"companyName"`
+	Phone       string    `json:"phone"`
+	Website     string    `json:"website"`
+	Vat         string    `json:"vat"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+}

@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -562,6 +563,139 @@ func HandleTransactions(w http.ResponseWriter, r *http.Request) {
 		}
 
 		json.NewEncoder(w).Encode(map[string]string{"status": "success", "id": tx.ID, "message": "Transaction logged successfully"})
+	} else {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+	}
+}
+
+func HandleClients(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		id := r.URL.Query().Get("id")
+		if id != "" {
+			var c Client
+			var createdAt, updatedAt time.Time
+			err := db.QueryRow("SELECT id, name, sub_name, email, category, status, company_name, phone, website, vat, created_at, updated_at FROM clients WHERE id = ?", id).
+				Scan(&c.ID, &c.Name, &c.SubName, &c.Email, &c.Category, &c.Status, &c.CompanyName, &c.Phone, &c.Website, &c.Vat, &createdAt, &updatedAt)
+			if err == sql.ErrNoRows {
+				w.WriteHeader(http.StatusNotFound)
+				json.NewEncoder(w).Encode(map[string]string{"message": "Client not found"})
+				return
+			} else if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+				return
+			}
+			c.CreatedAt = createdAt
+			c.UpdatedAt = updatedAt
+			json.NewEncoder(w).Encode(c)
+			return
+		}
+
+		rows, err := db.Query("SELECT id, name, sub_name, email, category, status, company_name, phone, website, vat, created_at, updated_at FROM clients ORDER BY name ASC")
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+		defer rows.Close()
+
+		clients := []Client{}
+		for rows.Next() {
+			var c Client
+			var createdAt, updatedAt time.Time
+			if err := rows.Scan(&c.ID, &c.Name, &c.SubName, &c.Email, &c.Category, &c.Status, &c.CompanyName, &c.Phone, &c.Website, &c.Vat, &createdAt, &updatedAt); err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+				return
+			}
+			c.CreatedAt = createdAt
+			c.UpdatedAt = updatedAt
+			clients = append(clients, c)
+		}
+		json.NewEncoder(w).Encode(clients)
+
+	} else if r.Method == http.MethodPost {
+		var c Client
+		if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Invalid request body"})
+			return
+		}
+		if c.Name == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Missing required field: name"})
+			return
+		}
+
+		if c.ID == "" {
+			c.ID = "cli-" + generateUUID()[:8]
+		}
+		if c.Status == "" {
+			c.Status = "Active"
+		}
+		if c.SubName == "" {
+			c.SubName = c.Name
+		}
+		if c.CompanyName == "" {
+			c.CompanyName = c.Name
+		}
+
+		_, err := db.Exec("INSERT INTO clients (id, name, sub_name, email, category, status, company_name, phone, website, vat) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			c.ID, c.Name, c.SubName, c.Email, c.Category, c.Status, c.CompanyName, c.Phone, c.Website, c.Vat)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{"status": "success", "id": c.ID, "message": "Client added successfully"})
+
+	} else if r.Method == http.MethodPut {
+		var c Client
+		if err := json.NewDecoder(r.Body).Decode(&c); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Invalid request body"})
+			return
+		}
+		if c.ID == "" || c.Name == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Missing client ID or Name"})
+			return
+		}
+
+		_, err := db.Exec("UPDATE clients SET name = ?, sub_name = ?, email = ?, category = ?, status = ?, company_name = ?, phone = ?, website = ?, vat = ? WHERE id = ?",
+			c.Name, c.SubName, c.Email, c.Category, c.Status, c.CompanyName, c.Phone, c.Website, c.Vat, c.ID)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+			return
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Client updated successfully"})
+
+	} else if r.Method == http.MethodDelete {
+		ids := r.URL.Query().Get("id")
+		if ids == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{"error": "Missing client ID"})
+			return
+		}
+
+		idList := strings.Split(ids, ",")
+		for _, id := range idList {
+			id = strings.TrimSpace(id)
+			if id == "" {
+				continue
+			}
+			_, err := db.Exec("DELETE FROM clients WHERE id = ?", id)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+				return
+			}
+		}
+
+		json.NewEncoder(w).Encode(map[string]string{"status": "success", "message": "Client(s) deleted successfully"})
 	} else {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}

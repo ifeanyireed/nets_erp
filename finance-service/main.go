@@ -71,6 +71,7 @@ func registerRoutes() {
 	registerRoute("/invoices", handlers.HandleInvoices)
 	registerRoute("/reconciliations", handlers.HandleReconciliations)
 	registerRoute("/transactions", handlers.HandleTransactions)
+	registerRoute("/clients", handlers.HandleClients)
 }
 
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {

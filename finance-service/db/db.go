@@ -127,6 +127,21 @@ func setupSchema() error {
 			description TEXT NULL,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
+
+		`CREATE TABLE IF NOT EXISTS clients (
+			id VARCHAR(36) PRIMARY KEY,
+			name VARCHAR(255) NOT NULL,
+			sub_name VARCHAR(255) NOT NULL,
+			email VARCHAR(255) NOT NULL,
+			category VARCHAR(100) NOT NULL,
+			status VARCHAR(50) NOT NULL,
+			company_name VARCHAR(255) NOT NULL,
+			phone VARCHAR(100) NOT NULL,
+			website VARCHAR(255) NOT NULL,
+			vat VARCHAR(100) NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;`,
 	}
 
 	for i, q := range queries {
@@ -148,6 +163,9 @@ func setupSchema() error {
 }
 
 func seedInitialData() error {
+	// Ensure clients table is seeded
+	seedClientsTable()
+
 	var count int
 	err := DB.QueryRow("SELECT COUNT(*) FROM expenses").Scan(&count)
 	if err != nil {
@@ -273,4 +291,50 @@ func seedInitialData() error {
 
 	log.Println("Database seeded successfully with mock finance logs")
 	return nil
+}
+
+func seedClientsTable() {
+	var count int
+	err := DB.QueryRow("SELECT COUNT(*) FROM clients").Scan(&count)
+	if err != nil {
+		log.Printf("Warning: Failed to check clients table count: %v", err)
+		return
+	}
+	if count > 0 {
+		return
+	}
+
+	log.Println("Seeding initial mock data into clients table...")
+	clientsSeeds := []struct {
+		ID          string
+		Name        string
+		SubName     string
+		Email       string
+		Category    string
+		Status      string
+		CompanyName string
+		Phone       string
+		Website     string
+		Vat         string
+	}{
+		{"cli-1", "Ecologique Transport Solution", "Ecologique Transport Solution", "semiu.abolade@ecologiqueltd.com", "COOPERATE CLIENT", "Active", "Ecologique Transport Solution", "08164473371", "https://www.ecologiqueltd.com", ""},
+		{"cli-2", "Dulux - Chemical & Allied Product PLC", "Dulux - Chemical & Allied Product Plc", "careline@capplc.com", "COOPERATE CLIENT", "Active", "Dulux - Chemical & Allied Product PLC", "08159492865", "https://duluxnigeria.com.ng", ""},
+		{"cli-3", "7UP Bottling Company", "7Up Bottling Company", "info@sevenup.org", "COOPERATE CLIENT", "Active", "7UP Bottling Company", "0805 6900 900", "https://www.sevenup.org", ""},
+		{"cli-4", "YNV - Teknowledge Operations Nigeria Ltd", "Ymv - Teknowledge Operations Nigeria Ltd", "voke.dabonur@teknowledge.com", "COOPERATE CLIENT", "Active", "YMV - Teknowledge Operations Nigeria Ltd", "08135771574", "https://teknowledge.com", ""},
+		{"cli-5", "GAIO System Nigeria ltd", "Gaio System Nigeria Ltd", "esalomo@gaiosystem.com.ng", "COOPERATE CLIENT", "Active", "GAIO System Nigeria ltd", "08028416180", "https://www.en.gaio.co.jp/company", ""},
+		{"cli-6", "IHS - Holding Limited", "Ihs - Holding Limited", "hauwa.ohize@ihstowers.com", "COOPERATE CLIENT", "Active", "IHS - Holding Limited", "+234 700 0777777", "https://www.ihstowers.com", ""},
+		{"cli-7", "Nigerian Bottling Company (NBC)", "Nigerian Bottling Company (Nbc)", "reace.odimba@cchellenic.com", "COOPERATE CLIENT", "Active", "Nigerian Bottling Company (NBC)", "08150594417", "https://www.coca-colahellenic.com", ""},
+		{"cli-8", "Yikodeen COMPANY LIMITED", "Yikodeen Company Limited", "", "", "Active", "YIKODEEN COMPANY LIMITED", "", "", "19853071-0001"},
+	}
+
+	for _, c := range clientsSeeds {
+		_, err := DB.Exec(
+			"INSERT INTO clients (id, name, sub_name, email, category, status, company_name, phone, website, vat) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			c.ID, c.Name, c.SubName, c.Email, c.Category, c.Status, c.CompanyName, c.Phone, c.Website, c.Vat,
+		)
+		if err != nil {
+			log.Printf("Warning: Failed to seed client %s: %v", c.Name, err)
+		}
+	}
+	log.Println("Clients table seeded successfully")
 }
