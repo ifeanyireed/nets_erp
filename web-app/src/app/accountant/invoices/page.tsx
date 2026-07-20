@@ -354,6 +354,14 @@ export default function InvoicesPage() {
 	const [opCoordination, setOpCoordination] = useState("Operation Coordination");
 	const [headOfFinance, setHeadOfFinance] = useState("Head of Finance");
 
+	// Core dynamic column headers state (editable & deletable)
+	const [coreColumns, setCoreColumns] = useState({
+		truckNo: { visible: true, title: "TRUCK NO" },
+		location: { visible: true, title: "LOCATION" },
+		trackingId: { visible: true, title: "TRACKING ID" },
+		tonnage: { visible: true, title: "TONNAGE" }
+	});
+
 	// Calculation logic: CHARGE is editable; EXPENSES = Subtotal - Charge (derived)
 	// VAT is applied to Charge when present, or to Subtotal when charge is not inputed
 	const subtotal = lineItems.reduce((sum, item) => sum + parseNumberFromCommas(item.amount), 0);
@@ -391,6 +399,22 @@ export default function InvoicesPage() {
 		setLineItems(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
 	};
 
+	const handleOpenCreateModal = () => {
+		setInvNumber(formatInvoiceCode(billedToName, invDate, invSerial));
+		setLineItems([
+			{ id: "1", date: "", truckNo: "MUS 07 YK", location: "", trackingId: "", tonnage: "", amount: "" }
+		]);
+		setChargeInput("");
+		setCoreColumns({
+			truckNo: { visible: true, title: "TRUCK NO" },
+			location: { visible: true, title: "LOCATION" },
+			trackingId: { visible: true, title: "TRACKING ID" },
+			tonnage: { visible: true, title: "TONNAGE" }
+		});
+		setCustomColumns([]);
+		setShowAddModal(true);
+	};
+
 	const loadSampleTemplate = () => {
 		setInvNumber("NETS-CAP-2025-008");
 		setInvDate("2025-08-15");
@@ -418,6 +442,12 @@ export default function InvoicesPage() {
 		]);
 		setChargeInput(125964.51);
 		setVatPercent(7.5);
+		setCoreColumns({
+			truckNo: { visible: true, title: "TRUCK NO" },
+			location: { visible: true, title: "LOCATION" },
+			trackingId: { visible: true, title: "TRACKING ID" },
+			tonnage: { visible: true, title: "TONNAGE" }
+		});
 	};
 
 	const filteredInvoices = invoices.filter(inv => {
@@ -522,7 +552,7 @@ export default function InvoicesPage() {
 			{/* Table Actions Row */}
 			<div className="flex items-center gap-2 flex-wrap">
 				<button
-					onClick={() => setShowAddModal(true)}
+					onClick={handleOpenCreateModal}
 					className="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all border-none outline-none"
 				>
 					<IconPlus className="w-4 h-4" />
@@ -976,9 +1006,84 @@ export default function InvoicesPage() {
 												<tr className="bg-slate-100 border-b border-slate-900 text-[10px] font-black text-slate-900 uppercase tracking-tight text-center">
 													<th className="p-2 border-r border-slate-900 w-12">S/No</th>
 													<th className="p-2 border-r border-slate-900 min-w-[110px]">DATE</th>
-													<th className="p-2 border-r border-slate-900 min-w-[120px]">TRUCK NO</th>
-													<th className="p-2 border-r border-slate-900 min-w-[120px]">LOCATION</th>
-													<th className="p-2 border-r border-slate-900 min-w-[110px]">TRACKING ID</th>
+													{coreColumns.truckNo.visible && (
+														<th className="p-1 border-r border-slate-900 min-w-[120px] align-middle">
+															<div className="flex items-center justify-between gap-1 w-full px-1">
+																<input
+																	type="text"
+																	value={coreColumns.truckNo.title}
+																	onChange={(e) => setCoreColumns(prev => ({
+																		...prev,
+																		truckNo: { ...prev.truckNo, title: e.target.value.toUpperCase() }
+																	}))}
+																	className="w-full text-center bg-transparent border-none font-black text-[10px] text-slate-900 uppercase focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none py-0.5"
+																/>
+																<button
+																	type="button"
+																	onClick={() => setCoreColumns(prev => ({
+																		...prev,
+																		truckNo: { ...prev.truckNo, visible: false }
+																	}))}
+																	className="text-red-650 hover:text-red-800 font-bold text-xs cursor-pointer px-1 no-print border-none bg-transparent"
+																	title="Remove Column"
+																>
+																	×
+																</button>
+															</div>
+														</th>
+													)}
+													{coreColumns.location.visible && (
+														<th className="p-1 border-r border-slate-900 min-w-[120px] align-middle">
+															<div className="flex items-center justify-between gap-1 w-full px-1">
+																<input
+																	type="text"
+																	value={coreColumns.location.title}
+																	onChange={(e) => setCoreColumns(prev => ({
+																		...prev,
+																		location: { ...prev.location, title: e.target.value.toUpperCase() }
+																	}))}
+																	className="w-full text-center bg-transparent border-none font-black text-[10px] text-slate-900 uppercase focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none py-0.5"
+																/>
+																<button
+																	type="button"
+																	onClick={() => setCoreColumns(prev => ({
+																		...prev,
+																		location: { ...prev.location, visible: false }
+																	}))}
+																	className="text-red-650 hover:text-red-800 font-bold text-xs cursor-pointer px-1 no-print border-none bg-transparent"
+																	title="Remove Column"
+																>
+																	×
+																</button>
+															</div>
+														</th>
+													)}
+													{coreColumns.trackingId.visible && (
+														<th className="p-1 border-r border-slate-900 min-w-[110px] align-middle">
+															<div className="flex items-center justify-between gap-1 w-full px-1">
+																<input
+																	type="text"
+																	value={coreColumns.trackingId.title}
+																	onChange={(e) => setCoreColumns(prev => ({
+																		...prev,
+																		trackingId: { ...prev.trackingId, title: e.target.value.toUpperCase() }
+																	}))}
+																	className="w-full text-center bg-transparent border-none font-black text-[10px] text-slate-900 uppercase focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none py-0.5"
+																/>
+																<button
+																	type="button"
+																	onClick={() => setCoreColumns(prev => ({
+																		...prev,
+																		trackingId: { ...prev.trackingId, visible: false }
+																	}))}
+																	className="text-red-650 hover:text-red-800 font-bold text-xs cursor-pointer px-1 no-print border-none bg-transparent"
+																	title="Remove Column"
+																>
+																	×
+																</button>
+															</div>
+														</th>
+													)}
 													{customColumns.map(col => (
 														<th key={col.id} className="p-2 border-r border-slate-900 min-w-[120px]">
 															<div className="flex items-center justify-between gap-1">
@@ -986,7 +1091,7 @@ export default function InvoicesPage() {
 																<button
 																	type="button"
 																	onClick={() => setCustomColumns(prev => prev.filter(c => c.id !== col.id))}
-																	className="text-red-600 hover:text-red-800 font-black text-xs cursor-pointer px-1"
+																	className="text-red-650 hover:text-red-800 font-black text-xs cursor-pointer px-1"
 																	title="Remove Column"
 																>
 																	×
@@ -994,7 +1099,32 @@ export default function InvoicesPage() {
 															</div>
 														</th>
 													))}
-													<th className="p-2 border-r border-slate-900 min-w-[100px]">TONNAGE</th>
+													{coreColumns.tonnage.visible && (
+														<th className="p-1 border-r border-slate-900 min-w-[100px] align-middle">
+															<div className="flex items-center justify-between gap-1 w-full px-1">
+																<input
+																	type="text"
+																	value={coreColumns.tonnage.title}
+																	onChange={(e) => setCoreColumns(prev => ({
+																		...prev,
+																		tonnage: { ...prev.tonnage, title: e.target.value.toUpperCase() }
+																	}))}
+																	className="w-full text-center bg-transparent border-none font-black text-[10px] text-slate-900 uppercase focus:bg-white focus:ring-1 focus:ring-slate-400 outline-none py-0.5"
+																/>
+																<button
+																	type="button"
+																	onClick={() => setCoreColumns(prev => ({
+																		...prev,
+																		tonnage: { ...prev.tonnage, visible: false }
+																	}))}
+																	className="text-red-650 hover:text-red-800 font-bold text-xs cursor-pointer px-1 no-print border-none bg-transparent"
+																	title="Remove Column"
+																>
+																	×
+																</button>
+															</div>
+														</th>
+													)}
 													<th className="p-2 border-r border-slate-900 min-w-[130px]">AMOUNT (₦)</th>
 													<th className="p-1 w-8"></th>
 												</tr>
@@ -1011,33 +1141,39 @@ export default function InvoicesPage() {
 																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-medium focus:bg-white outline-none"
 															/>
 														</td>
-														<td className="p-1 border-r border-slate-900">
-															<input
-																type="text"
-																placeholder="e.g. MUS 07 YK"
-																value={item.truckNo}
-																onChange={(e) => handleItemChange(item.id, "truckNo", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-bold uppercase focus:bg-white outline-none"
-															/>
-														</td>
-														<td className="p-1 border-r border-slate-900">
-															<input
-																type="text"
-																placeholder="Location"
-																value={item.location}
-																onChange={(e) => handleItemChange(item.id, "location", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-semibold uppercase focus:bg-white outline-none"
-															/>
-														</td>
-														<td className="p-1 border-r border-slate-900">
-															<input
-																type="text"
-																placeholder="Waybill/ID"
-																value={item.trackingId}
-																onChange={(e) => handleItemChange(item.id, "trackingId", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-medium text-center focus:bg-white outline-none"
-															/>
-														</td>
+														{coreColumns.truckNo.visible && (
+															<td className="p-1 border-r border-slate-900">
+																<input
+																	type="text"
+																	placeholder={`e.g. ${coreColumns.truckNo.title.toLowerCase()}`}
+																	value={item.truckNo}
+																	onChange={(e) => handleItemChange(item.id, "truckNo", e.target.value)}
+																	className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-bold uppercase focus:bg-white outline-none text-slate-900"
+																/>
+															</td>
+														)}
+														{coreColumns.location.visible && (
+															<td className="p-1 border-r border-slate-900">
+																<input
+																	type="text"
+																	placeholder={`e.g. ${coreColumns.location.title.toLowerCase()}`}
+																	value={item.location}
+																	onChange={(e) => handleItemChange(item.id, "location", e.target.value)}
+																	className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-semibold uppercase focus:bg-white outline-none text-slate-900"
+																/>
+															</td>
+														)}
+														{coreColumns.trackingId.visible && (
+															<td className="p-1 border-r border-slate-900">
+																<input
+																	type="text"
+																	placeholder={`e.g. ${coreColumns.trackingId.title.toLowerCase()}`}
+																	value={item.trackingId}
+																	onChange={(e) => handleItemChange(item.id, "trackingId", e.target.value)}
+																	className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-medium text-center focus:bg-white outline-none text-slate-900"
+																/>
+															</td>
+														)}
 														{customColumns.map(col => (
 															<td key={col.id} className="p-1 border-r border-slate-900">
 																<input
@@ -1055,15 +1191,17 @@ export default function InvoicesPage() {
 																/>
 															</td>
 														))}
-														<td className="p-1 border-r border-slate-900">
-															<input
-																type="text"
-																placeholder="0.00"
-																value={formatNumberWithCommas(item.tonnage)}
-																onChange={(e) => handleItemChange(item.id, "tonnage", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-semibold text-right focus:bg-white outline-none text-slate-900"
-															/>
-														</td>
+														{coreColumns.tonnage.visible && (
+															<td className="p-1 border-r border-slate-900">
+																<input
+																	type="text"
+																	placeholder="0.00"
+																	value={formatNumberWithCommas(item.tonnage)}
+																	onChange={(e) => handleItemChange(item.id, "tonnage", e.target.value)}
+																	className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-semibold text-right focus:bg-white outline-none text-slate-900"
+																/>
+															</td>
+														)}
 														<td className="p-1 border-r border-slate-900">
 															<input
 																type="text"
