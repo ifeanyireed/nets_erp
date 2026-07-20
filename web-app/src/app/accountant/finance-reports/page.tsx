@@ -29,6 +29,7 @@ const REPORTS_TABS = [
 	{ id: "finance-reports", label: "Finance Reports", slug: "/accountant/finance-reports" },
 	{ id: "ledger-summary", label: "Ledger Summary", slug: "/accountant/ledger-summary" },
 	{ id: "trial-balance", label: "Trial Balance", slug: "/accountant/trial-balance" },
+	{ id: "income-statement", label: "Income Statement", slug: "/accountant/income-statement" },
 	{ id: "financial-position", label: "Financial Position", slug: "/accountant/financial-position" },
 	{ id: "aged-receivables", label: "Aged Receivables", slug: "/accountant/aged-receivables" },
 	{ id: "aged-payables", label: "Aged Payables", slug: "/accountant/aged-payables" }
