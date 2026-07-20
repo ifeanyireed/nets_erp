@@ -1093,23 +1093,9 @@ export default function InvoicesPage() {
 
 								{/* SUMMARY & FINANCIAL BREAKDOWN BOX */}
 								<div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start pt-2">
-									
-									{/* Left Column: Notes & Amount in Words */}
-									<div className="md:col-span-6 flex flex-col gap-3">
-										<div className="border border-slate-900 rounded-sm p-3 bg-amber-50/40">
-											<span className="text-[10px] font-black uppercase text-slate-800 block mb-1">AMOUNT IN WORDS</span>
-											<p className="text-xs font-bold italic text-slate-900 leading-snug">
-												{amountInWords}
-											</p>
-										</div>
-
-										<div className="text-[10px] text-slate-500 leading-normal italic">
-											* All transport services subject to standard New Era Transport terms.
-										</div>
-									</div>
 
 									{/* Right Column: Financial Calculations Grid (Matching Image Totals) */}
-									<div className="md:col-span-6 border border-slate-900 rounded-sm overflow-hidden text-xs">
+									<div className="md:col-span-6 md:col-start-7 border border-slate-900 rounded-sm overflow-hidden text-xs">
 										<div className="flex justify-between items-center p-2.5 border-b border-slate-900 bg-slate-50">
 											<span className="font-black uppercase text-slate-800 text-[10px]">LINE ITEMS TOTAL</span>
 											<span className="font-mono font-bold text-slate-900 text-xs">{formatNaira(subtotal)}</span>
@@ -1152,6 +1138,20 @@ export default function InvoicesPage() {
 										<div className="flex justify-between items-center p-3 bg-slate-900 text-white">
 											<span className="font-black uppercase tracking-wider text-xs">GRAND TOTAL</span>
 											<span className="font-mono font-black text-sm text-emerald-400">{formatNaira(grandTotal)}</span>
+										</div>
+									</div>
+
+									{/* Left Column: Notes & Amount in Words */}
+									<div className="md:col-span-6 md:col-start-7 flex flex-col gap-3">
+										<div className="border border-slate-900 rounded-sm p-3 bg-amber-50/40">
+											<span className="text-[10px] font-black uppercase text-slate-800 block mb-1">AMOUNT IN WORDS</span>
+											<p className="text-xs font-bold italic text-slate-900 leading-snug">
+												{amountInWords}
+											</p>
+										</div>
+
+										<div className="text-[10px] text-slate-500 leading-normal italic">
+											* All transport services subject to standard New Era Transport terms.
 										</div>
 									</div>
 								</div>
