@@ -6,7 +6,9 @@ import {
 	IconPlus, 
 	IconSearch,
 	IconCheck,
-	IconTrash 
+	IconTrash,
+	IconArrowLeft,
+	IconX
 } from "@tabler/icons-react";
 
 const TRANSACTIONS_TABS = [
@@ -38,13 +40,14 @@ export default function JournalEntriesPage() {
 	const [searchQuery, setSearchQuery] = useState("");
 	const [showAddModal, setShowAddModal] = useState(false);
 
-	const [newJournal, setNewJournal] = useState({
-		accountName: "1030 - Providus Bank",
-		reference: "",
-		entryType: "debit" as "debit" | "credit",
-		amount: "",
-		dateText: "18-07-2026"
-	});
+	// Modal Form States
+	const [transactionDate, setTransactionDate] = useState("2026-07-20");
+	const [reference, setReference] = useState("");
+	const [journalDescription, setJournalDescription] = useState("");
+	const [postingLines, setPostingLines] = useState([
+		{ id: "1", accountName: "", debit: "", credit: "", description: "" },
+		{ id: "2", accountName: "", debit: "", credit: "", description: "" }
+	]);
 
 	const filteredJournals = journals.filter(j =>
 		j.accountName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -52,33 +55,114 @@ export default function JournalEntriesPage() {
 		j.id.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
+	const getNextJournalNumber = () => {
+		const nextIdNum = journals.length > 0 ? Math.max(...journals.map(j => {
+			const num = parseInt(j.id.replace(/[^\d]/g, ""), 10);
+			return isNaN(num) ? 0 : num;
+		})) : 0;
+		const journalNumVal = nextIdNum > 2 ? nextIdNum + 1 : 588;
+		return `JRN-${String(journalNumVal).padStart(5, "0")}`;
+	};
+
+	const handleOpenModal = () => {
+		const today = new Date().toISOString().split("T")[0];
+		setTransactionDate(today);
+		setReference("");
+		setJournalDescription("");
+		setPostingLines([
+			{ id: "1", accountName: "", debit: "", credit: "", description: "" },
+			{ id: "2", accountName: "", debit: "", credit: "", description: "" }
+		]);
+		setShowAddModal(true);
+	};
+
+	const handleLineChange = (id: string, field: string, value: string) => {
+		setPostingLines(prev => prev.map(line => {
+			if (line.id === id) {
+				const updatedLine = { ...line, [field]: value };
+				// If debit is updated and has value, clear credit
+				if (field === "debit" && value !== "") {
+					updatedLine.credit = "";
+				}
+				// If credit is updated and has value, clear debit
+				if (field === "credit" && value !== "") {
+					updatedLine.debit = "";
+				}
+				return updatedLine;
+			}
+			return line;
+		}));
+	};
+
+	const handleAddLine = () => {
+		setPostingLines(prev => [...prev, { id: Date.now().toString(), accountName: "", debit: "", credit: "", description: "" }]);
+	};
+
+	const handleDeleteLine = (id: string) => {
+		if (postingLines.length <= 2) {
+			alert("A journal entry must have at least 2 posting lines.");
+			return;
+		}
+		setPostingLines(prev => prev.filter(line => line.id !== id));
+	};
+
+	const formatDateToDMY = (dateStr: string) => {
+		if (!dateStr) return "";
+		const [y, m, d] = dateStr.split("-");
+		return `${d}-${m}-${y}`;
+	};
+
+	const formatNumber = (num: number) => {
+		return num.toLocaleString("en-NG", {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2
+		});
+	};
+
 	const handleAddJournalSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		const amount = parseFloat(newJournal.amount);
-		if (isNaN(amount) || amount <= 0) {
-			alert("Please enter a valid amount");
+
+		// Validation
+		if (postingLines.length < 2) {
+			alert("A journal entry must have at least 2 posting lines.");
 			return;
 		}
 
-		const padNum = String(journals.length + 1).padStart(5, "0");
-		const journalData: JournalEntry = {
-			id: `JE-${padNum}`,
-			date: newJournal.dateText,
-			accountName: newJournal.accountName,
-			reference: newJournal.reference || "Manual Adjustment",
-			debit: newJournal.entryType === "debit" ? amount : 0,
-			credit: newJournal.entryType === "credit" ? amount : 0
-		};
+		const hasInvalidLine = postingLines.some(line => !line.accountName);
+		if (hasInvalidLine) {
+			alert("Please select a ledger account for all posting lines.");
+			return;
+		}
 
-		setJournals(prev => [journalData, ...prev]);
+		const totalDebit = postingLines.reduce((sum, line) => sum + (parseFloat(line.debit) || 0), 0);
+		const totalCredit = postingLines.reduce((sum, line) => sum + (parseFloat(line.credit) || 0), 0);
+
+		if (totalDebit === 0 && totalCredit === 0) {
+			alert("Please enter debit or credit amounts.");
+			return;
+		}
+
+		if (Math.abs(totalDebit - totalCredit) > 0.009) {
+			alert(`The journal entry is unbalanced.\nTotal Debits: ₦${formatNumber(totalDebit)}\nTotal Credits: ₦${formatNumber(totalCredit)}\nDifference: ₦${formatNumber(Math.abs(totalDebit - totalCredit))}`);
+			return;
+		}
+
+		const journalNumber = getNextJournalNumber();
+		const formattedDate = formatDateToDMY(transactionDate);
+
+		const newItems: JournalEntry[] = postingLines
+			.filter(line => line.accountName && (parseFloat(line.debit) > 0 || parseFloat(line.credit) > 0))
+			.map(line => ({
+				id: journalNumber,
+				date: formattedDate,
+				accountName: line.accountName,
+				reference: line.description || reference || journalDescription || "Manual Adjustment",
+				debit: parseFloat(line.debit) || 0,
+				credit: parseFloat(line.credit) || 0
+			}));
+
+		setJournals(prev => [...newItems, ...prev]);
 		setShowAddModal(false);
-		setNewJournal({
-			accountName: "1030 - Providus Bank",
-			reference: "",
-			entryType: "debit",
-			amount: "",
-			dateText: "18-07-2026"
-		});
 	};
 
 	const handleDeleteJournal = (id: string) => {
@@ -106,7 +190,7 @@ export default function JournalEntriesPage() {
 					<p className="text-xs text-slate-455 font-semibold mt-1">Record double-entry ledger adjustments and general journal entries</p>
 				</div>
 				<button
-					onClick={() => setShowAddModal(true)}
+					onClick={handleOpenModal}
 					className="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-sm active:scale-95 transition-all border-none outline-none self-start sm:self-center"
 				>
 					<IconPlus className="w-4 h-4" />
@@ -192,90 +276,195 @@ export default function JournalEntriesPage() {
 
 			{/* ADD JOURNAL MODAL */}
 			{showAddModal && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-fadeIn">
-					<div className="bg-white rounded-3xl w-full max-w-md shadow-2xl border border-gray-100 flex flex-col overflow-hidden animate-slideUp">
-						<div className="flex justify-between items-center p-6 border-b border-gray-100 bg-slate-50/50">
+				<div className="fixed inset-0 z-50 flex items-start justify-center bg-slate-950/40 backdrop-blur-sm p-4 overflow-y-auto pt-10">
+					<div className="bg-slate-50/95 rounded-2xl w-full max-w-5xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden animate-slideUp mb-10">
+						
+						{/* Header */}
+						<div className="flex justify-between items-center px-8 py-6 bg-transparent">
 							<div>
-								<h3 className="font-extrabold text-slate-800 text-sm">Create Journal Entry</h3>
-								<p className="text-[10px] text-slate-455 mt-0.5 font-semibold">Post a manual double-entry accounting ledger transaction</p>
+								<h3 className="font-black text-slate-800 text-lg">Create Journal Entry</h3>
+								<p className="text-xs text-slate-500 mt-1 font-semibold">Post a balanced manual debit and credit journal.</p>
 							</div>
 							<button
+								type="button"
 								onClick={() => setShowAddModal(false)}
-								className="w-7 h-7 rounded-xl hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-sm font-bold border-none bg-transparent"
+								className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-bold rounded-lg text-xs flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
 							>
-								✕
+								<IconArrowLeft className="w-4 h-4" />
+								Journals
 							</button>
 						</div>
 
-						<form onSubmit={handleAddJournalSubmit} className="p-6 flex flex-col gap-4 text-left">
-							<div className="flex flex-col gap-1">
-								<label className="text-[10px] font-bold text-slate-450 uppercase">Ledger Account</label>
-								<select
-									value={newJournal.accountName}
-									onChange={(e) => setNewJournal(prev => ({ ...prev, accountName: e.target.value }))}
-									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-								>
-									<option value="1030 - Providus Bank">1030 - Providus Bank</option>
-									<option value="1050 - Globus Bank">1050 - Globus Bank</option>
-									<option value="1010 - GT Bank">1010 - GT Bank</option>
-									<option value="4000 - Professional Service Income">4000 - Professional Service Income</option>
-									<option value="5000 - Travel & Transportation Expense">5000 - Travel & Transportation Expense</option>
-								</select>
-							</div>
+						{/* Form */}
+						<form onSubmit={handleAddJournalSubmit} className="px-8 pb-8 flex flex-col gap-6 text-left">
+							
+							{/* Card 1: Header Info */}
+							<div className="bg-white border border-slate-200/80 rounded-xl p-6 shadow-sm flex flex-col gap-4">
+								<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+									<div className="flex flex-col gap-1">
+										<label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Journal Number</label>
+										<input
+											type="text"
+											disabled
+											value={getNextJournalNumber()}
+											className="w-full px-3 py-2 bg-slate-100/80 border border-slate-200 text-xs rounded-lg text-slate-550 font-semibold outline-none cursor-not-allowed font-mono"
+										/>
+									</div>
+									
+									<div className="flex flex-col gap-1">
+										<label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Transaction Date</label>
+										<input
+											type="date"
+											required
+											value={transactionDate}
+											onChange={(e) => setTransactionDate(e.target.value)}
+											className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-lg text-slate-800 font-semibold outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
+										/>
+									</div>
 
-							<div className="grid grid-cols-2 gap-3">
+									<div className="flex flex-col gap-1">
+										<label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Reference</label>
+										<input
+											type="text"
+											placeholder="Reference code or name"
+											value={reference}
+											onChange={(e) => setReference(e.target.value)}
+											className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-lg text-slate-800 font-semibold outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
+										/>
+									</div>
+								</div>
+
 								<div className="flex flex-col gap-1">
-									<label className="text-[10px] font-bold text-slate-455 uppercase">Date</label>
-									<input
-										type="text"
-										required
-										value={newJournal.dateText}
-										onChange={(e) => setNewJournal(prev => ({ ...prev, dateText: e.target.value }))}
-										className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+									<label className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Description</label>
+									<textarea
+										placeholder="Describe the overall purpose of this journal entry"
+										value={journalDescription}
+										onChange={(e) => setJournalDescription(e.target.value)}
+										className="w-full px-3 py-2 bg-white border border-slate-200 text-xs rounded-lg text-slate-800 font-semibold outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 h-20 resize-none"
 									/>
 								</div>
-								<div className="flex flex-col gap-1">
-									<label className="text-[10px] font-bold text-slate-455 uppercase">Entry Type</label>
-									<select
-										value={newJournal.entryType}
-										onChange={(e) => setNewJournal(prev => ({ ...prev, entryType: e.target.value as any }))}
-										className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
+							</div>
+
+							{/* Card 2: Posting Lines */}
+							<div className="bg-white border border-slate-200/80 rounded-xl shadow-sm flex flex-col overflow-hidden">
+								
+								{/* Card header */}
+								<div className="flex justify-between items-center p-5 border-b border-slate-100">
+									<h4 className="font-black text-slate-800 text-xs uppercase tracking-wider">Posting Lines</h4>
+									<button
+										type="button"
+										onClick={handleAddLine}
+										className="px-3.5 py-1.5 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-lg text-xs flex items-center gap-1.5 transition-all shadow-md active:scale-95 border-none outline-none cursor-pointer"
 									>
-										<option value="debit">Debit</option>
-										<option value="credit">Credit</option>
-									</select>
+										<IconPlus className="w-3.5 h-3.5" />
+										Add Line
+									</button>
 								</div>
+
+								{/* Table Column Labels */}
+								<div className="grid grid-cols-12 gap-3 px-6 py-3 bg-slate-50/50 border-b border-slate-100 text-[10px] font-black text-slate-500 uppercase tracking-wider">
+									<div className="col-span-4">Account</div>
+									<div className="col-span-2 text-right pr-4">Debit</div>
+									<div className="col-span-2 text-right pr-4">Credit</div>
+									<div className="col-span-3 pl-2">Description</div>
+									<div className="col-span-1"></div>
+								</div>
+
+								{/* Dynamic Rows */}
+								<div className="divide-y divide-slate-100">
+									{postingLines.map((line) => (
+										<div key={line.id} className="grid grid-cols-12 gap-3 px-6 py-3 items-center hover:bg-slate-50/30 transition-colors">
+											<div className="col-span-4">
+												<select
+													required
+													value={line.accountName}
+													onChange={(e) => handleLineChange(line.id, "accountName", e.target.value)}
+													className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg text-xs font-semibold text-slate-800 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 outline-none transition-all"
+												>
+													<option value="">Select account</option>
+													<option value="1030 - Providus Bank">1030 - Providus Bank</option>
+													<option value="1050 - Globus Bank">1050 - Globus Bank</option>
+													<option value="1010 - GT Bank">1010 - GT Bank</option>
+													<option value="4000 - Professional Service Income">4000 - Professional Service Income</option>
+													<option value="5000 - Travel & Transportation Expense">5000 - Travel & Transportation Expense</option>
+												</select>
+											</div>
+											<div className="col-span-2">
+												<input
+													type="number"
+													step="0.01"
+													placeholder="0.00"
+													value={line.debit}
+													onChange={(e) => handleLineChange(line.id, "debit", e.target.value)}
+													className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg text-xs font-mono text-right text-slate-800 font-bold focus:border-slate-400 focus:ring-1 focus:ring-slate-400 outline-none transition-all"
+												/>
+											</div>
+											<div className="col-span-2">
+												<input
+													type="number"
+													step="0.01"
+													placeholder="0.00"
+													value={line.credit}
+													onChange={(e) => handleLineChange(line.id, "credit", e.target.value)}
+													className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg text-xs font-mono text-right text-slate-800 font-bold focus:border-slate-400 focus:ring-1 focus:ring-slate-400 outline-none transition-all"
+												/>
+											</div>
+											<div className="col-span-3">
+												<input
+													type="text"
+													placeholder="Description"
+													value={line.description}
+													onChange={(e) => handleLineChange(line.id, "description", e.target.value)}
+													className="w-full px-3 py-2 border border-slate-200 bg-white rounded-lg text-xs font-semibold text-slate-800 focus:border-slate-400 focus:ring-1 focus:ring-slate-400 outline-none transition-all"
+												/>
+											</div>
+											<div className="col-span-1 flex justify-end">
+												<button
+													type="button"
+													onClick={() => handleDeleteLine(line.id)}
+													className="p-1.5 border border-red-200 hover:border-red-400 text-red-500 hover:text-red-700 bg-white hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+													title="Delete Line"
+												>
+													<IconX className="w-3.5 h-3.5" />
+												</button>
+											</div>
+										</div>
+									))}
+								</div>
+
+								{/* Totals Row */}
+								<div className="grid grid-cols-12 gap-3 px-6 py-3.5 bg-slate-50/30 border-t border-slate-200 font-bold text-xs text-slate-800 items-center">
+									<div className="col-span-4 text-right pr-6 font-black uppercase text-[10px] text-slate-500">Total</div>
+									<div className="col-span-2 text-right pr-3 font-mono font-black text-slate-900">
+										{formatNumber(postingLines.reduce((sum, l) => sum + (parseFloat(l.debit) || 0), 0))}
+									</div>
+									<div className="col-span-2 text-right pr-3 font-mono font-black text-slate-900">
+										{formatNumber(postingLines.reduce((sum, l) => sum + (parseFloat(l.credit) || 0), 0))}
+									</div>
+									<div className="col-span-3"></div>
+									<div className="col-span-1"></div>
+								</div>
+
+								{/* Bottom Actions Bar */}
+								<div className="p-5 flex justify-end gap-3 bg-slate-50/20 border-t border-slate-100">
+									<button
+										type="button"
+										onClick={() => setShowAddModal(false)}
+										className="px-5 py-2 border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-bold rounded-xl text-xs transition-colors cursor-pointer"
+									>
+										Cancel
+									</button>
+									<button
+										type="submit"
+										className="px-6 py-2 bg-red-500 hover:bg-red-600 text-white font-black rounded-xl text-xs flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer border-none"
+									>
+										<IconCheck className="w-4 h-4" />
+										Post Journal
+									</button>
+								</div>
+
 							</div>
 
-							<div className="flex flex-col gap-1">
-								<label className="text-[10px] font-bold text-slate-455 uppercase">Amount (NGN)</label>
-								<input
-									type="number"
-									required
-									placeholder="e.g. 49000"
-									value={newJournal.amount}
-									onChange={(e) => setNewJournal(prev => ({ ...prev, amount: e.target.value }))}
-									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-								/>
-							</div>
-
-							<div className="flex flex-col gap-1">
-								<label className="text-[10px] font-bold text-slate-450 uppercase">Reference / Description</label>
-								<input
-									type="text"
-									placeholder="e.g. Relocate operating imprest"
-									value={newJournal.reference}
-									onChange={(e) => setNewJournal(prev => ({ ...prev, reference: e.target.value }))}
-									className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-								/>
-							</div>
-
-							<button
-								type="submit"
-								className="w-full py-2.5 mt-2 bg-red-500 hover:bg-red-600 text-white font-extrabold rounded-xl text-xs transition-all shadow-md active:scale-[0.99] border-none outline-none cursor-pointer"
-							>
-								Post Journal Entry
-							</button>
 						</form>
 					</div>
 				</div>
