@@ -490,122 +490,122 @@ export default function InvoicesPage() {
 								</div>
 
 								{/* UNIFIED PAPER METADATA GRID (MATCHING REFERENCE IMAGE EXACTLY) */}
-								<div className="border border-slate-900 overflow-hidden text-xs">
+								<div className="border border-slate-900 overflow-hidden text-xs text-slate-900">
 									<table className="w-full border-collapse">
 										<tbody>
 											{/* Row 1 */}
 											<tr className="border-b border-slate-900">
-												<td className="w-36 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="w-36 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													INVOICE NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900 w-[35%]">
+												<td className="p-1 border-r border-slate-900 w-[35%] bg-white">
 													<input
 														type="text"
 														required
 														value={invNumber}
 														onChange={(e) => setInvNumber(e.target.value)}
-														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="w-32 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="w-32 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													BANKERS
 												</td>
-												<td className="p-1">
+												<td className="p-1 bg-white">
 													<input
 														type="text"
 														value={bankers}
 														onChange={(e) => setBankers(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 2 */}
 											<tr className="border-b border-slate-900">
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													INVOICE DATE
 												</td>
-												<td className="p-1 border-r border-slate-900">
+												<td className="p-1 border-r border-slate-900 bg-white">
 													<input
 														type="date"
 														required
 														value={invDate}
 														onChange={(e) => setInvDate(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													ACCOUNT NAME
 												</td>
-												<td className="p-1">
+												<td className="p-1 bg-white">
 													<input
 														type="text"
 														value={accountName}
 														onChange={(e) => setAccountName(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 3 */}
 											<tr className="border-b border-slate-900">
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													COY REG NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900">
+												<td className="p-1 border-r border-slate-900 bg-white">
 													<input
 														type="text"
 														value={coyRegNumber}
 														onChange={(e) => setCoyRegNumber(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													ACCOUNT NUMBER
 												</td>
-												<td className="p-1">
+												<td className="p-1 bg-white">
 													<input
 														type="text"
 														value={accountNumber}
 														onChange={(e) => setAccountNumber(e.target.value)}
-														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 4 */}
 											<tr className="border-b border-slate-900">
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													PO NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900">
+												<td className="p-1 border-r border-slate-900 bg-white">
 													<input
 														type="text"
 														placeholder="PO Number"
 														value={poNumber}
 														onChange={(e) => setPoNumber(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													TIN
 												</td>
-												<td className="p-1">
+												<td className="p-1 bg-white">
 													<input
 														type="text"
 														value={tinNumber}
 														onChange={(e) => setTinNumber(e.target.value)}
-														className="w-full px-2 py-1 font-mono font-semibold text-xs outline-none bg-transparent"
+														className="w-full px-2 py-1 font-mono font-semibold text-xs outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 5: BILLED TO & ADDRESS */}
 											<tr className="border-b border-slate-900">
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													BILLED TO
 												</td>
-												<td colSpan={3} className="p-2">
+												<td colSpan={3} className="p-2 bg-white">
 													<div className="flex flex-col gap-1.5">
 														<input
 															type="text"
@@ -613,14 +613,14 @@ export default function InvoicesPage() {
 															placeholder="Client / Billed To Name"
 															value={billedToName}
 															onChange={(e) => setBilledToName(e.target.value)}
-															className="w-full px-2 py-1 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded bg-transparent"
+															className="w-full px-2 py-1 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
 														/>
 														<input
 															type="text"
 															placeholder="Address (e.g. NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS)"
 															value={billedToAddress}
 															onChange={(e) => setBilledToAddress(e.target.value)}
-															className="w-full px-2 py-1 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded bg-transparent text-slate-700"
+															className="w-full px-2 py-1 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
 														/>
 													</div>
 												</td>
@@ -628,17 +628,17 @@ export default function InvoicesPage() {
 
 											{/* Row 6: PURPOSE OF INVOICE */}
 											<tr className="border-b border-slate-900">
-												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px] text-slate-900">
 													PURPOSE OF INVOICE
 												</td>
-												<td colSpan={3} className="p-1">
+												<td colSpan={3} className="p-1 bg-white">
 													<input
 														type="text"
 														required
 														placeholder="e.g. JULY 2025 INVOICE"
 														value={purposeOfInvoice}
 														onChange={(e) => setPurposeOfInvoice(e.target.value)}
-														className="w-full px-2 py-1 font-bold text-xs uppercase outline-none bg-transparent"
+														className="w-full px-2 py-1 font-bold text-xs uppercase outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
@@ -648,21 +648,21 @@ export default function InvoicesPage() {
 									{/* Row 7 & 8: SALES REP ID | SHIPPING METHOD | DUE DATE */}
 									<table className="w-full border-collapse">
 										<thead>
-											<tr className="bg-slate-100 border-b border-slate-900 text-[10px] font-black uppercase text-center">
-												<th className="p-2 border-r border-slate-900 w-1/3">SALES REP ID</th>
-												<th className="p-2 border-r border-slate-900 w-1/3">SHIPPING METHOD</th>
-												<th className="p-2 w-1/3">DUE DATE</th>
+											<tr className="bg-slate-100 border-b border-slate-900 text-[10px] font-black uppercase text-center text-slate-900">
+												<th className="p-2 border-r border-slate-900 w-1/3 text-slate-900">SALES REP ID</th>
+												<th className="p-2 border-r border-slate-900 w-1/3 text-slate-900">SHIPPING METHOD</th>
+												<th className="p-2 w-1/3 text-slate-900">DUE DATE</th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr className="text-xs">
+											<tr className="text-xs bg-white">
 												<td className="p-1 border-r border-slate-900">
 													<input
 														type="text"
 														placeholder="Sales Rep ID"
 														value={salesRepId}
 														onChange={(e) => setSalesRepId(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 												<td className="p-1 border-r border-slate-900">
@@ -671,7 +671,7 @@ export default function InvoicesPage() {
 														placeholder="e.g. Hand Delivery"
 														value={shippingMethod}
 														onChange={(e) => setShippingMethod(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 												<td className="p-1">
@@ -679,7 +679,7 @@ export default function InvoicesPage() {
 														type="date"
 														value={dueDate}
 														onChange={(e) => setDueDate(e.target.value)}
-														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+														className="w-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>

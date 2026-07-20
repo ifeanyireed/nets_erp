@@ -816,79 +816,11 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 					</div>
 				)}
 
-				{/* MODAL 1: CREATE INVOICE */}
+				{/* MODAL 1: CREATE INVOICE REDIRECT HANDLER */}
 				{showInvoiceModal && (
-					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fadeIn">
-						<div className="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 max-w-md w-full flex flex-col gap-4">
-							<div className="flex justify-between items-center pb-2 border-b border-gray-100">
-								<h3 className="font-black text-slate-800 text-md">Create Customer Invoice</h3>
-								<button onClick={() => setShowInvoiceModal(false)} className="text-slate-400 hover:text-slate-700 font-extrabold text-sm border-none bg-transparent">✕</button>
-							</div>
-							<form onSubmit={handleCreateInvoice} className="flex flex-col gap-3">
-								<div className="flex flex-col gap-1">
-									<label className="text-[10px] font-bold text-slate-450 uppercase">Customer Name</label>
-									<input
-										type="text"
-										required
-										value={newInvoice.customerName}
-										onChange={(e) => setNewInvoice({ ...newInvoice, customerName: e.target.value })}
-										placeholder="e.g. Dangote Group Plc"
-										className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-									/>
-								</div>
-								<div className="flex flex-col gap-1">
-									<label className="text-[10px] font-bold text-slate-455 uppercase">Customer Email</label>
-									<input
-										type="email"
-										required
-										value={newInvoice.customerEmail}
-										onChange={(e) => setNewInvoice({ ...newInvoice, customerEmail: e.target.value })}
-										placeholder="e.g. billing@dangote.com"
-										className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-									/>
-								</div>
-								<div className="grid grid-cols-2 gap-3">
-									<div className="flex flex-col gap-1">
-										<label className="text-[10px] font-bold text-slate-450 uppercase">Amount (NGN)</label>
-										<input
-											type="number"
-											required
-											min="1"
-											step="0.01"
-											value={newInvoice.amount}
-											onChange={(e) => setNewInvoice({ ...newInvoice, amount: e.target.value })}
-											placeholder="250000"
-											className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-										/>
-									</div>
-									<div className="flex flex-col gap-1">
-										<label className="text-[10px] font-bold text-slate-450 uppercase">Due Date</label>
-										<input
-											type="date"
-											required
-											value={newInvoice.dueDate}
-											onChange={(e) => setNewInvoice({ ...newInvoice, dueDate: e.target.value })}
-											className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold"
-										/>
-									</div>
-								</div>
-								<div className="flex flex-col gap-1">
-									<label className="text-[10px] font-bold text-slate-450 uppercase">Invoice Description</label>
-									<textarea
-										rows={3}
-										value={newInvoice.description}
-										onChange={(e) => setNewInvoice({ ...newInvoice, description: e.target.value })}
-										placeholder="Corporate transport service charge for July"
-										className="px-3 py-2 bg-gray-50 border border-gray-200 text-xs rounded-xl focus:outline-none focus:border-blue-500 text-slate-800 font-semibold resize-none"
-									/>
-								</div>
-								<div className="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-100">
-									<button type="button" onClick={() => setShowInvoiceModal(false)} className="px-4 py-2 border border-gray-200 text-slate-500 rounded-xl text-xs font-bold hover:bg-slate-50 bg-white">Cancel</button>
-									<button type="submit" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold border-none cursor-pointer">Submit Invoice</button>
-								</div>
-							</form>
-						</div>
-					</div>
+					<React.Fragment>
+						{/* Redirecting to document invoice modal on invoices page */}
+					</React.Fragment>
 				)}
 
 				{/* MODAL 2: REQUEST IMPREST */}
