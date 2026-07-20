@@ -163,6 +163,41 @@ function parseNumberFromCommas(value: string | number): number {
 	return parseFloat(clean) || 0;
 }
 
+function getClientAcronym(clientName: string): string {
+	if (!clientName) return "GEN";
+	const clean = clientName.trim().toUpperCase();
+
+	// 1. Check for parenthesized acronym e.g. "NIGERIAN BOTTLING COMPANY (NBC)" -> "NBC"
+	const matchParen = clean.match(/\(([^)]+)\)/);
+	if (matchParen && matchParen[1].trim().length >= 2) {
+		return matchParen[1].trim().replace(/[^A-Z0-9]/g, "");
+	}
+
+	// 2. Specific known client acronym overrides
+	if (clean.includes("CHEMICAL") || clean.includes("CAP PLC")) return "CAP";
+	if (clean.includes("ECOLOGIQUE")) return "ETS";
+	if (clean.includes("7UP")) return "7UP";
+	if (clean.includes("DULUX")) return "DULUX";
+	if (clean.includes("IHS")) return "IHS";
+
+	// 3. Extract main initials
+	const stopWords = new Set(["AND", "&", "PLC", "LTD", "LIMITED", "INC", "CORP", "COMPANY", "CO", "SERVICES", "SERVICE"]);
+	const words = clean.split(/[\s\-_]+/).filter(w => w && !stopWords.has(w));
+
+	let acronym = words.map(w => w.charAt(0)).join("").replace(/[^A-Z0-9]/g, "");
+	if (acronym.length < 2) {
+		acronym = clean.replace(/[^A-Z0-9]/g, "").slice(0, 3);
+	}
+	return acronym || "GEN";
+}
+
+function formatInvoiceCode(clientName: string, dateStr: string, serial: string | number = "008"): string {
+	const acronym = getClientAcronym(clientName);
+	const year = dateStr && dateStr.includes("-") ? dateStr.split("-")[0] : new Date().getFullYear().toString();
+	const formattedSerial = String(serial).padStart(3, "0");
+	return `NETS-${acronym}-${year}-${formattedSerial}`;
+}
+
 export default function InvoicesPage() {
 	const router = useRouter();
 
@@ -287,15 +322,23 @@ export default function InvoicesPage() {
 	};
 
 	// Invoice Document Form State
-	const [invNumber, setInvNumber] = useState("NETS-CAP-2025-008");
+	const [invSerial, setInvSerial] = useState("008");
 	const [invDate, setInvDate] = useState("2025-08-15");
+	const [billedToName, setBilledToName] = useState("CHEMICAL AND ALLIED PRODUCTS PLC");
+	const [invNumber, setInvNumber] = useState(() => formatInvoiceCode("CHEMICAL AND ALLIED PRODUCTS PLC", "2025-08-15", "008"));
+
+	// Auto-update invoice code dynamically: NETS-[CLIENT_ACRONYM]-[YEAR]-[SERIAL]
+	React.useEffect(() => {
+		const dynamicCode = formatInvoiceCode(billedToName, invDate, invSerial);
+		setInvNumber(dynamicCode);
+	}, [billedToName, invDate, invSerial]);
+
 	const [coyRegNumber, setCoyRegNumber] = useState("RC. 463290");
 	const [poNumber, setPoNumber] = useState("");
 	const [bankers, setBankers] = useState("providus");
 	const [accountName, setAccountName] = useState("New Era Transport Services");
 	const [accountNumber, setAccountNumber] = useState("1304247018");
 	const [tinNumber, setTinNumber] = useState("19300499-0001");
-	const [billedToName, setBilledToName] = useState("CHEMICAL AND ALLIED PRODUCTS PLC");
 	const [billedToAddress, setBilledToAddress] = useState("NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS.");
 	const [purposeOfInvoice, setPurposeOfInvoice] = useState("JULY 2025 INVOICE");
 	const [salesRepId, setSalesRepId] = useState("");
