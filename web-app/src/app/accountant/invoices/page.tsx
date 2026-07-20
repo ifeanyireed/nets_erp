@@ -64,6 +64,21 @@ const DEFAULT_CLIENTS: ClientOption[] = [
 	{ id: "cli-6", name: "IHS - HOLDING LIMITED", address: "IKOYI, LAGOS." }
 ];
 
+interface BankAccountOption {
+	id: string;
+	bankName: string;
+	accountName: string;
+	accountNumber: string;
+}
+
+const DEFAULT_BANK_ACCOUNTS: BankAccountOption[] = [
+	{ id: "acc-4", bankName: "PROVIDUS BANK", accountName: "New Era Transport Services", accountNumber: "1304247018" },
+	{ id: "acc-3", bankName: "GT BANK", accountName: "New Era Transport Services", accountNumber: "0123456789" },
+	{ id: "acc-1", bankName: "GLOBUS BANK", accountName: "New Era Transport Services", accountNumber: "1050293847" },
+	{ id: "acc-2", bankName: "KEYSTONE BANK", accountName: "New Era Transport Services", accountNumber: "1029384756" },
+	{ id: "acc-5", bankName: "MONIEPOINT", accountName: "New Era Transport Services", accountNumber: "5098765432" }
+];
+
 interface Invoice {
 	id: string;
 	code: string;
@@ -164,8 +179,9 @@ export default function InvoicesPage() {
 	const [selectedClientFilter, setSelectedClientFilter] = useState("All");
 	const [showAddModal, setShowAddModal] = useState(false);
 
-	// Client Dropdown & Database Sync State
+	// Client & Bank Accounts Dropdown & Database Sync State
 	const [clientList, setClientList] = useState<ClientOption[]>(DEFAULT_CLIENTS);
+	const [bankAccountsList, setBankAccountsList] = useState<BankAccountOption[]>(DEFAULT_BANK_ACCOUNTS);
 	const [showAddClientModal, setShowAddClientModal] = useState(false);
 	const [newClientName, setNewClientName] = useState("");
 	const [newClientAddress, setNewClientAddress] = useState("");
@@ -194,6 +210,29 @@ export default function InvoicesPage() {
 						setClientList(prev => {
 							const existingNames = new Set(prev.map(p => p.name.toUpperCase()));
 							const newItems = mapped.filter(m => !existingNames.has(m.name.toUpperCase()));
+							return [...prev, ...newItems];
+						});
+					}
+				}
+			})
+			.catch(() => null);
+
+		// Fetch database bank accounts
+		fetch(`${FINANCE_API_URL}/bank-accounts`)
+			.then(res => res.ok ? res.json() : null)
+			.then(data => {
+				if (data && Array.isArray(data) && data.length > 0) {
+					const mapped: BankAccountOption[] = data.map((item: any) => ({
+						id: item.id || `acc-${Date.now()}`,
+						bankName: (item.bankName || item.name || "").toUpperCase(),
+						accountName: item.holderName || item.accountName || "New Era Transport Services",
+						accountNumber: item.accountNumber || item.number || "1304247018"
+					})).filter((b: BankAccountOption) => b.bankName);
+
+					if (mapped.length > 0) {
+						setBankAccountsList(prev => {
+							const existingNames = new Set(prev.map(p => p.bankName.toUpperCase()));
+							const newItems = mapped.filter(m => !existingNames.has(m.bankName.toUpperCase()));
 							return [...prev, ...newItems];
 						});
 					}
@@ -630,12 +669,28 @@ export default function InvoicesPage() {
 													BANKERS
 												</td>
 												<td className="p-0.5 w-[30%] bg-white align-middle">
-													<input
-														type="text"
-														value={bankers}
-														onChange={(e) => setBankers(e.target.value)}
-														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
-													/>
+													<select
+														value={bankers.toUpperCase()}
+														onChange={(e) => {
+															const val = e.target.value;
+															setBankers(val);
+															const selected = bankAccountsList.find(b => b.bankName.toUpperCase() === val.toUpperCase());
+															if (selected) {
+																if (selected.accountName) setAccountName(selected.accountName);
+																if (selected.accountNumber) setAccountNumber(selected.accountNumber);
+															}
+														}}
+														className="w-full h-full px-1.5 py-0.5 font-bold text-xs text-slate-900 outline-none bg-white cursor-pointer uppercase"
+													>
+														{bankAccountsList.map(b => (
+															<option key={b.id} value={b.bankName.toUpperCase()}>
+																{b.bankName.toUpperCase()}
+															</option>
+														))}
+														{!bankAccountsList.some(b => b.bankName.toUpperCase() === bankers.toUpperCase()) && bankers && (
+															<option value={bankers.toUpperCase()}>{bankers.toUpperCase()}</option>
+														)}
+													</select>
 												</td>
 											</tr>
 
