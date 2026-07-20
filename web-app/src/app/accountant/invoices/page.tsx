@@ -16,8 +16,11 @@ import {
 	IconSparkles,
 	IconX,
 	IconCheck,
-	IconFileText
+	IconFileText,
+	IconUserPlus
 } from "@tabler/icons-react";
+
+const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 const CLIENTS_TABS = [
 	{ id: "clients", label: "Clients", slug: "/accountant/clients" },
@@ -45,6 +48,21 @@ interface CustomColumn {
 	id: string;
 	title: string;
 }
+
+interface ClientOption {
+	id: string | number;
+	name: string;
+	address?: string;
+}
+
+const DEFAULT_CLIENTS: ClientOption[] = [
+	{ id: "cli-1", name: "CHEMICAL AND ALLIED PRODUCTS PLC", address: "NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS." },
+	{ id: "cli-2", name: "ECOLOGIQUE TRANSPORT SOLUTION", address: "NO 12, MARINA ROAD, VICTORIA ISLAND, LAGOS." },
+	{ id: "cli-3", name: "DULUX - CHEMICAL & ALLIED PRODUCT PLC", address: "ADENIYI JONES AVENUE, IKEJA LAGOS." },
+	{ id: "cli-4", name: "7UP BOTTLING COMPANY", address: "227 MOBOlAJI JOHNSON AVENUE, OREGUN, IKEJA, LAGOS." },
+	{ id: "cli-5", name: "NIGERIAN BOTTLING COMPANY (NBC)", address: "IDDI-MANGORO, AGEGE MOTOR ROAD, LAGOS." },
+	{ id: "cli-6", name: "IHS - HOLDING LIMITED", address: "IKOYI, LAGOS." }
+];
 
 interface Invoice {
 	id: string;
@@ -146,6 +164,13 @@ export default function InvoicesPage() {
 	const [selectedClientFilter, setSelectedClientFilter] = useState("All");
 	const [showAddModal, setShowAddModal] = useState(false);
 
+	// Client Dropdown & Database Sync State
+	const [clientList, setClientList] = useState<ClientOption[]>(DEFAULT_CLIENTS);
+	const [showAddClientModal, setShowAddClientModal] = useState(false);
+	const [newClientName, setNewClientName] = useState("");
+	const [newClientAddress, setNewClientAddress] = useState("");
+	const [isSavingClient, setIsSavingClient] = useState(false);
+
 	React.useEffect(() => {
 		if (typeof window !== "undefined") {
 			const params = new URLSearchParams(window.location.search);
@@ -153,7 +178,74 @@ export default function InvoicesPage() {
 				setShowAddModal(true);
 			}
 		}
+
+		// Fetch database clients
+		fetch(`${FINANCE_API_URL}/clients`)
+			.then(res => res.ok ? res.json() : null)
+			.then(data => {
+				if (data && Array.isArray(data) && data.length > 0) {
+					const mapped: ClientOption[] = data.map((item: any) => ({
+						id: item.id || `cli-${Date.now()}`,
+						name: (item.name || item.companyName || item.subName || "").toUpperCase(),
+						address: (item.address || item.website || "").toUpperCase()
+					})).filter((c: ClientOption) => c.name);
+
+					if (mapped.length > 0) {
+						setClientList(prev => {
+							const existingNames = new Set(prev.map(p => p.name.toUpperCase()));
+							const newItems = mapped.filter(m => !existingNames.has(m.name.toUpperCase()));
+							return [...prev, ...newItems];
+						});
+					}
+				}
+			})
+			.catch(() => null);
 	}, []);
+
+	const handleCreateClientOnTheFly = async (e: React.FormEvent) => {
+		e.preventDefault();
+		if (!newClientName.trim()) return;
+
+		setIsSavingClient(true);
+		const nameUpper = newClientName.trim().toUpperCase();
+		const addrUpper = newClientAddress.trim().toUpperCase();
+
+		const newClientObj: ClientOption = {
+			id: `cli-${Date.now()}`,
+			name: nameUpper,
+			address: addrUpper
+		};
+
+		// Select new client immediately
+		setClientList(prev => [newClientObj, ...prev]);
+		setBilledToName(nameUpper);
+		if (addrUpper) setBilledToAddress(addrUpper);
+
+		// Post to backend database
+		try {
+			await fetch(`${FINANCE_API_URL}/clients`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					name: nameUpper,
+					companyName: nameUpper,
+					subName: nameUpper,
+					category: "COOPERATE CLIENT",
+					status: "Active",
+					email: `${nameUpper.toLowerCase().replace(/[^a-z0-9]/g, "")}@client.com`,
+					phone: "08000000000",
+					address: addrUpper
+				})
+			}).catch(() => null);
+		} catch (err) {
+			// Fallback
+		} finally {
+			setIsSavingClient(false);
+			setNewClientName("");
+			setNewClientAddress("");
+			setShowAddClientModal(false);
+		}
+	};
 
 	// Invoice Document Form State
 	const [invNumber, setInvNumber] = useState("NETS-CAP-2025-008");
@@ -628,19 +720,51 @@ export default function InvoicesPage() {
 											</tr>
 
 											{/* Row 5a: BILLED TO */}
-											<tr className="border-b border-slate-900 h-7">
+											<tr className="border-b border-slate-900 h-8">
 												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													BILLED TO
 												</td>
 												<td colSpan={3} className="p-0.5 bg-white align-middle">
-													<input
-														type="text"
-														required
-														placeholder="Client / Billed To Name"
-														value={billedToName}
-														onChange={(e) => setBilledToName(e.target.value)}
-														className="w-full h-full px-1.5 py-0.5 font-black text-xs uppercase outline-none text-slate-900 bg-transparent"
-													/>
+													<div className="flex items-center gap-1.5 w-full h-full px-1">
+														<select
+															required
+															value={billedToName}
+															onChange={(e) => {
+																const val = e.target.value;
+																if (val === "__ADD_NEW__") {
+																	setShowAddClientModal(true);
+																} else {
+																	setBilledToName(val);
+																	const selected = clientList.find(c => c.name === val);
+																	if (selected && selected.address) {
+																		setBilledToAddress(selected.address);
+																	}
+																}
+															}}
+															className="w-full h-full font-black text-xs uppercase outline-none text-slate-900 bg-white cursor-pointer py-0.5"
+														>
+															{!billedToName && <option value="">Select Client from Database...</option>}
+															{clientList.map(c => (
+																<option key={c.id} value={c.name}>
+																	{c.name}
+																</option>
+															))}
+															{!clientList.some(c => c.name === billedToName) && billedToName && (
+																<option value={billedToName}>{billedToName}</option>
+															)}
+															<option value="__ADD_NEW__" className="font-bold text-red-600 bg-slate-100">
+																+ Add New Client to Database...
+															</option>
+														</select>
+														<button
+															type="button"
+															onClick={() => setShowAddClientModal(true)}
+															className="px-2 py-0.5 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-black uppercase tracking-wider shrink-0 cursor-pointer shadow-sm border-none flex items-center gap-1"
+															title="Add a new client to the database on the fly"
+														>
+															+ New Client
+														</button>
+													</div>
 												</td>
 											</tr>
 
@@ -1005,6 +1129,78 @@ export default function InvoicesPage() {
 							</div>
 						</div>
 
+					</div>
+				</div>
+			)}
+
+			{/* ADD NEW CLIENT ON THE FLY MODAL */}
+			{showAddClientModal && (
+				<div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 animate-fadeIn">
+					<div className="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-slate-200 overflow-hidden animate-slideUp">
+						<div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-900 text-white">
+							<div className="flex items-center gap-2.5">
+								<div className="p-1.5 bg-red-500/20 text-red-400 rounded-lg">
+									<IconUserPlus className="w-5 h-5" />
+								</div>
+								<div>
+									<h3 className="font-black text-white text-sm uppercase tracking-wider">Add New Client to Database</h3>
+									<p className="text-[11px] text-slate-400 font-medium">Create client profile on the fly</p>
+								</div>
+							</div>
+							<button
+								type="button"
+								onClick={() => setShowAddClientModal(false)}
+								className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer border-none"
+							>
+								<IconX className="w-4 h-4" />
+							</button>
+						</div>
+
+						<form onSubmit={handleCreateClientOnTheFly} className="p-6 flex flex-col gap-4">
+							<div>
+								<label className="text-[10px] font-black text-slate-700 uppercase tracking-wider block mb-1">
+									Client / Company Name *
+								</label>
+								<input
+									type="text"
+									required
+									placeholder="e.g. DANGOTE CEMENT PLC"
+									value={newClientName}
+									onChange={(e) => setNewClientName(e.target.value)}
+									className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-black uppercase text-slate-900 focus:border-slate-800 outline-none"
+								/>
+							</div>
+
+							<div>
+								<label className="text-[10px] font-black text-slate-700 uppercase tracking-wider block mb-1">
+									Address (Optional)
+								</label>
+								<input
+									type="text"
+									placeholder="e.g. NO 1, ALIKO DANGOTE WAY, IKEJA, LAGOS"
+									value={newClientAddress}
+									onChange={(e) => setNewClientAddress(e.target.value)}
+									className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-semibold uppercase text-slate-900 focus:border-slate-800 outline-none"
+								/>
+							</div>
+
+							<div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100 mt-2">
+								<button
+									type="button"
+									onClick={() => setShowAddClientModal(false)}
+									className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-colors cursor-pointer"
+								>
+									Cancel
+								</button>
+								<button
+									type="submit"
+									disabled={isSavingClient}
+									className="px-5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase tracking-wider rounded-xl shadow-md transition-colors cursor-pointer border-none flex items-center gap-1.5"
+								>
+									{isSavingClient ? "Saving..." : "Save & Select Client"}
+								</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			)}
