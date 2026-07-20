@@ -109,107 +109,109 @@ export default function IncomeStatementPage() {
 				</div>
 			)}
 
-			{/* Income Statement Table Layout */}
-			<div className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm mt-2 text-xs">
-				<div className="grid grid-cols-12 gap-3 px-6 py-4 bg-slate-900 text-white font-black uppercase tracking-wider text-[10px]">
-					<div className="col-span-8">Financial Particulars</div>
-					<div className="col-span-4 text-right">Amount (₦)</div>
-				</div>
-
-				<div className="divide-y divide-slate-100 font-semibold text-slate-700">
-					{/* REVENUE */}
-					<div className="px-6 py-3 bg-slate-50/50 flex justify-between items-center text-slate-900 font-bold uppercase tracking-tight text-[10px] border-b border-slate-200">
-						<span>Revenue</span>
-						<span></span>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Haulage & Freight Revenue</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.revenue.haulageRevenue)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Other Operating Revenue</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.revenue.otherRevenue)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-6 py-3 bg-slate-50/20 items-center font-bold text-slate-800">
-						<div className="col-span-8">Total Revenue</div>
-						<div className="col-span-4 text-right font-mono text-slate-900">{formatNaira(totalRevenue)}</div>
-					</div>
-
-					{/* COST OF SALES */}
-					<div className="px-6 py-3 bg-slate-50/50 flex justify-between items-center text-slate-900 font-bold uppercase tracking-tight text-[10px] border-b border-slate-200 border-t-2 border-slate-300">
-						<span>Cost of Sales</span>
-						<span></span>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Haulage & Fuel Direct Expenses</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.costOfSales.fuelDirectCost)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Driver Allowances & Logistics Costs</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.costOfSales.driverAllowances)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-6 py-3 bg-slate-50/20 items-center font-bold text-slate-800">
-						<div className="col-span-8">Total Cost of Sales</div>
-						<div className="col-span-4 text-right font-mono text-slate-900">{formatNaira(totalCostOfSales)}</div>
-					</div>
-
-					{/* GROSS PROFIT */}
-					<div className="grid grid-cols-12 gap-3 px-6 py-3.5 bg-slate-100 items-center font-black text-slate-900 border-t border-b border-slate-300 uppercase tracking-tight">
-						<div className="col-span-8">Gross Profit</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(grossProfit)}</div>
-					</div>
-
-					{/* OPERATING EXPENSES */}
-					<div className="px-6 py-3 bg-slate-50/50 flex justify-between items-center text-slate-900 font-bold uppercase tracking-tight text-[10px] border-b border-slate-200">
-						<span>Operating Expenses</span>
-						<span></span>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Fleet Repair & Maintenance</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.operatingExpenses.fleetRepairMaintenance)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Salaries and Wages</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.operatingExpenses.salariesWages)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Depreciation of Trucks & Assets</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.operatingExpenses.depreciationTrucks)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Administrative & Office Expenses</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.operatingExpenses.adminOfficeExpenses)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Finance Charges & Bank Fees</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.operatingExpenses.financeCharges)}</div>
-					</div>
-					<div className="grid grid-cols-12 gap-3 px-6 py-3 bg-slate-50/20 items-center font-bold text-slate-800 border-b border-slate-200">
-						<div className="col-span-8">Total Operating Expenses</div>
-						<div className="col-span-4 text-right font-mono text-slate-900">{formatNaira(totalOperatingExpenses)}</div>
-					</div>
-
-					{/* OPERATING PROFIT */}
-					<div className="grid grid-cols-12 gap-3 px-6 py-3.5 bg-slate-100 items-center font-black text-slate-900 border-t border-b border-slate-300 uppercase tracking-tight">
-						<div className="col-span-8">Operating Profit (EBIT)</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(operatingProfit)}</div>
-					</div>
-
-					{/* INCOME TAX */}
-					<div className="grid grid-cols-12 gap-3 px-8 py-3 items-center">
-						<div className="col-span-8 text-slate-650">Company Income Tax (30%)</div>
-						<div className="col-span-4 text-right font-mono">{formatNaira(incomeStatement.tax.incomeTax)}</div>
-					</div>
-
-					{/* NET INCOME */}
-					<div className="grid grid-cols-12 gap-3 px-6 py-4 bg-slate-900 text-white items-center font-black border-t-2 border-slate-900 uppercase tracking-wider text-sm">
-						<div className="col-span-8 flex items-center gap-2">
-							<IconReportMoney className="w-5 h-5 text-emerald-400 shrink-0" />
-							<span>Net Income (Net Profit)</span>
+			{/* Income Statement Card Layout (Matches Balance Sheet) */}
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2 text-left text-xs font-semibold">
+				
+				{/* Revenues & Costs Card */}
+				<div className="flex flex-col gap-4 bg-slate-50/50 p-6 rounded-3xl border border-gray-100">
+					<h3 className="text-sm font-black text-slate-800 border-b border-gray-200 pb-2 uppercase tracking-wide">Trading Revenue & Direct Costs</h3>
+					
+					<div className="space-y-4">
+						{/* Revenue */}
+						<div>
+							<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Revenue Streams</h4>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5">
+								<span className="text-slate-700">Haulage & Freight Revenue</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.revenue.haulageRevenue)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Other Operating Revenue</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.revenue.otherRevenue)}</span>
+							</div>
+							<div className="flex justify-between pt-1.5 font-bold text-slate-800">
+								<span>Total Revenue</span>
+								<span>{formatNaira(totalRevenue)}</span>
+							</div>
 						</div>
-						<div className="col-span-4 text-right font-mono text-emerald-400">{formatNaira(netIncome)}</div>
+
+						{/* Cost of Sales */}
+						<div>
+							<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Direct Costs (Cost of Sales)</h4>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5">
+								<span className="text-slate-700">Haulage & Fuel Direct Expenses</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.costOfSales.fuelDirectCost)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Driver Allowances & Logistics Costs</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.costOfSales.driverAllowances)}</span>
+							</div>
+							<div className="flex justify-between pt-1.5 font-bold text-slate-800">
+								<span>Total Cost of Sales</span>
+								<span>{formatNaira(totalCostOfSales)}</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="flex justify-between border-t border-gray-200 pt-4 mt-auto text-slate-850 font-black text-sm">
+						<span>Gross Profit</span>
+						<span className="text-blue-600">{formatNaira(grossProfit)}</span>
 					</div>
 				</div>
+
+				{/* Expenses & Earnings Card */}
+				<div className="flex flex-col gap-4 bg-slate-50/50 p-6 rounded-3xl border border-gray-100">
+					<h3 className="text-sm font-black text-slate-800 border-b border-gray-200 pb-2 uppercase tracking-wide">Operating Overhead & Earnings</h3>
+					
+					<div className="space-y-4">
+						{/* Operating Expenses */}
+						<div>
+							<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Operating Overhead</h4>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5">
+								<span className="text-slate-700">Fleet Repair & Maintenance</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.operatingExpenses.fleetRepairMaintenance)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Salaries and Wages</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.operatingExpenses.salariesWages)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Depreciation of Trucks & Assets</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.operatingExpenses.depreciationTrucks)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Administrative & Office Expenses</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.operatingExpenses.adminOfficeExpenses)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Finance Charges & Bank Fees</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.operatingExpenses.financeCharges)}</span>
+							</div>
+							<div className="flex justify-between pt-1.5 font-bold text-slate-800">
+								<span>Total Operating Expenses</span>
+								<span>{formatNaira(totalOperatingExpenses)}</span>
+							</div>
+						</div>
+
+						{/* Earnings & Tax */}
+						<div>
+							<h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Earnings & Taxation</h4>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5">
+								<span className="text-slate-700">Operating Profit (EBIT)</span>
+								<span className="text-slate-850 font-bold">{formatNaira(operatingProfit)}</span>
+							</div>
+							<div className="flex justify-between border-b border-gray-50 pb-1.5 mt-1.5">
+								<span className="text-slate-700">Company Income Tax (30%)</span>
+								<span className="text-slate-850 font-bold">{formatNaira(incomeStatement.tax.incomeTax)}</span>
+							</div>
+						</div>
+					</div>
+
+					<div className="flex justify-between border-t border-gray-200 pt-4 mt-auto text-slate-850 font-black text-sm">
+						<span>Net Income (Net Profit)</span>
+						<span className="text-emerald-600">{formatNaira(netIncome)}</span>
+					</div>
+				</div>
+
 			</div>
 
 		</div>
