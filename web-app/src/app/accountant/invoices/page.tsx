@@ -1194,7 +1194,7 @@ export default function InvoicesPage() {
 						</div>
 
 						{/* Modal Bottom Actions Bar */}
-						<div className="flex justify-between items-center px-6 py-4 border-t border-slate-200 bg-white shrink-0">
+						<div className="flex justify-between items-center px-6 py-4 border-t border-slate-200 bg-white shrink-0 no-print">
 							<div className="flex items-center gap-2 text-slate-500 text-xs font-semibold">
 								<span>Grand Total:</span>
 								<span className="text-slate-900 font-black text-sm">{formatNaira(grandTotal)}</span>
