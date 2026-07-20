@@ -38,6 +38,12 @@ interface LineItem {
 	trackingId: string;
 	tonnage: string | number;
 	amount: string | number;
+	customValues?: Record<string, string>;
+}
+
+interface CustomColumn {
+	id: string;
+	title: string;
 }
 
 interface Invoice {
@@ -189,6 +195,16 @@ export default function InvoicesPage() {
 	const vatAmount = (vatBasis * vatPercent) / 100;
 	const grandTotal = subtotal + vatAmount;
 	const amountInWords = numberToWordsNaira(grandTotal);
+
+	const [customColumns, setCustomColumns] = useState<CustomColumn[]>([]);
+
+	const handleAddColumn = () => {
+		const colName = prompt("Enter new column header title (e.g. CONTAINER NO, DRIVER NAME, REMARKS):");
+		if (colName && colName.trim()) {
+			const newColId = `col_${Date.now()}`;
+			setCustomColumns(prev => [...prev, { id: newColId, title: colName.trim().toUpperCase() }]);
+		}
+	};
 
 	const handleAddRow = () => {
 		const newId = String(Date.now());
@@ -708,16 +724,27 @@ export default function InvoicesPage() {
 
 								{/* TRANSPORTATION LINE ITEMS TABLE */}
 								<div className="flex flex-col gap-2">
-									<div className="flex justify-between items-center">
+									<div className="flex justify-between items-center flex-wrap gap-2">
 										<h4 className="text-xs font-black uppercase tracking-wider text-slate-800">Haulage & Delivery Line Items</h4>
-										<button
-											type="button"
-											onClick={handleAddRow}
-											className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer"
-										>
-											<IconPlus className="w-3.5 h-3.5" />
-											Add Line Item
-										</button>
+										<div className="flex items-center gap-2">
+											<button
+												type="button"
+												onClick={handleAddColumn}
+												className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer border border-slate-700 shadow-sm"
+												title="Add custom column header to line items table"
+											>
+												<IconPlus className="w-3.5 h-3.5 text-sky-400" />
+												Add Column Item
+											</button>
+											<button
+												type="button"
+												onClick={handleAddRow}
+												className="px-2.5 py-1 bg-slate-900 hover:bg-slate-800 text-white rounded text-[11px] font-bold flex items-center gap-1 cursor-pointer shadow-sm"
+											>
+												<IconPlus className="w-3.5 h-3.5" />
+												Add Line Item
+											</button>
+										</div>
 									</div>
 
 									<div className="overflow-x-auto border border-slate-900 rounded-sm">
@@ -729,6 +756,21 @@ export default function InvoicesPage() {
 													<th className="p-2 border-r border-slate-900 min-w-[120px]">TRUCK NO</th>
 													<th className="p-2 border-r border-slate-900 min-w-[120px]">LOCATION</th>
 													<th className="p-2 border-r border-slate-900 min-w-[110px]">TRACKING ID</th>
+													{customColumns.map(col => (
+														<th key={col.id} className="p-2 border-r border-slate-900 min-w-[120px]">
+															<div className="flex items-center justify-between gap-1">
+																<span>{col.title}</span>
+																<button
+																	type="button"
+																	onClick={() => setCustomColumns(prev => prev.filter(c => c.id !== col.id))}
+																	className="text-red-600 hover:text-red-800 font-black text-xs cursor-pointer px-1"
+																	title="Remove Column"
+																>
+																	×
+																</button>
+															</div>
+														</th>
+													))}
 													<th className="p-2 border-r border-slate-900 min-w-[100px]">TONNAGE</th>
 													<th className="p-2 border-r border-slate-900 min-w-[130px]">AMOUNT (₦)</th>
 													<th className="p-1 w-8"></th>
@@ -773,6 +815,23 @@ export default function InvoicesPage() {
 																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-medium text-center focus:bg-white outline-none"
 															/>
 														</td>
+														{customColumns.map(col => (
+															<td key={col.id} className="p-1 border-r border-slate-900">
+																<input
+																	type="text"
+																	placeholder={col.title}
+																	value={item.customValues?.[col.id] || ""}
+																	onChange={(e) => {
+																		const val = e.target.value;
+																		setLineItems(prev => prev.map(row => row.id === item.id ? {
+																			...row,
+																			customValues: { ...(row.customValues || {}), [col.id]: val }
+																		} : row));
+																	}}
+																	className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-medium focus:bg-white outline-none uppercase text-slate-900"
+																/>
+															</td>
+														))}
 														<td className="p-1 border-r border-slate-900">
 															<input
 																type="text"
