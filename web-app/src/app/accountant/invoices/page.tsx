@@ -489,157 +489,157 @@ export default function InvoicesPage() {
 									</div>
 								</div>
 
-								{/* METADATA TABLE - GUARANTEED NON-COLLAPSIBLE FLEX ITEM */}
-								<div className="w-full shrink-0 border-2 border-slate-900 rounded-sm my-2 bg-white block">
+								{/* METADATA TABLE - SLEEK & COMPACT PAPER LAYOUT */}
+								<div className="w-full shrink-0 border-2 border-slate-900 rounded-sm my-1 bg-white block">
 									<table className="w-full text-left border-collapse table-fixed">
 										<tbody className="divide-y divide-slate-900 text-xs text-slate-900">
 											
 											{/* Row 1: INVOICE NUMBER | BANKERS */}
-											<tr className="border-b border-slate-900 h-10">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 w-[20%] text-slate-900 align-middle">
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 w-[20%] text-slate-900 align-middle">
 													INVOICE NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900 w-[30%] bg-white align-middle">
+												<td className="p-0.5 border-r border-slate-900 w-[30%] bg-white align-middle">
 													<input
 														type="text"
 														required
 														value={invNumber}
 														onChange={(e) => setInvNumber(e.target.value)}
-														className="w-full h-full px-2 py-1 font-mono font-bold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-mono font-bold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 w-[20%] text-slate-900 align-middle">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 w-[20%] text-slate-900 align-middle">
 													BANKERS
 												</td>
-												<td className="p-1 w-[30%] bg-white align-middle">
+												<td className="p-0.5 w-[30%] bg-white align-middle">
 													<input
 														type="text"
 														value={bankers}
 														onChange={(e) => setBankers(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 2: INVOICE DATE | ACCOUNT NAME */}
-											<tr className="border-b border-slate-900 h-10">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													INVOICE DATE
 												</td>
-												<td className="p-1 border-r border-slate-900 bg-white align-middle">
+												<td className="p-0.5 border-r border-slate-900 bg-white align-middle">
 													<input
 														type="date"
 														required
 														value={invDate}
 														onChange={(e) => setInvDate(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													ACCOUNT NAME
 												</td>
-												<td className="p-1 bg-white align-middle">
+												<td className="p-0.5 bg-white align-middle">
 													<input
 														type="text"
 														value={accountName}
 														onChange={(e) => setAccountName(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 3: COY REG NUMBER | ACCOUNT NUMBER */}
-											<tr className="border-b border-slate-900 h-10">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													COY REG NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900 bg-white align-middle">
+												<td className="p-0.5 border-r border-slate-900 bg-white align-middle">
 													<input
 														type="text"
 														value={coyRegNumber}
 														onChange={(e) => setCoyRegNumber(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													ACCOUNT NUMBER
 												</td>
-												<td className="p-1 bg-white align-middle">
+												<td className="p-0.5 bg-white align-middle">
 													<input
 														type="text"
 														value={accountNumber}
 														onChange={(e) => setAccountNumber(e.target.value)}
-														className="w-full h-full px-2 py-1 font-mono font-bold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-mono font-bold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 4: PO NUMBER | TIN */}
-											<tr className="border-b border-slate-900 h-10">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													PO NUMBER
 												</td>
-												<td className="p-1 border-r border-slate-900 bg-white align-middle">
+												<td className="p-0.5 border-r border-slate-900 bg-white align-middle">
 													<input
 														type="text"
 														placeholder="PO Number"
 														value={poNumber}
 														onChange={(e) => setPoNumber(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													TIN
 												</td>
-												<td className="p-1 bg-white align-middle">
+												<td className="p-0.5 bg-white align-middle">
 													<input
 														type="text"
 														value={tinNumber}
 														onChange={(e) => setTinNumber(e.target.value)}
-														className="w-full h-full px-2 py-1 font-mono font-semibold text-xs text-slate-900 outline-none bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-mono font-semibold text-xs text-slate-900 outline-none bg-transparent"
 													/>
 												</td>
 											</tr>
 
 											{/* Row 5: BILLED TO & ADDRESS */}
 											<tr className="border-b border-slate-900">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 align-top pt-3 text-slate-900">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 align-top pt-2 text-slate-900">
 													BILLED TO
 												</td>
-												<td colSpan={3} className="p-2 bg-white">
-													<div className="flex flex-col gap-1.5">
+												<td colSpan={3} className="p-1.5 bg-white">
+													<div className="flex flex-col gap-1">
 														<input
 															type="text"
 															required
 															placeholder="Client / Billed To Name"
 															value={billedToName}
 															onChange={(e) => setBilledToName(e.target.value)}
-															className="w-full px-2.5 py-1.5 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
+															className="w-full px-2 py-1 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
 														/>
 														<input
 															type="text"
 															placeholder="Address (e.g. NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS)"
 															value={billedToAddress}
 															onChange={(e) => setBilledToAddress(e.target.value)}
-															className="w-full px-2.5 py-1.5 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
+															className="w-full px-2 py-1 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
 														/>
 													</div>
 												</td>
 											</tr>
 
 											{/* Row 6: PURPOSE OF INVOICE */}
-											<tr className="border-b border-slate-900 h-10">
-												<td className="p-2 font-black uppercase text-[10px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													PURPOSE OF INVOICE
 												</td>
-												<td colSpan={3} className="p-1 bg-white align-middle">
+												<td colSpan={3} className="p-0.5 bg-white align-middle">
 													<input
 														type="text"
 														required
 														placeholder="e.g. JULY 2025 INVOICE"
 														value={purposeOfInvoice}
 														onChange={(e) => setPurposeOfInvoice(e.target.value)}
-														className="w-full h-full px-2 py-1 font-bold text-xs uppercase outline-none text-slate-900 bg-transparent"
+														className="w-full h-full px-1.5 py-0.5 font-bold text-xs uppercase outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
@@ -650,38 +650,38 @@ export default function InvoicesPage() {
 									{/* SALES REP ID | SHIPPING METHOD | DUE DATE TABLE */}
 									<table className="w-full text-left border-collapse border-t border-slate-900 table-fixed">
 										<thead>
-											<tr className="bg-slate-100 border-b border-slate-900 text-[10px] font-black text-slate-900 uppercase tracking-tight text-center h-8">
-												<th className="p-2 border-r border-slate-900 w-1/3 text-slate-900 align-middle">SALES REP ID</th>
-												<th className="p-2 border-r border-slate-900 w-1/3 text-slate-900 align-middle">SHIPPING METHOD</th>
-												<th className="p-2 w-1/3 text-slate-900 align-middle">DUE DATE</th>
+											<tr className="bg-slate-100 border-b border-slate-900 text-[9px] font-black text-slate-900 uppercase tracking-tight text-center h-6">
+												<th className="p-1 border-r border-slate-900 w-1/3 text-slate-900 align-middle">SALES REP ID</th>
+												<th className="p-1 border-r border-slate-900 w-1/3 text-slate-900 align-middle">SHIPPING METHOD</th>
+												<th className="p-1 w-1/3 text-slate-900 align-middle">DUE DATE</th>
 											</tr>
 										</thead>
 										<tbody className="text-xs text-slate-900 bg-white">
-											<tr className="h-10">
-												<td className="p-1 border-r border-slate-900 align-middle">
+											<tr className="h-7">
+												<td className="p-0.5 border-r border-slate-900 align-middle">
 													<input
 														type="text"
 														placeholder="Sales Rep ID"
 														value={salesRepId}
 														onChange={(e) => setSalesRepId(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
+														className="w-full h-full px-1 py-0.5 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="p-1 border-r border-slate-900 align-middle">
+												<td className="p-0.5 border-r border-slate-900 align-middle">
 													<input
 														type="text"
 														placeholder="e.g. Hand Delivery"
 														value={shippingMethod}
 														onChange={(e) => setShippingMethod(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
+														className="w-full h-full px-1 py-0.5 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
-												<td className="p-1 align-middle">
+												<td className="p-0.5 align-middle">
 													<input
 														type="date"
 														value={dueDate}
 														onChange={(e) => setDueDate(e.target.value)}
-														className="w-full h-full px-2 py-1 font-semibold text-center outline-none text-slate-900 bg-transparent"
+														className="w-full h-full px-1 py-0.5 font-semibold text-center outline-none text-slate-900 bg-transparent"
 													/>
 												</td>
 											</tr>
