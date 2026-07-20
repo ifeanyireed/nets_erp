@@ -175,15 +175,15 @@ export default function InvoicesPage() {
 		{ id: "7", date: "2025-07-31", truckNo: "MUS 07 YK", location: "IBADAN", trackingId: "16744", tonnage: 5920, amount: 177209.28 }
 	]);
 
-	const [expenses, setExpenses] = useState<number | string>(377953.59);
+	const [chargeInput, setChargeInput] = useState<number | string>(125964.51);
 	const [vatPercent, setVatPercent] = useState<number>(7.5);
 	const [opCoordination, setOpCoordination] = useState("Operation Coordination");
 	const [headOfFinance, setHeadOfFinance] = useState("Head of Finance");
 
-	// Calculation logic
+	// Calculation logic: CHARGE is editable; EXPENSES = Subtotal - Charge (derived)
 	const subtotal = lineItems.reduce((sum, item) => sum + parseNumberFromCommas(item.amount), 0);
-	const numExpenses = parseNumberFromCommas(expenses);
-	const charge = Math.max(0, subtotal - numExpenses);
+	const charge = parseNumberFromCommas(chargeInput);
+	const numExpenses = Math.max(0, subtotal - charge);
 	const vatAmount = (charge * vatPercent) / 100;
 	const grandTotal = subtotal + vatAmount;
 	const amountInWords = numberToWordsNaira(grandTotal);
@@ -230,7 +230,7 @@ export default function InvoicesPage() {
 			{ id: "6", date: "2025-07-31", truckNo: "MUS 07 YK", location: "ISOLO", trackingId: "16725", tonnage: 6300, amount: 64530.90 },
 			{ id: "7", date: "2025-07-31", truckNo: "MUS 07 YK", location: "IBADAN", trackingId: "16744", tonnage: 5920, amount: 177209.28 }
 		]);
-		setExpenses(377953.59);
+		setChargeInput(125964.51);
 		setVatPercent(7.5);
 	};
 
@@ -841,22 +841,24 @@ export default function InvoicesPage() {
 											<span className="font-mono font-bold text-slate-900 text-xs">{formatNaira(subtotal)}</span>
 										</div>
 
+										{/* EXPENSES (DERIVED: Subtotal minus Charge) */}
+										<div className="flex justify-between items-center p-2.5 border-b border-slate-900 bg-slate-50">
+											<span className="font-black uppercase text-slate-800 text-[10px]">EXPENSES</span>
+											<span className="font-mono font-bold text-slate-900 text-xs">{formatNaira(numExpenses)}</span>
+										</div>
+
+										{/* CHARGE (EDITABLE FIELD) */}
 										<div className="flex justify-between items-center p-2 border-b border-slate-900 bg-white">
-											<span className="font-extrabold uppercase text-slate-700 text-[10px]">EXPENSES</span>
+											<span className="font-extrabold uppercase text-slate-700 text-[10px]">CHARGE</span>
 											<div className="flex items-center gap-1">
 												<span className="text-slate-400 font-mono text-[11px]">₦</span>
 												<input
 													type="text"
-													value={formatNumberWithCommas(expenses)}
-													onChange={(e) => setExpenses(e.target.value)}
-													className="w-36 px-2 py-0.5 border border-slate-300 rounded font-mono font-semibold text-right text-xs focus:bg-amber-50/50 outline-none text-slate-900"
+													value={formatNumberWithCommas(chargeInput)}
+													onChange={(e) => setChargeInput(e.target.value)}
+													className="w-36 px-2 py-0.5 border border-slate-300 rounded font-mono font-bold text-right text-xs focus:bg-amber-50/50 outline-none text-slate-900"
 												/>
 											</div>
-										</div>
-
-										<div className="flex justify-between items-center p-2.5 border-b border-slate-900 bg-slate-50">
-											<span className="font-black uppercase text-slate-800 text-[10px]">CHARGE</span>
-											<span className="font-mono font-bold text-slate-900 text-xs">{formatNaira(charge)}</span>
 										</div>
 
 										<div className="flex justify-between items-center p-2 border-b border-slate-900 bg-white">
