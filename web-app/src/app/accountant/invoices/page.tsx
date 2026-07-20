@@ -630,7 +630,7 @@ export default function InvoicesPage() {
 					<div className="bg-white rounded-2xl w-full max-w-5xl shadow-2xl border border-slate-200/80 flex flex-col my-auto max-h-[92vh] overflow-hidden animate-slideUp">
 						
 						{/* Top Modal Navigation Header */}
-						<div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-50 text-slate-900 shrink-0">
+						<div className="flex justify-between items-center px-6 py-4 border-b border-slate-200 bg-slate-50 text-slate-900 shrink-0 no-print print:hidden">
 							<div className="flex items-center gap-3">
 								<div className="p-2 bg-red-50 text-red-600 rounded-xl border border-red-200">
 									<IconFileText className="w-5 h-5" />

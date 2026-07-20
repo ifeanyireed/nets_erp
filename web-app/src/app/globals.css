@@ -337,10 +337,21 @@ body::before {
     overflow: visible !important;
   }
 
-  /* Hide interactive controls, buttons, and action bars */
+  /* Hide interactive controls, buttons, action bars, headers and footers during print */
   button,
-  .no-print {
+  .no-print,
+  .print\:hidden,
+  header,
+  footer,
+  nav {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
   }
 
   /* Flatten input fields and dropdowns into clean document text */
