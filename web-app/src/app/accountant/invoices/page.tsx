@@ -601,29 +601,36 @@ export default function InvoicesPage() {
 												</td>
 											</tr>
 
-											{/* Row 5: BILLED TO & ADDRESS */}
-											<tr className="border-b border-slate-900">
-												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 align-top pt-2 text-slate-900">
+											{/* Row 5a: BILLED TO */}
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
 													BILLED TO
 												</td>
-												<td colSpan={3} className="p-1.5 bg-white">
-													<div className="flex flex-col gap-1">
-														<input
-															type="text"
-															required
-															placeholder="Client / Billed To Name"
-															value={billedToName}
-															onChange={(e) => setBilledToName(e.target.value)}
-															className="w-full px-2 py-1 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
-														/>
-														<input
-															type="text"
-															placeholder="Address (e.g. NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS)"
-															value={billedToAddress}
-															onChange={(e) => setBilledToAddress(e.target.value)}
-															className="w-full px-2 py-1 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded text-slate-900 bg-white"
-														/>
-													</div>
+												<td colSpan={3} className="p-0.5 bg-white align-middle">
+													<input
+														type="text"
+														required
+														placeholder="Client / Billed To Name"
+														value={billedToName}
+														onChange={(e) => setBilledToName(e.target.value)}
+														className="w-full h-full px-1.5 py-0.5 font-black text-xs uppercase outline-none text-slate-900 bg-transparent"
+													/>
+												</td>
+											</tr>
+
+											{/* Row 5b: ADDRESS */}
+											<tr className="border-b border-slate-900 h-7">
+												<td className="p-1 px-2 font-black uppercase text-[9px] bg-slate-100 border-r border-slate-900 text-slate-900 align-middle">
+													ADDRESS
+												</td>
+												<td colSpan={3} className="p-0.5 bg-white align-middle">
+													<input
+														type="text"
+														placeholder="Address (e.g. NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS)"
+														value={billedToAddress}
+														onChange={(e) => setBilledToAddress(e.target.value)}
+														className="w-full h-full px-1.5 py-0.5 font-semibold text-xs uppercase outline-none text-slate-900 bg-transparent"
+													/>
 												</td>
 											</tr>
 
