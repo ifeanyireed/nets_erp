@@ -123,6 +123,15 @@ export default function InvoicesPage() {
 	const [selectedClientFilter, setSelectedClientFilter] = useState("All");
 	const [showAddModal, setShowAddModal] = useState(false);
 
+	React.useEffect(() => {
+		if (typeof window !== "undefined") {
+			const params = new URLSearchParams(window.location.search);
+			if (params.get("create") === "true") {
+				setShowAddModal(true);
+			}
+		}
+	}, []);
+
 	// Invoice Document Form State
 	const [invNumber, setInvNumber] = useState("NETS-CAP-2025-008");
 	const [invDate, setInvDate] = useState("2025-08-15");

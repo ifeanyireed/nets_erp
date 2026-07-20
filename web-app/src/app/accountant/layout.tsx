@@ -168,6 +168,13 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		fetchFinanceData();
 	}, []);
 
+	useEffect(() => {
+		if (showInvoiceModal) {
+			setShowInvoiceModal(false);
+			router.push("/accountant/invoices?create=true");
+		}
+	}, [showInvoiceModal, router]);
+
 	// Actions
 	const handleCreateInvoice = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -618,7 +625,7 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 							{/* Action Buttons Row */}
 							<div className="flex items-center gap-2 flex-wrap mt-3">
 								<button
-									onClick={() => setShowInvoiceModal(true)}
+									onClick={() => router.push("/accountant/invoices?create=true")}
 									className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-all shadow-sm cursor-pointer border-none"
 								>
 									Create Invoice
