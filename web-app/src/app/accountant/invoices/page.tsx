@@ -462,7 +462,7 @@ export default function InvoicesPage() {
 								className="w-full max-w-4xl bg-white rounded-lg shadow-xl border border-slate-300 p-6 md:p-10 font-sans text-slate-900 text-xs flex flex-col gap-6"
 							>
 								{/* INVOICE PAPER HEADER */}
-								<div className="flex flex-col md:flex-row justify-between items-start border-b-2 border-slate-900 pb-5 gap-4">
+								<div className="flex flex-col md:flex-row justify-between items-start pb-4 gap-4">
 									<div className="flex flex-col">
 										<div className="flex items-center gap-3">
 											<img 
