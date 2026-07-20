@@ -456,15 +456,6 @@ export default function InvoicesPage() {
 							<div className="flex items-center gap-2">
 								<button
 									type="button"
-									onClick={loadSampleTemplate}
-									className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 hover:text-slate-900 border border-slate-300 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
-									title="Populate fields with reference document values"
-								>
-									<IconSparkles className="w-3.5 h-3.5 text-amber-500" />
-									Load Image Preset Data
-								</button>
-								<button
-									type="button"
 									onClick={() => setShowAddModal(false)}
 									className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 transition-colors cursor-pointer text-sm font-bold border border-slate-200"
 								>
