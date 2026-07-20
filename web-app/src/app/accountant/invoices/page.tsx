@@ -468,7 +468,7 @@ export default function InvoicesPage() {
 											<img 
 												src="/favicon.png" 
 												alt="NEW ERA Logo" 
-												className="w-12 h-12 object-contain rounded-xl p-1 border border-slate-200 bg-white shadow-xs shrink-0" 
+												className="w-12 h-12 object-contain shrink-0" 
 											/>
 											<div>
 												<h1 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 uppercase">
@@ -489,179 +489,202 @@ export default function InvoicesPage() {
 									</div>
 								</div>
 
-								{/* HEADER GRID METADATA (Boxed Paper Form Style) */}
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-slate-800 border border-slate-800 rounded-sm overflow-hidden text-slate-900">
-									
-									{/* Left Column Box */}
-									<div className="bg-white p-3 flex flex-col gap-2">
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">INVOICE NUMBER</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													required
-													value={invNumber}
-													onChange={(e) => setInvNumber(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono font-bold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
+								{/* UNIFIED PAPER METADATA GRID (MATCHING REFERENCE IMAGE EXACTLY) */}
+								<div className="border border-slate-900 overflow-hidden text-xs">
+									<table className="w-full border-collapse">
+										<tbody>
+											{/* Row 1 */}
+											<tr className="border-b border-slate-900">
+												<td className="w-36 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													INVOICE NUMBER
+												</td>
+												<td className="p-1 border-r border-slate-900 w-[35%]">
+													<input
+														type="text"
+														required
+														value={invNumber}
+														onChange={(e) => setInvNumber(e.target.value)}
+														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none bg-transparent"
+													/>
+												</td>
+												<td className="w-32 bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													BANKERS
+												</td>
+												<td className="p-1">
+													<input
+														type="text"
+														value={bankers}
+														onChange={(e) => setBankers(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
 
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">INVOICE DATE</span>
-											<div className="col-span-7">
-												<input
-													type="date"
-													required
-													value={invDate}
-													onChange={(e) => setInvDate(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
+											{/* Row 2 */}
+											<tr className="border-b border-slate-900">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													INVOICE DATE
+												</td>
+												<td className="p-1 border-r border-slate-900">
+													<input
+														type="date"
+														required
+														value={invDate}
+														onChange={(e) => setInvDate(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													ACCOUNT NAME
+												</td>
+												<td className="p-1">
+													<input
+														type="text"
+														value={accountName}
+														onChange={(e) => setAccountName(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
 
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">COY REG NUMBER</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													value={coyRegNumber}
-													onChange={(e) => setCoyRegNumber(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
+											{/* Row 3 */}
+											<tr className="border-b border-slate-900">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													COY REG NUMBER
+												</td>
+												<td className="p-1 border-r border-slate-900">
+													<input
+														type="text"
+														value={coyRegNumber}
+														onChange={(e) => setCoyRegNumber(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													ACCOUNT NUMBER
+												</td>
+												<td className="p-1">
+													<input
+														type="text"
+														value={accountNumber}
+														onChange={(e) => setAccountNumber(e.target.value)}
+														className="w-full px-2 py-1 font-mono font-bold text-xs outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
 
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">PO NUMBER</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													placeholder="e.g. PO-88204"
-													value={poNumber}
-													onChange={(e) => setPoNumber(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
-									</div>
+											{/* Row 4 */}
+											<tr className="border-b border-slate-900">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													PO NUMBER
+												</td>
+												<td className="p-1 border-r border-slate-900">
+													<input
+														type="text"
+														placeholder="PO Number"
+														value={poNumber}
+														onChange={(e) => setPoNumber(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													TIN
+												</td>
+												<td className="p-1">
+													<input
+														type="text"
+														value={tinNumber}
+														onChange={(e) => setTinNumber(e.target.value)}
+														className="w-full px-2 py-1 font-mono font-semibold text-xs outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
 
-									{/* Right Column Box (Bank Details & TIN) */}
-									<div className="bg-white p-3 flex flex-col gap-2">
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">BANKERS</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													value={bankers}
-													onChange={(e) => setBankers(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
+											{/* Row 5: BILLED TO & ADDRESS */}
+											<tr className="border-b border-slate-900">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													BILLED TO
+												</td>
+												<td colSpan={3} className="p-2">
+													<div className="flex flex-col gap-1.5">
+														<input
+															type="text"
+															required
+															placeholder="Client / Billed To Name"
+															value={billedToName}
+															onChange={(e) => setBilledToName(e.target.value)}
+															className="w-full px-2 py-1 font-black text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded bg-transparent"
+														/>
+														<input
+															type="text"
+															placeholder="Address (e.g. NO 2, ADENIYI JONES AVENUE, IKEJA LAGOS)"
+															value={billedToAddress}
+															onChange={(e) => setBilledToAddress(e.target.value)}
+															className="w-full px-2 py-1 font-semibold text-xs uppercase outline-none border border-slate-300 focus:border-slate-800 rounded bg-transparent text-slate-700"
+														/>
+													</div>
+												</td>
+											</tr>
 
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">ACCOUNT NAME</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													value={accountName}
-													onChange={(e) => setAccountName(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
+											{/* Row 6: PURPOSE OF INVOICE */}
+											<tr className="border-b border-slate-900">
+												<td className="bg-slate-100 p-2 font-black uppercase border-r border-slate-900 text-[10px]">
+													PURPOSE OF INVOICE
+												</td>
+												<td colSpan={3} className="p-1">
+													<input
+														type="text"
+														required
+														placeholder="e.g. JULY 2025 INVOICE"
+														value={purposeOfInvoice}
+														onChange={(e) => setPurposeOfInvoice(e.target.value)}
+														className="w-full px-2 py-1 font-bold text-xs uppercase outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">ACCOUNT NUMBER</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													value={accountNumber}
-													onChange={(e) => setAccountNumber(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono font-bold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
-
-										<div className="grid grid-cols-12 items-center gap-2">
-											<span className="col-span-5 text-[10px] font-black uppercase text-slate-700">TIN</span>
-											<div className="col-span-7">
-												<input
-													type="text"
-													value={tinNumber}
-													onChange={(e) => setTinNumber(e.target.value)}
-													className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-mono font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								{/* BILLED TO SECTION */}
-								<div className="border border-slate-800 rounded-sm p-3 bg-slate-50/80 flex flex-col gap-2">
-									<div className="grid grid-cols-12 items-start gap-2">
-										<span className="col-span-12 md:col-span-2 text-[10px] font-black uppercase text-slate-800 pt-1">BILLED TO</span>
-										<div className="col-span-12 md:col-span-10 flex flex-col gap-2">
-											<input
-												type="text"
-												required
-												placeholder="Client Company Name"
-												value={billedToName}
-												onChange={(e) => setBilledToName(e.target.value)}
-												className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-extrabold text-slate-900 uppercase focus:bg-amber-50/50 outline-none"
-											/>
-											<input
-												type="text"
-												placeholder="Client Office Address"
-												value={billedToAddress}
-												onChange={(e) => setBilledToAddress(e.target.value)}
-												className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-medium text-slate-800 uppercase focus:bg-amber-50/50 outline-none"
-											/>
-										</div>
-									</div>
-								</div>
-
-								{/* PURPOSE OF INVOICE & LOGISTICS METADATA BAR */}
-								<div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-slate-800 border border-slate-800 rounded-sm overflow-hidden text-slate-900">
-									<div className="bg-white p-2.5 flex flex-col gap-1">
-										<label className="text-[9px] font-black uppercase text-slate-600">PURPOSE OF INVOICE</label>
-										<input
-											type="text"
-											required
-											value={purposeOfInvoice}
-											onChange={(e) => setPurposeOfInvoice(e.target.value)}
-											className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-bold text-slate-900 uppercase focus:bg-amber-50/50 outline-none"
-										/>
-									</div>
-									<div className="bg-white p-2.5 flex flex-col gap-1">
-										<label className="text-[9px] font-black uppercase text-slate-600">SALES REP ID</label>
-										<input
-											type="text"
-											placeholder="Optional Rep ID"
-											value={salesRepId}
-											onChange={(e) => setSalesRepId(e.target.value)}
-											className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 uppercase focus:bg-amber-50/50 outline-none"
-										/>
-									</div>
-									<div className="bg-white p-2.5 flex flex-col gap-1">
-										<label className="text-[9px] font-black uppercase text-slate-600">SHIPPING METHOD</label>
-										<input
-											type="text"
-											value={shippingMethod}
-											onChange={(e) => setShippingMethod(e.target.value)}
-											className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 uppercase focus:bg-amber-50/50 outline-none"
-										/>
-									</div>
-									<div className="bg-white p-2.5 flex flex-col gap-1">
-										<label className="text-[9px] font-black uppercase text-slate-600">DUE DATE</label>
-										<input
-											type="date"
-											value={dueDate}
-											onChange={(e) => setDueDate(e.target.value)}
-											className="w-full px-2 py-1 border border-slate-300 rounded text-xs font-semibold text-slate-900 focus:bg-amber-50/50 outline-none"
-										/>
-									</div>
+									{/* Row 7 & 8: SALES REP ID | SHIPPING METHOD | DUE DATE */}
+									<table className="w-full border-collapse">
+										<thead>
+											<tr className="bg-slate-100 border-b border-slate-900 text-[10px] font-black uppercase text-center">
+												<th className="p-2 border-r border-slate-900 w-1/3">SALES REP ID</th>
+												<th className="p-2 border-r border-slate-900 w-1/3">SHIPPING METHOD</th>
+												<th className="p-2 w-1/3">DUE DATE</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr className="text-xs">
+												<td className="p-1 border-r border-slate-900">
+													<input
+														type="text"
+														placeholder="Sales Rep ID"
+														value={salesRepId}
+														onChange={(e) => setSalesRepId(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+													/>
+												</td>
+												<td className="p-1 border-r border-slate-900">
+													<input
+														type="text"
+														placeholder="e.g. Hand Delivery"
+														value={shippingMethod}
+														onChange={(e) => setShippingMethod(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+													/>
+												</td>
+												<td className="p-1">
+													<input
+														type="date"
+														value={dueDate}
+														onChange={(e) => setDueDate(e.target.value)}
+														className="w-full px-2 py-1 font-semibold text-center outline-none bg-transparent"
+													/>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 
 								{/* TRANSPORTATION LINE ITEMS TABLE */}
