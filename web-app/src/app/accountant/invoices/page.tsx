@@ -682,8 +682,8 @@ export default function InvoicesPage() {
 														}}
 														className="w-full h-full px-1.5 py-0.5 font-bold text-xs text-slate-900 outline-none bg-white cursor-pointer uppercase"
 													>
-														{bankAccountsList.map(b => (
-															<option key={b.id} value={b.bankName.toUpperCase()}>
+														{bankAccountsList.map((b, idx) => (
+															<option key={`bank-${b.id}-${idx}`} value={b.bankName.toUpperCase()}>
 																{b.bankName.toUpperCase()}
 															</option>
 														))}
@@ -799,8 +799,8 @@ export default function InvoicesPage() {
 															className="w-full h-full font-black text-xs uppercase outline-none text-slate-900 bg-white cursor-pointer py-0.5"
 														>
 															{!billedToName && <option value="">Select Client from Database...</option>}
-															{clientList.map(c => (
-																<option key={c.id} value={c.name}>
+															{clientList.map((c, idx) => (
+																<option key={`client-${c.id}-${idx}`} value={c.name}>
 																	{c.name}
 																</option>
 															))}
