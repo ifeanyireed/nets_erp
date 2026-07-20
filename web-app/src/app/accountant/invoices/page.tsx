@@ -464,10 +464,12 @@ export default function InvoicesPage() {
 								{/* INVOICE PAPER HEADER */}
 								<div className="flex flex-col md:flex-row justify-between items-start border-b-2 border-slate-900 pb-5 gap-4">
 									<div className="flex flex-col">
-										<div className="flex items-center gap-2">
-											<div className="w-9 h-9 rounded-full bg-slate-900 text-white font-black text-sm flex items-center justify-center border-2 border-slate-700">
-												NETS
-											</div>
+										<div className="flex items-center gap-3">
+											<img 
+												src="/favicon.png" 
+												alt="NEW ERA Logo" 
+												className="w-12 h-12 object-contain rounded-xl p-1 border border-slate-200 bg-white shadow-xs shrink-0" 
+											/>
 											<div>
 												<h1 className="text-xl md:text-2xl font-black tracking-tight text-slate-900 uppercase">
 													NEW ERA
