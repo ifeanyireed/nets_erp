@@ -346,16 +346,10 @@ export default function InvoicesPage() {
 	const [dueDate, setDueDate] = useState("2025-08-30");
 
 	const [lineItems, setLineItems] = useState<LineItem[]>([
-		{ id: "1", date: "2025-07-11", truckNo: "MUS 07 YK", location: "IKEJA", trackingId: "16477", tonnage: 4880, amount: 28679.76 },
-		{ id: "2", date: "2025-07-24", truckNo: "MUS 07 YK", location: "LEKKI", trackingId: "16644", tonnage: 6980, amount: 114402.20 },
-		{ id: "3", date: "2025-07-25", truckNo: "MUS 07 YK", location: "GBAGADA", trackingId: "16656", tonnage: 4720, amount: 39581.92 },
-		{ id: "4", date: "2025-07-29", truckNo: "MUS 07 YK", location: "IKEJA", trackingId: "16693", tonnage: 6920, amount: 40668.84 },
-		{ id: "5", date: "2025-07-30", truckNo: "MUS 07 YK", location: "YABA", trackingId: "16715", tonnage: 5930, amount: 38865.22 },
-		{ id: "6", date: "2025-07-31", truckNo: "MUS 07 YK", location: "ISOLO", trackingId: "16725", tonnage: 6300, amount: 64530.90 },
-		{ id: "7", date: "2025-07-31", truckNo: "MUS 07 YK", location: "IBADAN", trackingId: "16744", tonnage: 5920, amount: 177209.28 }
+		{ id: "1", date: "", truckNo: "MUS 07 YK", location: "", trackingId: "", tonnage: "", amount: "" }
 	]);
 
-	const [chargeInput, setChargeInput] = useState<number | string>(125964.51);
+	const [chargeInput, setChargeInput] = useState<number | string>("");
 	const [vatPercent, setVatPercent] = useState<number>(7.5);
 	const [opCoordination, setOpCoordination] = useState("Operation Coordination");
 	const [headOfFinance, setHeadOfFinance] = useState("Head of Finance");
@@ -644,6 +638,13 @@ export default function InvoicesPage() {
 								</div>
 							</div>
 							<div className="flex items-center gap-2">
+								<button
+									type="button"
+									onClick={loadSampleTemplate}
+									className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1 cursor-pointer transition-colors border border-slate-200"
+								>
+									Load Sample
+								</button>
 								<button
 									type="button"
 									onClick={() => setShowAddModal(false)}
@@ -1057,7 +1058,7 @@ export default function InvoicesPage() {
 														<td className="p-1 border-r border-slate-900">
 															<input
 																type="text"
-																placeholder="0"
+																placeholder="0.00"
 																value={formatNumberWithCommas(item.tonnage)}
 																onChange={(e) => handleItemChange(item.id, "tonnage", e.target.value)}
 																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-semibold text-right focus:bg-white outline-none text-slate-900"
@@ -1114,6 +1115,7 @@ export default function InvoicesPage() {
 												<span className="text-slate-400 font-mono text-[11px]">₦</span>
 												<input
 													type="text"
+													placeholder="0.00"
 													value={formatNumberWithCommas(chargeInput)}
 													onChange={(e) => setChargeInput(e.target.value)}
 													className="w-36 px-2 py-0.5 border border-slate-300 rounded font-mono font-bold text-right text-xs focus:bg-amber-50/50 outline-none text-slate-900"
