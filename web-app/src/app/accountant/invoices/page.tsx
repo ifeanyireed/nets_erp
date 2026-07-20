@@ -484,7 +484,7 @@ export default function InvoicesPage() {
 									<div className="text-left md:text-right border-l-2 md:border-l-0 md:border-r-0 border-red-500 pl-3 md:pl-0">
 										<p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase">SERVICES</p>
 										<p className="text-[11px] font-black text-slate-800 uppercase tracking-tight">
-											HAULAGE | INTRA CITY TRANSPORT | LEASING | FLEET MANAGEMENT
+											HAULAGE • INTRA CITY TRANSPORT • LEASING • FLEET MANAGEMENT
 										</p>
 									</div>
 								</div>
