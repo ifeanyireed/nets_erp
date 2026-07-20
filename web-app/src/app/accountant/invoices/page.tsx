@@ -455,11 +455,11 @@ export default function InvoicesPage() {
 						</div>
 
 						{/* Paper Invoice Sheet Canvas Scroll Area */}
-						<div className="overflow-y-auto p-4 md:p-8 bg-slate-100 flex justify-center">
+						<div className="overflow-y-auto p-4 md:p-10 bg-slate-200/80 flex justify-center pb-16">
 							<form 
 								id="invoice-document-form" 
 								onSubmit={handleAddInvoiceSubmit}
-								className="w-full max-w-4xl bg-white rounded-lg shadow-xl border border-slate-300 p-6 md:p-10 font-sans text-slate-900 text-xs flex flex-col gap-6"
+								className="w-full max-w-4xl bg-white rounded-lg shadow-2xl border border-slate-300 p-6 md:p-12 pb-14 md:pb-16 font-sans text-slate-900 text-xs flex flex-col gap-6 my-2"
 							>
 								{/* INVOICE PAPER HEADER */}
 								<div className="flex flex-col md:flex-row justify-between items-start pb-0 gap-4">
@@ -866,30 +866,37 @@ export default function InvoicesPage() {
 								</div>
 
 								{/* SIGNATURE / AUTHORIZATION FOOTER */}
-								<div className="grid grid-cols-2 gap-8 pt-8 mt-4 border-t border-slate-300">
+								<div className="grid grid-cols-2 gap-8 pt-10 mt-6 border-t-2 border-slate-900 pb-4">
 									<div className="flex flex-col items-center gap-2 text-center">
-										<div className="w-48 h-12 border-b border-dashed border-slate-400 flex items-end justify-center pb-1">
-											<span className="font-serif italic text-slate-400 text-sm">OpCoord Approval</span>
+										<div className="w-56 h-14 border-b-2 border-dashed border-slate-900 flex items-end justify-center pb-1">
+											<span className="font-serif italic text-slate-400 text-sm">Operation Coordination</span>
 										</div>
 										<input
 											type="text"
 											value={opCoordination}
 											onChange={(e) => setOpCoordination(e.target.value)}
-											className="text-center font-extrabold text-xs text-slate-800 uppercase border-b border-transparent focus:border-slate-400 outline-none bg-transparent"
+											className="text-center font-black text-xs text-slate-900 uppercase border-b border-transparent focus:border-slate-400 outline-none bg-transparent"
 										/>
 									</div>
 
 									<div className="flex flex-col items-center gap-2 text-center">
-										<div className="w-48 h-12 border-b border-dashed border-slate-400 flex items-end justify-center pb-1">
-											<span className="font-serif italic text-slate-400 text-sm">Finance Approval</span>
+										<div className="w-56 h-14 border-b-2 border-dashed border-slate-900 flex items-end justify-center pb-1">
+											<span className="font-serif italic text-slate-400 text-sm">Head of Finance</span>
 										</div>
 										<input
 											type="text"
 											value={headOfFinance}
 											onChange={(e) => setHeadOfFinance(e.target.value)}
-											className="text-center font-extrabold text-xs text-slate-800 uppercase border-b border-transparent focus:border-slate-400 outline-none bg-transparent"
+											className="text-center font-black text-xs text-slate-900 uppercase border-b border-transparent focus:border-slate-400 outline-none bg-transparent"
 										/>
 									</div>
+								</div>
+
+								{/* PAPER FOOTER STAMP */}
+								<div className="pt-4 text-center border-t border-slate-200">
+									<p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
+										NEW ERA TRANSPORT SERVICES • OFFICIAL INVOICE DOCUMENT
+									</p>
 								</div>
 
 							</form>
