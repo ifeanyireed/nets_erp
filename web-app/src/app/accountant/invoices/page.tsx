@@ -107,6 +107,23 @@ function numberToWordsNaira(num: number): string {
 	return words;
 }
 
+function formatNumberWithCommas(value: number | string): string {
+	if (value === undefined || value === null || value === "") return "";
+	const rawStr = String(value).replace(/,/g, "");
+	const num = parseFloat(rawStr);
+	if (isNaN(num)) return String(value);
+
+	const parts = rawStr.split(".");
+	parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	return parts.join(".");
+}
+
+function parseNumberFromCommas(value: string | number): number {
+	if (value === undefined || value === null || value === "") return 0;
+	const clean = String(value).replace(/,/g, "");
+	return parseFloat(clean) || 0;
+}
+
 export default function InvoicesPage() {
 	const router = useRouter();
 
@@ -164,8 +181,8 @@ export default function InvoicesPage() {
 	const [headOfFinance, setHeadOfFinance] = useState("Head of Finance");
 
 	// Calculation logic
-	const subtotal = lineItems.reduce((sum, item) => sum + (parseFloat(String(item.amount)) || 0), 0);
-	const numExpenses = parseFloat(String(expenses)) || 0;
+	const subtotal = lineItems.reduce((sum, item) => sum + parseNumberFromCommas(item.amount), 0);
+	const numExpenses = parseNumberFromCommas(expenses);
 	const charge = Math.max(0, subtotal - numExpenses);
 	const vatAmount = (charge * vatPercent) / 100;
 	const grandTotal = subtotal + vatAmount;
@@ -765,21 +782,20 @@ export default function InvoicesPage() {
 														</td>
 														<td className="p-1 border-r border-slate-900">
 															<input
-																type="number"
+																type="text"
 																placeholder="0"
-																value={item.tonnage}
+																value={formatNumberWithCommas(item.tonnage)}
 																onChange={(e) => handleItemChange(item.id, "tonnage", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-semibold text-right focus:bg-white outline-none"
+																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-semibold text-right focus:bg-white outline-none text-slate-900"
 															/>
 														</td>
 														<td className="p-1 border-r border-slate-900">
 															<input
-																type="number"
-																step="0.01"
+																type="text"
 																placeholder="0.00"
-																value={item.amount}
+																value={formatNumberWithCommas(item.amount)}
 																onChange={(e) => handleItemChange(item.id, "amount", e.target.value)}
-																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-bold text-right focus:bg-white outline-none"
+																className="w-full px-1.5 py-1 text-xs border border-transparent hover:border-slate-300 focus:border-slate-800 rounded font-mono font-bold text-right focus:bg-white outline-none text-slate-900"
 															/>
 														</td>
 														<td className="p-1 text-center">
@@ -830,11 +846,10 @@ export default function InvoicesPage() {
 											<div className="flex items-center gap-1">
 												<span className="text-slate-400 font-mono text-[11px]">₦</span>
 												<input
-													type="number"
-													step="0.01"
-													value={expenses}
+													type="text"
+													value={formatNumberWithCommas(expenses)}
 													onChange={(e) => setExpenses(e.target.value)}
-													className="w-32 px-2 py-0.5 border border-slate-300 rounded font-mono font-semibold text-right text-xs focus:bg-amber-50/50 outline-none"
+													className="w-36 px-2 py-0.5 border border-slate-300 rounded font-mono font-semibold text-right text-xs focus:bg-amber-50/50 outline-none text-slate-900"
 												/>
 											</div>
 										</div>
