@@ -181,10 +181,12 @@ export default function InvoicesPage() {
 	const [headOfFinance, setHeadOfFinance] = useState("Head of Finance");
 
 	// Calculation logic: CHARGE is editable; EXPENSES = Subtotal - Charge (derived)
+	// VAT is applied to Charge when present, or to Subtotal when charge is not inputed
 	const subtotal = lineItems.reduce((sum, item) => sum + parseNumberFromCommas(item.amount), 0);
 	const charge = parseNumberFromCommas(chargeInput);
 	const numExpenses = Math.max(0, subtotal - charge);
-	const vatAmount = (charge * vatPercent) / 100;
+	const vatBasis = charge > 0 ? charge : subtotal;
+	const vatAmount = (vatBasis * vatPercent) / 100;
 	const grandTotal = subtotal + vatAmount;
 	const amountInWords = numberToWordsNaira(grandTotal);
 
