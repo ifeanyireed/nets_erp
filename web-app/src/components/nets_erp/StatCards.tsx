@@ -17,7 +17,7 @@ export default function StatCards() {
         setCurrentUser(u);
 
         if (u.role === "accountant") {
-          const financeApiUrl = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+          const financeApiUrl = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
           fetch(`${financeApiUrl}/stats`)
             .then(res => {
               if (res.ok) return res.json();

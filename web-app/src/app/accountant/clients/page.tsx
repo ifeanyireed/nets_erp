@@ -16,7 +16,7 @@ import {
 	IconChevronRight
 } from "@tabler/icons-react";
 
-const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 const CLIENTS_TABS = [
 	{ id: "clients", label: "Clients", slug: "/accountant/clients" },

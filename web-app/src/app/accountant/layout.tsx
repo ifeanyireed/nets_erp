@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import ERPLayout from "@/components/nets_erp/Layout";
 import { FinanceContext, Stats, Expense, Invoice, Reconciliation, Transaction } from "./FinanceContext";
 
-const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 export default function AccountantLayout({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
@@ -90,28 +90,28 @@ export default function AccountantLayout({ children }: { children: React.ReactNo
 		setLoading(true);
 		try {
 			// Fetch Stats
-			const statsRes = await fetch(`${FINANCE_API_URL}/stats`);
-			const statsData = statsRes.ok ? await statsRes.json() : { totalRevenue: 1500000, totalExpenses: 760000, pendingPayables: 310000, outstandingInvoice: 4250000 };
+			const statsRes = await fetch(`${FINANCE_API_URL}/stats`).catch(() => null);
+			const statsData = statsRes && statsRes.ok ? await statsRes.json() : { totalRevenue: 1500000, totalExpenses: 760000, pendingPayables: 310000, outstandingInvoice: 4250000 };
 			setStats(statsData);
 
 			// Fetch Expenses
-			const expRes = await fetch(`${FINANCE_API_URL}/expenses`);
-			const expData = expRes.ok ? await expRes.json() : [];
+			const expRes = await fetch(`${FINANCE_API_URL}/expenses`).catch(() => null);
+			const expData = expRes && expRes.ok ? await expRes.json() : [];
 			setExpenses(expData);
 
 			// Fetch Invoices
-			const invRes = await fetch(`${FINANCE_API_URL}/invoices`);
-			const invData = invRes.ok ? await invRes.json() : [];
+			const invRes = await fetch(`${FINANCE_API_URL}/invoices`).catch(() => null);
+			const invData = invRes && invRes.ok ? await invRes.json() : [];
 			setInvoices(invData);
 
 			// Fetch Reconciliations
-			const recRes = await fetch(`${FINANCE_API_URL}/reconciliations`);
-			const recData = recRes.ok ? await recRes.json() : [];
+			const recRes = await fetch(`${FINANCE_API_URL}/reconciliations`).catch(() => null);
+			const recData = recRes && recRes.ok ? await recRes.json() : [];
 			setReconciliations(recData);
 
 			// Fetch Transactions
-			const txRes = await fetch(`${FINANCE_API_URL}/transactions`);
-			const txData = txRes.ok ? await txRes.json() : [];
+			const txRes = await fetch(`${FINANCE_API_URL}/transactions`).catch(() => null);
+			const txData = txRes && txRes.ok ? await txRes.json() : [];
 			setTransactions(txData);
 
 			setError(null);

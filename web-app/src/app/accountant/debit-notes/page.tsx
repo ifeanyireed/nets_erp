@@ -35,7 +35,7 @@ export default function AccountantDebitNotes() {
 	const [amountText, setAmountText] = useState("");
 	const [description, setDescription] = useState("");
 
-	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 	const fetchDebitNotes = async () => {
 		try {

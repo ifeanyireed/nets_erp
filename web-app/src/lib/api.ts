@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 export const getAuthToken = () => {
   if (typeof window !== "undefined") {

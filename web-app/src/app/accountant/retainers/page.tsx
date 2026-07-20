@@ -50,7 +50,7 @@ export default function RetainersPage() {
 		total: ""
 	});
 
-	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "http://localhost:8085";
+	const FINANCE_API_URL = process.env.NEXT_PUBLIC_FINANCE_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 	const fetchRetainers = async () => {
 		try {

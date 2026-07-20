@@ -418,14 +418,18 @@ const INITIAL_REVIEWS: PerformanceReview[] = [];
 
 
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://nets-erp-m7iw.onrender.com";
 
 async function fetchFromApi<T>(endpoint: string, fallbackData: T): Promise<T> {
-  const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch from API endpoint ${endpoint}: ${res.statusText}`);
+  try {
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, { cache: "no-store" });
+    if (!res.ok) {
+      return fallbackData;
+    }
+    return await res.json();
+  } catch (err) {
+    return fallbackData;
   }
-  return await res.json();
 }
 
 async function ensureReviewsForActiveCycles(
