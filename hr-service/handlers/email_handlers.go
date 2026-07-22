@@ -1,59 +1,20 @@
 package handlers
 
 import (
+	"backend/utils"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"net/smtp"
 	"os"
 	"strings"
 	"sync"
 )
 
-// Send SMTP Email via Hostinger
+// Send Email via Email Proxy
 func sendEmail(to, subject, htmlBody string) error {
-	smtpHost := os.Getenv("SMTP_HOST")
-	if smtpHost == "" {
-		smtpHost = "smtp.hostinger.com"
-	}
-	smtpPort := os.Getenv("SMTP_PORT")
-	if smtpPort == "" {
-		smtpPort = "587"
-	}
-	smtpUser := os.Getenv("SMTP_USER")
-	if smtpUser == "" {
-		smtpUser = "hello@resultspro.ng"
-	}
-	smtpPassword := os.Getenv("SMTP_PASSWORD")
-	if smtpPassword == "" {
-		smtpPassword = "*Reedb4b4"
-	}
-	fromEmail := os.Getenv("SMTP_FROM_EMAIL")
-	if fromEmail == "" {
-		fromEmail = "hr@neweratransports.com"
-	}
-
-	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpHost)
-
-	// Compose headers and body
-	headerFrom := fmt.Sprintf("From: New Era HR <%s>\r\n", fromEmail)
-	headerTo := fmt.Sprintf("To: %s\r\n", to)
-	headerSubject := fmt.Sprintf("Subject: %s\r\n", subject)
-	headerMime := "MIME-Version: 1.0\r\n"
-	headerContentType := "Content-Type: text/html; charset=UTF-8\r\n"
-	body := fmt.Sprintf("\r\n%s\r\n", htmlBody)
-
-	msg := []byte(headerFrom + headerTo + headerSubject + headerMime + headerContentType + body)
-
-	addr := fmt.Sprintf("%s:%s", smtpHost, smtpPort)
-	err := smtp.SendMail(addr, auth, smtpUser, []string{to}, msg)
-	if err != nil {
-		log.Printf("Error sending email to %s: %v", to, err)
-		return err
-	}
-	return nil
+	return utils.SendEmail(to, subject, htmlBody)
 }
 
 // SHA256 Token generator for password resets

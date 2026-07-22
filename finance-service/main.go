@@ -90,6 +90,7 @@ func registerRoutes() {
 	registerRoute("/payrolls", handlers.HandlePayrolls)
 	registerRoute("/employee-salaries", handlers.HandleEmployeeSalaries)
 	registerRoute("/statutory-remittances", handlers.HandleStatutoryRemittances)
+	registerRoute("/send-email", handlers.HandleSendEmail)
 }
 
 func enableCORS(next http.HandlerFunc) http.HandlerFunc {
