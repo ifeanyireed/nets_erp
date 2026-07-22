@@ -59,7 +59,7 @@ func SendEmailViaProxy(payload EmailPayload) error {
 		apiKey = os.Getenv("EMAIL_PROXY_API_KEY")
 	}
 	if apiKey == "" {
-		apiKey = "ep_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b"
+		apiKey = "proxy_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b"
 	}
 
 	if payload.From == "" {
@@ -68,7 +68,7 @@ func SendEmailViaProxy(payload EmailPayload) error {
 			payload.From = os.Getenv("SMTP_FROM_EMAIL")
 		}
 		if payload.From == "" {
-			payload.From = "hr@neweratransports.com"
+			payload.From = "proxy@skilluplearningacademy.com"
 		}
 	}
 
