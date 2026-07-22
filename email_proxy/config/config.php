@@ -7,10 +7,10 @@ return [
     // API Authentication Key (Ensure this matches the token in your Go backend)
     'api_key' => 'ep_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b',
 
-    // SMTP Configuration (Hostinger Local SMTP or remote)
-    'smtp_host'     => 'smtp.hostinger.com', 
+    // SMTP Configuration (Hostinger / ResultsPro SMTP)
+    'smtp_host'     => 'mail.resultspro.ng', 
     'smtp_auth'     => true,                 
-    'smtp_username' => 'proxy@skilluplearningacademy.com',
+    'smtp_username' => 'hello@resultspro.ng',
     'smtp_password' => '*Reedb4b4',
     // ENCRYPTION_STARTTLS (587) or ENCRYPTION_SMTPS (465)
     'smtp_secure'   => PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS, 

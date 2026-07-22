@@ -90,6 +90,7 @@ func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 	var mu sync.Mutex
 	successCount := 0
 
+	var lastErr error
 	for _, u := range targetUsers {
 		pwd := ""
 		if u.Password != nil {
@@ -137,6 +138,9 @@ func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 				mu.Unlock()
 			} else {
 				log.Printf("Failed to send reset email to %s: %v", toEmail, err)
+				mu.Lock()
+				lastErr = err
+				mu.Unlock()
 			}
 		}(u.Email, "Reset Your Password - New Era Performance Portal", htmlBody)
 	}
@@ -144,7 +148,11 @@ func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 
 	if successCount == 0 {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to send reset email. Please try again later."})
+		errMsg := "Failed to send reset email. Please try again later."
+		if lastErr != nil {
+			errMsg = fmt.Sprintf("Failed to send reset email: %v", lastErr)
+		}
+		json.NewEncoder(w).Encode(map[string]string{"error": errMsg})
 		return
 	}
 
