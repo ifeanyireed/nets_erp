@@ -63,16 +63,34 @@ func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 		userMap[u.ID] = u
 	}
 
+	targetUsers := []User{}
+	if req.Email != "" {
+		trimmedEmail := strings.TrimSpace(strings.ToLower(req.Email))
+		for _, u := range userMap {
+			if strings.ToLower(strings.TrimSpace(u.Email)) == trimmedEmail {
+				targetUsers = append(targetUsers, u)
+			}
+		}
+	}
+	if len(targetUsers) == 0 && len(req.UserIDs) > 0 {
+		for _, id := range req.UserIDs {
+			if u, ok := userMap[id]; ok && u.Email != "" {
+				targetUsers = append(targetUsers, u)
+			}
+		}
+	}
+
+	if len(targetUsers) == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{"error": "No account found with this email address."})
+		return
+	}
+
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	successCount := 0
 
-	for _, id := range req.UserIDs {
-		u, ok := userMap[id]
-		if !ok || u.Email == "" {
-			continue
-		}
-
+	for _, u := range targetUsers {
 		pwd := ""
 		if u.Password != nil {
 			pwd = *u.Password
@@ -123,6 +141,12 @@ func HandleSendResetEmail(w http.ResponseWriter, r *http.Request) {
 		}(u.Email, "Reset Your Password - New Era Performance Portal", htmlBody)
 	}
 	wg.Wait()
+
+	if successCount == 0 {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": "Failed to send reset email. Please try again later."})
+		return
+	}
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]interface{}{

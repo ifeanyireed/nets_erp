@@ -26,7 +26,8 @@ function ResetPasswordForm() {
 
   const handleRequestReset = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailInput) {
+    const targetEmail = emailInput.trim();
+    if (!targetEmail) {
       setStatusMessage({ text: "Please enter your email address.", type: "error" });
       return;
     }
@@ -34,22 +35,16 @@ function ResetPasswordForm() {
     setIsLoading(true);
     setStatusMessage(null);
 
-    // Look up user by email
-    const user = users.find(u => u.email.toLowerCase() === emailInput.trim().toLowerCase());
-    if (!user) {
-      setStatusMessage({
-        text: "No account found with this email. Please contact HR or verify your input.",
-        type: "error"
-      });
-      setIsLoading(false);
-      return;
-    }
+    const user = users.find(u => u.email.toLowerCase() === targetEmail.toLowerCase());
 
     try {
       const res = await fetch(`${API_BASE_URL}/send-reset-email`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userIds: [user.id] }),
+        body: JSON.stringify({ 
+          email: targetEmail,
+          userIds: user ? [user.id] : [] 
+        }),
       });
 
       let data: any = {};
@@ -64,7 +59,7 @@ function ResetPasswordForm() {
 
       if (res.ok) {
         setStatusMessage({
-          text: `A password reset link has been sent to ${user.email}. Please check your inbox.`,
+          text: `A password reset link has been sent to ${targetEmail}. Please check your inbox.`,
           type: "success",
         });
         setEmailInput("");

@@ -66,6 +66,7 @@ type SeedData struct {
 
 type ResetEmailRequest struct {
 	UserIDs []string `json:"userIds"`
+	Email   string   `json:"email"`
 }
 
 type BulkNotificationRequest struct {
