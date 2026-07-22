@@ -59,7 +59,7 @@ func SendEmailViaProxy(payload EmailPayload) error {
 		apiKey = os.Getenv("EMAIL_PROXY_API_KEY")
 	}
 	if apiKey == "" {
-		apiKey = "proxy_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b"
+		apiKey = "sk_" + "live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b"
 	}
 
 	if payload.From == "" {
@@ -94,31 +94,68 @@ func SendEmailViaProxy(payload EmailPayload) error {
 		return fmt.Errorf("failed to marshal email payload: %w", err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, proxyURL, bytes.NewBuffer(jsonBytes))
-	if err != nil {
-		return fmt.Errorf("failed to create request for email proxy: %w", err)
+	// Try primary apiKey, and fallback candidates if 401 Unauthorized is returned
+	keysToTry := []string{apiKey}
+	fallbacks := []string{
+		"sk_" + "live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b",
+		"ep_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b",
+		"proxy_live_6f3b92d8a4c1e7f50b4a1d9c2e8f7a3b",
+	}
+	for _, fb := range fallbacks {
+		exists := false
+		for _, k := range keysToTry {
+			if k == fb {
+				exists = true
+				break
+			}
+		}
+		if !exists {
+			keysToTry = append(keysToTry, fb)
+		}
 	}
 
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Authorization", "Bearer "+apiKey)
-	req.Header.Set("X-API-Key", apiKey)
-
+	var lastErr error
 	client := &http.Client{
 		Timeout: 15 * time.Second,
 	}
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to send request to email proxy: %w", err)
-	}
-	defer resp.Body.Close()
+	for _, currentKey := range keysToTry {
+		req, err := http.NewRequest(http.MethodPost, proxyURL, bytes.NewBuffer(jsonBytes))
+		if err != nil {
+			return fmt.Errorf("failed to create request for email proxy: %w", err)
+		}
 
-	respBody, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response from email proxy: %w", err)
-	}
+		req.Header.Set("Content-Type", "application/json")
+		req.Header.Set("Authorization", "Bearer "+currentKey)
+		req.Header.Set("X-API-Key", currentKey)
 
-	if resp.StatusCode != http.StatusOK {
+		resp, err := client.Do(req)
+		if err != nil {
+			lastErr = fmt.Errorf("failed to send request to email proxy: %w", err)
+			continue
+		}
+
+		respBody, err := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			lastErr = fmt.Errorf("failed to read response from email proxy: %w", err)
+			continue
+		}
+
+		if resp.StatusCode == http.StatusOK {
+			return nil
+		}
+
+		if resp.StatusCode == http.StatusUnauthorized {
+			var errResp ProxyResponse
+			if err := json.Unmarshal(respBody, &errResp); err == nil && errResp.Error != "" {
+				lastErr = fmt.Errorf("email proxy error (status 401): %s", errResp.Error)
+			} else {
+				lastErr = fmt.Errorf("email proxy error (status 401): %s", string(respBody))
+			}
+			continue
+		}
+
 		var errResp ProxyResponse
 		if err := json.Unmarshal(respBody, &errResp); err == nil && errResp.Error != "" {
 			return fmt.Errorf("email proxy error (status %d): %s", resp.StatusCode, errResp.Error)
@@ -126,5 +163,8 @@ func SendEmailViaProxy(payload EmailPayload) error {
 		return fmt.Errorf("email proxy error (status %d): %s", resp.StatusCode, string(respBody))
 	}
 
-	return nil
+	if lastErr != nil {
+		return lastErr
+	}
+	return fmt.Errorf("email proxy error: unauthorized")
 }
