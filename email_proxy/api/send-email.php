@@ -150,7 +150,21 @@ try {
         $mail->Body = $text;
     }
 
-    $mail->send();
+    try {
+        $mail->send();
+    } catch (Exception $e) {
+        // If Hostinger rejected the custom sender address, retry with smtp_username as From and requested $from as Reply-To
+        if (strpos($e->getMessage(), 'Sender address rejected') !== false || strpos($mail->ErrorInfo, 'Sender address rejected') !== false) {
+            $mail->clearAllRecipients();
+            $mail->clearReplyTos();
+            $mail->setFrom($config['smtp_username'], $fromName);
+            $mail->addReplyTo($from, $fromName);
+            $mail->addAddress($to);
+            $mail->send();
+        } else {
+            throw $e;
+        }
+    }
     
     http_response_code(200);
     echo json_encode(['success' => true, 'message' => 'Email sent successfully']);
